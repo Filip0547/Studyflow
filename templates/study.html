@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}{{ word_list.name }} — StudyFlow{% endblock %}
+
+{% block content %}
+<div class="container page-top">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <div>
+            <a href="{{ url_for('dashboard') }}" class="back-link">← Dashboard</a>
+        </div>
+    </div>
+
+    <!-- ADD WORD FORM -->
+    <div class="study-form-card">
+        <h2 class="study-form-title">Add a new word</h2>
+        <form method="POST" action="{{ url_for('study', list_id=word_list.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {{ form.hidden_tag() if form }}
+
+            <div class="word-fields-grid">
+                <!-- WORD FIELD (always present) -->
+                <div class="form-group">
+                    <label for="word">Word / Term</label>
+                    <input
+                        type="text"
+                        id="word"
+                        name="word"
+                        class="form-input"
+                        placeholder="Enter the word or term"
+                        required
+                    >
+                </div>
+
+                <!-- FLEXIBLE FIELDS — add or remove as needed -->
+                {% set field_names = ['description', 'example', 'disadvantage'] %}
+                {% for field in field_names %}
+                <div class="form-group">
+                    <label for="{{ field }}">{{ field | capitalize }}</label>
+                    <input
+                        type="text"
+                        id="{{ field }}"
+                        name="{{ field }}"
+                        class="form-input"
+                        placeholder="Enter {{ field }}"
+                    >
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Add Word</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- WORDS TABLE -->
+    {% if words %}
+    <div class="table-wrapper">
+        <table class="study-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Word</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                    <th>Disadvantage</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for word in words %}
+                <tr>
+                    <td class="row-num">{{ loop.index }}</td>
+                    <td class="word-cell"><strong>{{ word.word }}</strong></td>
+                    <td>{{ word.description or '—' }}</td>
+                    <td>{{ word.example or '—' }}</td>
+                    <td>{{ word.disadvantage or '—' }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('delete_word', list_id=word_list.id, word_id=word.id) }}" style="display:inline;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- STUDY SECTION -->
+    <div id="study-section" class="study-section">
+        <h2>Study Mode</h2>
+        <div class="flashcard">
+            <div id="flashcard" class="card">
+                <div id="card-word" class="card-word"></div>
+                <div id="card-answer" class="card-answer"></div>
+            </div>
+            <div class="card-controls">
+                <button id="prev-card" class="btn btn-secondary">Previous</button>
+                <button id="toggle-answer" class="btn btn-primary">Show Answer</button>
+                <button id="next-card" class="btn btn-secondary">Next</button>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">✏️</div>
+        <h2>No words yet</h2>
+        <p>Use the form above to add your first word to this list.</p>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

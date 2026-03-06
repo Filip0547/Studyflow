@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Create List — StudyFlow{% endblock %}
+
+{% block content %}
+<div class="container page-top">
+    <div class="form-page-wrapper">
+
+        <div class="form-page-header">
+            <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+            <h1>Create a new list</h1>
+            <p>Give your study list a name to get started.</p>
+        </div>
+
+        <div class="form-card">
+            <form method="POST" action="{{ url_for('create_list') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                {{ form.hidden_tag() if form }}
+
+                <div class="form-group">
+                    <label for="name">List Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        class="form-input"
+                        placeholder="e.g. Spanish Vocabulary, Biology Chapter 3..."
+                        required
+                        autofocus
+                    >
+                </div>
+
+                <div class="form-actions">
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Create List</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

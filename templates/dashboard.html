@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — StudyFlow{% endblock %}
+
+{% block content %}
+<div class="container page-top">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Your Study Lists</h1>
+            <p class="page-subtitle">
+                {% if lists %}
+                    {{ lists|length }} list{{ 's' if lists|length != 1 }} ready to study
+                {% else %}
+                    No lists yet — create your first one!
+                {% endif %}
+            </p>
+        </div>
+        <a href="{{ url_for('create_list') }}" class="btn btn-primary">Create New List</a>
+    </div>
+
+    {% if lists %}
+        <div class="lists-grid">
+        {% for list in lists %}
+        <div class="list-card">
+            <div class="list-card-top">
+                <h3 class="list-name">{{ list.name }}</h3>
+                <p class="list-meta">
+                    {{ list.words|length if list.words else 0 }} word{{ 's' if (list.words|length if list.words else 0) != 1 }}
+                </p>
+            </div>
+            <div class="list-card-bottom">
+                <div class="dropdown-menu" style="flex: 1;">
+                    <button class="dropdown-toggle" data-dropdown="dropdown-{{ list.id }}">
+                        Study
+                        <span class="dropdown-icon">▼</span>
+                    </button>
+                    <div class="dropdown-content" id="dropdown-{{ list.id }}">
+                        <a href="{{ url_for('study', list_id=list.id) }}?mode=flashcards">Flashcards</a>
+                        <a href="{{ url_for('study', list_id=list.id) }}?mode=quiz">Normal Quiz</a>
+                        <a href="{{ url_for('study', list_id=list.id) }}?mode=multiple">Multiple Choice</a>
+                    </div>
+                </div>
+                <a href="{{ url_for('study', list_id=list.id) }}" class="btn-edit-list">Edit List</a>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <!-- EMPTY STATE -->
+        <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <h2>No study lists yet</h2>
+            <p>Create your first list and start adding words to study.</p>
+            <a href="{{ url_for('create_list') }}" class="btn btn-primary">Create your first list</a>
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}
