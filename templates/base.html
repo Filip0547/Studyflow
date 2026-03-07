@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ get_locale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,12 +20,23 @@
             </a>
             <div class="nav-links">
                 {% if current_user %}
-                    <a href="{{ url_for('dashboard') }}" class="nav-btn nav-btn-primary">Dashboard</a>
-                    <a href="{{ url_for('logout') }}" class="nav-btn nav-btn-secondary">Logout</a>
+                    <a href="{{ url_for('dashboard') }}" class="nav-btn nav-btn-primary">{{ _('Dashboard') }}</a>
+                    <a href="{{ url_for('logout') }}" class="nav-btn nav-btn-secondary">{{ _('Logout') }}</a>
                 {% else %}
-                    <a href="{{ url_for('login') }}" class="nav-btn nav-btn-secondary">Login</a>
-                    <a href="{{ url_for('register') }}" class="nav-btn nav-btn-primary">Get Started</a>
+                    <a href="{{ url_for('login') }}" class="nav-btn nav-btn-secondary">{{ _('Login') }}</a>
+                    <a href="{{ url_for('register') }}" class="nav-btn nav-btn-primary">{{ _('Get Started') }}</a>
                 {% endif %}
+                <!-- Language Selector -->
+                <form method="post" action="{{ url_for('set_language') }}" class="language-selector">
+                    <select name="language" class="language-dropdown" onchange="this.form.submit()">
+                        <option value="en" {% if get_locale() == 'en' %}selected{% endif %}>English</option>
+                        <option value="nl" {% if get_locale() == 'nl' %}selected{% endif %}>Nederlands</option>
+                        <option value="pl" {% if get_locale() == 'pl' %}selected{% endif %}>Polski</option>
+                        <option value="es" {% if get_locale() == 'es' %}selected{% endif %}>Español</option>
+                        <option value="fr" {% if get_locale() == 'fr' %}selected{% endif %}>Français</option>
+                        <option value="ru" {% if get_locale() == 'ru' %}selected{% endif %}>Pусский</option>
+                    </select>
+                </form>
             </div>
         </div>
     </nav>
@@ -38,7 +49,7 @@
     <!-- FOOTER -->
     <footer class="footer">
         <div class="footer-container">
-            <p>© 2024 StudyFlow — Learn smarter, not harder.</p>
+            <p>© 2024 StudyFlow — {{ _('Learn smarter, not harder.') }}</p>
         </div>
     </footer>
 

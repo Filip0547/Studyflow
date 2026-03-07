@@ -7,13 +7,13 @@
     <!-- PAGE HEADER -->
     <div class="page-header">
         <div>
-            <a href="{{ url_for('dashboard') }}" class="back-link">← Dashboard</a>
+            <a href="{{ url_for('dashboard') }}" class="back-link">← {{ _('Dashboard') }}</a>
         </div>
     </div>
 
     <!-- ADD WORD FORM -->
     <div class="study-form-card">
-        <h2 class="study-form-title">Add a new word</h2>
+        <h2 class="study-form-title">{{ _('Add a new word') }}</h2>
         <form method="POST" action="{{ url_for('study', list_id=word_list.id) }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             {{ form.hidden_tag() if form }}
@@ -21,13 +21,13 @@
             <div class="word-fields-grid">
                 <!-- WORD FIELD (always present) -->
                 <div class="form-group">
-                    <label for="word">Word / Term</label>
+                    <label for="word">{{ _('Word / Term') }}</label>
                     <input
                         type="text"
                         id="word"
                         name="word"
                         class="form-input"
-                        placeholder="Enter the word or term"
+                        placeholder="{{ _('Enter the word or term') }}"
                         required
                     >
                 </div>
@@ -49,7 +49,7 @@
             </div>
 
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Add Word</button>
+                <button type="submit" class="btn btn-primary">{{ _('Add Word') }}</button>
             </div>
         </form>
     </div>
@@ -61,11 +61,11 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Word</th>
-                    <th>Description</th>
-                    <th>Example</th>
-                    <th>Disadvantage</th>
-                    <th>Actions</th>
+                    <th>{{ _('Word') }}</th>
+                    <th>{{ _('Description') }}</th>
+                    <th>{{ _('Example') }}</th>
+                    <th>{{ _("Disadvantage") }}</th>
+                    <th>{{ _('Actions') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -79,7 +79,7 @@
                     <td>
                         <form method="POST" action="{{ url_for('delete_word', list_id=word_list.id, word_id=word.id) }}" style="display:inline;">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            <button type="submit" class="btn btn-danger btn-sm">{{ _('Delete') }}</button>
                         </form>
                     </td>
                 </tr>
@@ -90,16 +90,16 @@
 
     <!-- STUDY SECTION -->
     <div id="study-section" class="study-section">
-        <h2>Study Mode</h2>
+        <h2>{{ _('Study Mode') }}</h2>
         <div class="flashcard">
             <div id="flashcard" class="card">
                 <div id="card-word" class="card-word"></div>
                 <div id="card-answer" class="card-answer"></div>
             </div>
             <div class="card-controls">
-                <button id="prev-card" class="btn btn-secondary">Previous</button>
-                <button id="toggle-answer" class="btn btn-primary">Show Answer</button>
-                <button id="next-card" class="btn btn-secondary">Next</button>
+                <button id="prev-card" class="btn btn-secondary">{{ _('Previous') }}</button>
+                <button id="toggle-answer" class="btn btn-primary">{{ _('Show Answer') }}</button>
+                <button id="next-card" class="btn btn-secondary">{{ _('Next') }}</button>
             </div>
         </div>
     </div>
@@ -107,8 +107,8 @@
     {% else %}
     <div class="empty-state">
         <div class="empty-icon">✏️</div>
-        <h2>No words yet</h2>
-        <p>Use the form above to add your first word to this list.</p>
+        <h2>{{ _('No words yet') }}</h2>
+        <p>{{ _('Use the form above to add your first word to this list.') }}</p>
     </div>
     {% endif %}
 
