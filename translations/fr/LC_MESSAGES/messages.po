@@ -1,0 +1,260 @@
+# French translations for StudyFlow.
+# Copyright (C) 2026 StudyFlow
+# This file is distributed under the same license as the StudyFlow package.
+# StudyFlow Team <team@studyflow.com>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: StudyFlow 1.0\n"
+"Report-Msgid-Bugs-To: team@studyflow.com\n"
+"POT-Creation-Date: 2026-03-08 00:32+0100\n"
+"PO-Revision-Date: 2026-03-08 00:32+0100\n"
+"Last-Translator: StudyFlow Team <team@studyflow.com>\n"
+"Language: fr\n"
+"Language-Team: French <fr@studyflow.com>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: templates/base.html:23 templates/dashboard.html:2 templates/study.html:10
+msgid "Dashboard"
+msgstr "Tableau de Bord"
+
+#: templates/base.html:24
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: templates/base.html:26 templates/login.html:2
+msgid "Login"
+msgstr "Connexion"
+
+#: templates/base.html:27
+msgid "Get Started"
+msgstr "Commencer"
+
+#: templates/base.html:52
+msgid "Learn smarter, not harder."
+msgstr "Apprenez plus intelligemment, pas plus durement."
+
+#: templates/create_list.html:2 templates/create_list.html:34
+msgid "Create List"
+msgstr "Créer une Liste"
+
+#: templates/create_list.html:9
+msgid "Back to Dashboard"
+msgstr "Retour au Tableau de Bord"
+
+#: templates/create_list.html:10
+msgid "Create a new list"
+msgstr "Créer une nouvelle liste"
+
+#: templates/create_list.html:11
+msgid "Give your study list a name to get started."
+msgstr "Donnez un nom à votre liste d'étude pour commencer."
+
+#: templates/create_list.html:20
+msgid "List Name"
+msgstr "Nom de la Liste"
+
+#: templates/create_list.html:26
+msgid "e.g. Spanish Vocabulary, Biology Chapter 3..."
+msgstr "ex. Vocabulaire Espagnol, Biologie Chapitre 3..."
+
+#: templates/create_list.html:33
+msgid "Cancel"
+msgstr "Annuler"
+
+#: templates/dashboard.html:10
+msgid "Your Study Lists"
+msgstr "Vos Listes d'Étude"
+
+#: templates/dashboard.html:13
+msgid "list"
+msgstr "liste"
+
+#: templates/dashboard.html:13
+msgid "lists"
+msgstr "listes"
+
+#: templates/dashboard.html:13
+msgid "ready to study"
+msgstr "prêt à étudier"
+
+#: templates/dashboard.html:15
+msgid "No lists yet — create your first one!"
+msgstr "Pas encore de listes — créez la première !"
+
+#: templates/dashboard.html:19
+msgid "Create New List"
+msgstr "Créer une Nouvelle Liste"
+
+#: templates/dashboard.html:39
+msgid "Flashcards"
+msgstr "Cartes Mémoire"
+
+#: templates/dashboard.html:40
+msgid "Normal Quiz"
+msgstr "Quiz Normal"
+
+#: templates/dashboard.html:41
+msgid "Multiple Choice"
+msgstr "Choix Multiple"
+
+#: templates/dashboard.html:44
+msgid "Edit List"
+msgstr "Modifier la Liste"
+
+#: templates/dashboard.html:53
+msgid "No study lists yet"
+msgstr "Pas encore de listes d'étude"
+
+#: templates/dashboard.html:54
+msgid "Create your first list and start adding words to study."
+msgstr "Créez votre première liste et commencez à ajouter des mots à étudier."
+
+#: templates/dashboard.html:55
+msgid "Create your first list"
+msgstr "Créez votre première liste"
+
+#: templates/login.html:9
+msgid "Welcome back"
+msgstr "Bienvenue de retour"
+
+#: templates/login.html:10
+msgid "Sign in to continue studying"
+msgstr "Connectez-vous pour continuer à étudier"
+
+#: templates/login.html:18 templates/register.html:32
+msgid "Username"
+msgstr "Nom d'Utilisateur"
+
+#: templates/login.html:24
+msgid "Enter your username"
+msgstr "Entrez votre nom d'utilisateur"
+
+#: templates/login.html:32 templates/register.html:45
+msgid "Password"
+msgstr "Mot de Passe"
+
+#: templates/login.html:38
+msgid "Enter your password"
+msgstr "Entrez votre mot de passe"
+
+#: templates/login.html:44 templates/register.html:61
+msgid "Sign in"
+msgstr "Se Connecter"
+
+#: templates/login.html:48
+msgid "or"
+msgstr "ou"
+
+#: templates/login.html:58
+msgid "Continue with Google"
+msgstr "Continuer avec Google"
+
+#: templates/login.html:62
+msgid "Don't have an account?"
+msgstr "Vous n'avez pas de compte ?"
+
+#: templates/login.html:62
+msgid "Create one"
+msgstr "Créez-en un"
+
+#: templates/register.html:2
+msgid "Register"
+msgstr "S'inscrire"
+
+#: templates/register.html:9 templates/register.html:57
+msgid "Create account"
+msgstr "Créer un compte"
+
+#: templates/register.html:10
+msgid "Start learning smarter today"
+msgstr "Commencez à apprendre plus intelligemment aujourd'hui"
+
+#: templates/register.html:18
+msgid "Email"
+msgstr "E-mail"
+
+#: templates/register.html:24
+msgid "Enter your email address"
+msgstr "Entrez votre adresse e-mail"
+
+#: templates/register.html:38
+msgid "Choose a username"
+msgstr "Choisissez un nom d'utilisateur"
+
+#: templates/register.html:51
+msgid "Create a password"
+msgstr "Créez un mot de passe"
+
+#: templates/register.html:61
+msgid "Already have an account?"
+msgstr "Vous avez déjà un compte ?"
+
+#: templates/study.html:16
+msgid "Add a new word"
+msgstr "Ajouter un nouveau mot"
+
+#: templates/study.html:24
+msgid "Word / Term"
+msgstr "Mot / Terme"
+
+#: templates/study.html:30
+msgid "Enter the word or term"
+msgstr "Entrez le mot ou le terme"
+
+#: templates/study.html:52
+msgid "Add Word"
+msgstr "Ajouter un Mot"
+
+#: templates/study.html:64
+msgid "Word"
+msgstr "Mot"
+
+#: templates/study.html:65
+msgid "Description"
+msgstr "Description"
+
+#: templates/study.html:66
+msgid "Example"
+msgstr "Exemple"
+
+#: templates/study.html:67
+msgid "Disadvantage"
+msgstr "Désavantage"
+
+#: templates/study.html:68
+msgid "Actions"
+msgstr "Actions"
+
+#: templates/study.html:82
+msgid "Delete"
+msgstr "Supprimer"
+
+#: templates/study.html:93
+msgid "Study Mode"
+msgstr "Mode d'Étude"
+
+#: templates/study.html:100
+msgid "Previous"
+msgstr "Précédent"
+
+#: templates/study.html:101
+msgid "Show Answer"
+msgstr "Montrer la Réponse"
+
+#: templates/study.html:102
+msgid "Next"
+msgstr "Suivant"
+
+#: templates/study.html:110
+msgid "No words yet"
+msgstr ""
+
+#: templates/study.html:111
+msgid "Use the form above to add your first word to this list."
+msgstr ""
+

@@ -1,0 +1,259 @@
+# Translations template for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-03-08 00:32+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: templates/base.html:23 templates/dashboard.html:2 templates/study.html:10
+msgid "Dashboard"
+msgstr ""
+
+#: templates/base.html:24
+msgid "Logout"
+msgstr ""
+
+#: templates/base.html:26 templates/login.html:2
+msgid "Login"
+msgstr ""
+
+#: templates/base.html:27
+msgid "Get Started"
+msgstr ""
+
+#: templates/base.html:52
+msgid "Learn smarter, not harder."
+msgstr ""
+
+#: templates/create_list.html:2 templates/create_list.html:34
+msgid "Create List"
+msgstr ""
+
+#: templates/create_list.html:9
+msgid "Back to Dashboard"
+msgstr ""
+
+#: templates/create_list.html:10
+msgid "Create a new list"
+msgstr ""
+
+#: templates/create_list.html:11
+msgid "Give your study list a name to get started."
+msgstr ""
+
+#: templates/create_list.html:20
+msgid "List Name"
+msgstr ""
+
+#: templates/create_list.html:26
+msgid "e.g. Spanish Vocabulary, Biology Chapter 3..."
+msgstr ""
+
+#: templates/create_list.html:33
+msgid "Cancel"
+msgstr ""
+
+#: templates/dashboard.html:10
+msgid "Your Study Lists"
+msgstr ""
+
+#: templates/dashboard.html:13
+msgid "list"
+msgstr ""
+
+#: templates/dashboard.html:13
+msgid "lists"
+msgstr ""
+
+#: templates/dashboard.html:13
+msgid "ready to study"
+msgstr ""
+
+#: templates/dashboard.html:15
+msgid "No lists yet — create your first one!"
+msgstr ""
+
+#: templates/dashboard.html:19
+msgid "Create New List"
+msgstr ""
+
+#: templates/dashboard.html:39
+msgid "Flashcards"
+msgstr ""
+
+#: templates/dashboard.html:40
+msgid "Normal Quiz"
+msgstr ""
+
+#: templates/dashboard.html:41
+msgid "Multiple Choice"
+msgstr ""
+
+#: templates/dashboard.html:44
+msgid "Edit List"
+msgstr ""
+
+#: templates/dashboard.html:53
+msgid "No study lists yet"
+msgstr ""
+
+#: templates/dashboard.html:54
+msgid "Create your first list and start adding words to study."
+msgstr ""
+
+#: templates/dashboard.html:55
+msgid "Create your first list"
+msgstr ""
+
+#: templates/login.html:9
+msgid "Welcome back"
+msgstr ""
+
+#: templates/login.html:10
+msgid "Sign in to continue studying"
+msgstr ""
+
+#: templates/login.html:18 templates/register.html:32
+msgid "Username"
+msgstr ""
+
+#: templates/login.html:24
+msgid "Enter your username"
+msgstr ""
+
+#: templates/login.html:32 templates/register.html:45
+msgid "Password"
+msgstr ""
+
+#: templates/login.html:38
+msgid "Enter your password"
+msgstr ""
+
+#: templates/login.html:44 templates/register.html:61
+msgid "Sign in"
+msgstr ""
+
+#: templates/login.html:48
+msgid "or"
+msgstr ""
+
+#: templates/login.html:58
+msgid "Continue with Google"
+msgstr ""
+
+#: templates/login.html:62
+msgid "Don't have an account?"
+msgstr ""
+
+#: templates/login.html:62
+msgid "Create one"
+msgstr ""
+
+#: templates/register.html:2
+msgid "Register"
+msgstr ""
+
+#: templates/register.html:9 templates/register.html:57
+msgid "Create account"
+msgstr ""
+
+#: templates/register.html:10
+msgid "Start learning smarter today"
+msgstr ""
+
+#: templates/register.html:18
+msgid "Email"
+msgstr ""
+
+#: templates/register.html:24
+msgid "Enter your email address"
+msgstr ""
+
+#: templates/register.html:38
+msgid "Choose a username"
+msgstr ""
+
+#: templates/register.html:51
+msgid "Create a password"
+msgstr ""
+
+#: templates/register.html:61
+msgid "Already have an account?"
+msgstr ""
+
+#: templates/study.html:16
+msgid "Add a new word"
+msgstr ""
+
+#: templates/study.html:24
+msgid "Word / Term"
+msgstr ""
+
+#: templates/study.html:30
+msgid "Enter the word or term"
+msgstr ""
+
+#: templates/study.html:52
+msgid "Add Word"
+msgstr ""
+
+#: templates/study.html:64
+msgid "Word"
+msgstr ""
+
+#: templates/study.html:65
+msgid "Description"
+msgstr ""
+
+#: templates/study.html:66
+msgid "Example"
+msgstr ""
+
+#: templates/study.html:67
+msgid "Disadvantage"
+msgstr ""
+
+#: templates/study.html:68
+msgid "Actions"
+msgstr ""
+
+#: templates/study.html:82
+msgid "Delete"
+msgstr ""
+
+#: templates/study.html:93
+msgid "Study Mode"
+msgstr ""
+
+#: templates/study.html:100
+msgid "Previous"
+msgstr ""
+
+#: templates/study.html:101
+msgid "Show Answer"
+msgstr ""
+
+#: templates/study.html:102
+msgid "Next"
+msgstr ""
+
+#: templates/study.html:110
+msgid "No words yet"
+msgstr ""
+
+#: templates/study.html:111
+msgid "Use the form above to add your first word to this list."
+msgstr ""
+
