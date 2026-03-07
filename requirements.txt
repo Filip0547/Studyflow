@@ -1,6 +1,11 @@
 flask
 Flask-SQLAlchemy
 Flask-WTF
+Flask-Mail
+Flask-Babel
 gunicorn
 jinja2
 werkzeug
+authlib
+requests
+python-dotenv
