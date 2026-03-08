@@ -8,6 +8,7 @@ from flask_babel import Babel, gettext, lazy_gettext as _l
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import CSRFProtect
 from authlib.integrations.flask_client import OAuth
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
 load_dotenv()
 
@@ -39,6 +40,11 @@ oauth = OAuth(app)
 mail = Mail(app)
 babel = Babel(app)
 
+# Flask-Login Configuration
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
 # Locale selector for Flask-Babel
 def get_locale():
     """Select user language from session, then browser, then default."""
@@ -56,14 +62,22 @@ google = oauth.register(
     name='google',
     client_id=app.config['GOOGLE_CLIENT_ID'],
     client_secret=app.config['GOOGLE_CLIENT_SECRET'],
-    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
-    client_kwargs={'scope': 'openid email profile'}
+    access_token_url="https://oauth2.googleapis.com/token",
+    authorize_url="https://accounts.google.com/o/oauth2/auth",
+    api_base_url="https://www.googleapis.com/oauth2/v1/",
+    client_kwargs={"scope": "openid email profile"},
 )
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    """Load user by ID for Flask-Login."""
+    return User.query.get(int(user_id))
 
 
 # ─── MODELS ───────────────────────────────────────────────
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     id       = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=True)
     email    = db.Column(db.String(100), unique=True, nullable=True)
@@ -96,9 +110,7 @@ with app.app_context():
 
 def get_current_user():
     """Returns the logged-in User object, or None."""
-    if 'user_id' in session:
-        return User.query.get(session['user_id'])
-    return None
+    return current_user if current_user.is_authenticated else None
 
 def login_required(f):
     """Simple login guard — use as a manual check or wrap routes."""
@@ -175,14 +187,14 @@ def inject_globals():
 @app.route("/")
 def index():
     # Auto redirect to dashboard if already logged in
-    if get_current_user():
+    if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
     return render_template("index.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if get_current_user():
+    if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
 
     if request.method == "POST":
@@ -226,7 +238,7 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if get_current_user():
+    if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
 
     if request.method == "POST":
@@ -235,10 +247,10 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         if user and check_password_hash(user.password, password):
-            session['user_id'] = user.id
+            login_user(user)
             return redirect(url_for('dashboard'))
         else:
-            pass
+            flash('Invalid username or password.', 'error')
 
     return render_template("login.html")
 
@@ -250,7 +262,7 @@ def login_google():
     return google.authorize_redirect(redirect_uri)
 
 
-@app.route("/auth/google/callback")
+@app.route("/login/google/authorized")
 def auth_google_callback():
     """Handle the Google OAuth callback."""
     try:
@@ -290,15 +302,15 @@ def auth_google_callback():
             db.session.add(user)
             db.session.commit()
     
-    # Log the user in
-    session['user_id'] = user.id
+    # Log the user in using Flask-Login
+    login_user(user)
     return redirect(url_for('dashboard'))
 
 
 @app.route("/logout")
 def logout():
-    # completely clear session for security
-    session.clear()
+    """Log out the current user."""
+    logout_user()
     return redirect(url_for('index'))
 
 

@@ -3,6 +3,7 @@ Flask-SQLAlchemy
 Flask-WTF
 Flask-Mail
 Flask-Babel
+Flask-Login
 gunicorn
 jinja2
 werkzeug
