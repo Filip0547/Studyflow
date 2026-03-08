@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+{% block title %}{{ word_list.name }} — Multiple Choice — StudyFlow{% endblock %}
+
+{% block content %}
+<div class="container page-top">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <div>
+            <a href="{{ url_for('dashboard') }}" class="back-link">← {{ _('Dashboard') }}</a>
+            <h1 class="page-title">{{ word_list.name }}</h1>
+            <p class="page-subtitle">{{ _('Multiple Choice Quiz') }}</p>
+        </div>
+        <a href="{{ url_for('edit_list', list_id=word_list.id) }}" class="btn btn-secondary">{{ _('Edit List') }}</a>
+    </div>
+
+    {% if words %}
+    <div class="quiz-container">
+        <div class="quiz-card">
+            <div class="quiz-question">
+                <h3>{{ _('What is the translation of:') }}</h3>
+                <div class="quiz-word">{{ words[0].word }}</div>
+            </div>
+
+            <form id="quiz-form" method="POST" onsubmit="checkAnswer(event)">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" id="correct-answer" value="{{ words[0].description }}">
+                <div class="options-grid">
+                    <button type="button" class="option-btn" data-option="0"></button>
+                    <button type="button" class="option-btn" data-option="1"></button>
+                    <button type="button" class="option-btn" data-option="2"></button>
+                    <button type="button" class="option-btn" data-option="3"></button>
+                </div>
+            </form>
+
+            <div id="feedback" class="quiz-feedback" style="display: none;"></div>
+        </div>
+
+        <div class="quiz-controls">
+            <button id="prev-question" class="btn btn-secondary" onclick="prevQuestion()">{{ _('Previous') }}</button>
+            <span id="progress">1 / {{ words|length }}</span>
+            <button id="next-question" class="btn btn-secondary" onclick="nextQuestion()" style="display: none;">{{ _('Next Question') }}</button>
+        </div>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        let score = 0;
+        const words = {{ words|tojson }};
+        let answered = false;
+        let currentOptions = [];
+        const multipleChoiceUrl = "{{ url_for('multiple_choice', list_id=word_list.id) }}";
+        const dashboardUrl = "{{ url_for('dashboard') }}";
+
+        function generateOptions(correctAnswer, allWords) {
+            const options = [correctAnswer];
+            const otherAnswers = allWords
+                .filter(w => w.description !== correctAnswer)
+                .map(w => w.description);
+
+            // Shuffle and pick 3 wrong answers
+            const shuffled = otherAnswers.sort(() => 0.5 - Math.random());
+            options.push(...shuffled.slice(0, 3));
+
+            // Shuffle the options
+            return options.sort(() => 0.5 - Math.random());
+        }
+
+        function updateQuestion() {
+            const word = words[currentIndex];
+            document.querySelector('.quiz-word').textContent = word.word;
+            document.getElementById('correct-answer').value = word.description;
+
+            currentOptions = generateOptions(word.description, words);
+            const optionBtns = document.querySelectorAll('.option-btn');
+
+            optionBtns.forEach((btn, index) => {
+                btn.textContent = currentOptions[index];
+                btn.classList.remove('selected', 'correct', 'incorrect');
+                btn.disabled = false;
+            });
+
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('next-question').style.display = 'none';
+            document.getElementById('prev-question').style.display = currentIndex > 0 ? 'inline-block' : 'none';
+            document.getElementById('progress').textContent = (currentIndex + 1) + ' / ' + words.length;
+            answered = false;
+        }
+
+        function selectOption(button) {
+            if (answered) return;
+
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            button.classList.add('selected');
+        }
+
+        function checkAnswer(event) {
+            event.preventDefault();
+            if (answered) return;
+
+            const selectedBtn = document.querySelector('.option-btn.selected');
+            if (!selectedBtn) return;
+
+            const selectedAnswer = selectedBtn.textContent;
+            const correctAnswer = words[currentIndex].description;
+            const feedback = document.getElementById('feedback');
+
+            if (selectedAnswer === correctAnswer) {
+                selectedBtn.classList.add('correct');
+                feedback.innerHTML = '<div class="correct">✓ Correct!</div>';
+                score++;
+            } else {
+                selectedBtn.classList.add('incorrect');
+                document.querySelectorAll('.option-btn').forEach(btn => {
+                    if (btn.textContent === correctAnswer) {
+                        btn.classList.add('correct');
+                    }
+                });
+                feedback.innerHTML = `<div class="incorrect">✗ Incorrect. The correct answer is: ${correctAnswer}</div>`;
+            }
+
+            document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+            feedback.style.display = 'block';
+            document.getElementById('next-question').style.display = 'inline-block';
+            answered = true;
+        }
+
+        function nextQuestion() {
+            if (currentIndex < words.length - 1) {
+                currentIndex++;
+                updateQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateQuestion();
+            }
+        }
+
+        function showResults() {
+            const percentage = Math.round((score / words.length) * 100);
+            document.querySelector('.quiz-container').innerHTML = `
+                <div class="quiz-results">
+                    <h2>Quiz Complete!</h2>
+                    <div class="score">Your score: ${score}/${words.length} (${percentage}%)</div>
+                    <div class="message">${percentage >= 80 ? 'Excellent work!' : percentage >= 60 ? 'Good job!' : 'Keep practicing!'}</div>
+                    <a href="${multipleChoiceUrl}" class="btn btn-primary">Try Again</a>
+                    <a href="${dashboardUrl}" class="btn btn-secondary">Back to Dashboard</a>
+                </div>
+            `;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateQuestion();
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    selectOption(this);
+                });
+            });
+        });
+
+        // Keyboard support
+        document.addEventListener('keydown', function(event) {
+            if (event.key >= '1' && event.key <= '4' && !answered) {
+                const index = parseInt(event.key) - 1;
+                const btn = document.querySelectorAll('.option-btn')[index];
+                selectOption(btn);
+            } else if (event.key === 'Enter' && !answered) {
+                document.getElementById('quiz-form').dispatchEvent(new Event('submit'));
+            } else if (event.key === 'ArrowRight' && answered) {
+                nextQuestion();
+            } else if (event.key === 'ArrowLeft') {
+                prevQuestion();
+            }
+        });
+    </script>
+
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">🔢</div>
+        <h2>{{ _('No words in this list') }}</h2>
+        <p>{{ _('Add some words first to take the multiple choice quiz.') }}</p>
+        <a href="{{ url_for('edit_list', list_id=word_list.id) }}" class="btn btn-primary">{{ _('Add Words') }}</a>
+    </div>
+    {% endif %}
+
+</div>
+
+<style>
+.quiz-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.quiz-card {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+}
+
+.quiz-question {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.quiz-word {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin: 1rem 0;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.option-btn {
+    padding: 1rem;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.option-btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--bg);
+}
+
+.option-btn.selected {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: white;
+}
+
+.option-btn.correct {
+    border-color: #10b981;
+    background: #10b981;
+    color: white;
+}
+
+.option-btn.incorrect {
+    border-color: #ef4444;
+    background: #ef4444;
+    color: white;
+}
+
+.option-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.quiz-feedback {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.correct {
+    color: #10b981;
+    font-weight: bold;
+}
+
+.incorrect {
+    color: #ef4444;
+    font-weight: bold;
+}
+
+.quiz-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+.quiz-results {
+    text-align: center;
+    padding: 2rem;
+}
+
+.score {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.message {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+</style>
+{% endblock %}

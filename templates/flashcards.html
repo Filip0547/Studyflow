@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block title %}{{ word_list.name }} — Flashcards — StudyFlow{% endblock %}
+
+{% block content %}
+<div class="container page-top">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <div>
+            <a href="{{ url_for('dashboard') }}" class="back-link">← {{ _('Dashboard') }}</a>
+            <h1 class="page-title">{{ word_list.name }}</h1>
+            <p class="page-subtitle">{{ _('Flashcards') }}</p>
+        </div>
+        <a href="{{ url_for('edit_list', list_id=word_list.id) }}" class="btn btn-secondary">{{ _('Edit List') }}</a>
+    </div>
+
+    {% if words %}
+    <div class="flashcard-container">
+        <div class="flashcard">
+            <div id="flashcard" class="card" onclick="flipCard()">
+                <div id="card-front" class="card-front">
+                    <div class="card-word">{{ words[0].word }}</div>
+                </div>
+                <div id="card-back" class="card-back">
+                    <div class="card-description">{{ words[0].description or 'No description' }}</div>
+                    {% if words[0].example %}
+                    <div class="card-example">{{ words[0].example }}</div>
+                    {% endif %}
+                    {% if words[0].disadvantage %}
+                    <div class="card-disadvantage">{{ words[0].disadvantage }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="card-controls">
+            <button id="prev-card" class="btn btn-secondary" onclick="prevCard()">{{ _('Previous') }}</button>
+            <button id="toggle-answer" class="btn btn-primary" onclick="flipCard()">{{ _('Flip Card') }}</button>
+            <button id="next-card" class="btn btn-secondary" onclick="nextCard()">{{ _('Next') }}</button>
+        </div>
+
+        <div class="card-progress">
+            <span id="current-card">1</span> / {{ words|length }}
+        </div>
+    </div>
+
+    <script>
+        let currentIndex = 0;
+        let isFlipped = false;
+        const words = {{ words|tojson }};
+
+        function updateCard() {
+            const word = words[currentIndex];
+            document.getElementById('card-front').innerHTML = '<div class="card-word">' + word.word + '</div>';
+            document.getElementById('card-back').innerHTML = '<div class="card-description">' + (word.description || 'No description') + '</div>' +
+                (word.example ? '<div class="card-example">' + word.example + '</div>' : '') +
+                (word.disadvantage ? '<div class="card-disadvantage">' + word.disadvantage + '</div>' : '');
+            document.getElementById('current-card').textContent = currentIndex + 1;
+            isFlipped = false;
+            document.getElementById('flashcard').classList.remove('flipped');
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % words.length;
+            updateCard();
+        }
+
+        function prevCard() {
+            currentIndex = (currentIndex - 1 + words.length) % words.length;
+            updateCard();
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                nextCard();
+            } else if (event.key === 'ArrowLeft') {
+                prevCard();
+            } else if (event.key === 'f' || event.key === 'F') {
+                flipCard();
+            }
+        });
+    </script>
+
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">📚</div>
+        <h2>{{ _('No words in this list') }}</h2>
+        <p>{{ _('Add some words first to start studying with flashcards.') }}</p>
+        <a href="{{ url_for('edit_list', list_id=word_list.id) }}" class="btn btn-primary">{{ _('Add Words') }}</a>
+    </div>
+    {% endif %}
+
+</div>
+
+<style>
+.flashcard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.flashcard {
+    perspective: 1000px;
+}
+
+.card {
+    width: 400px;
+    height: 250px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+    cursor: pointer;
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.card-front {
+    background: var(--surface);
+    border: 2px solid var(--primary);
+}
+
+.card-back {
+    background: var(--primary);
+    color: white;
+    transform: rotateY(180deg);
+}
+
+.card-word {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.card-description {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-example, .card-disadvantage {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.card-controls {
+    display: flex;
+    gap: 1rem;
+}
+
+.card-progress {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+</style>
+{% endblock %}

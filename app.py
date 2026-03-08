@@ -321,14 +321,14 @@ def create_list():
             new_list = WordList(name=name, user_id=session['user_id'])
             db.session.add(new_list)
             db.session.commit()
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('edit_list', list_id=new_list.id))
 
     return render_template("create_list.html")
 
 
-@app.route("/list/<int:list_id>", methods=["GET", "POST"])
+@app.route("/list/<int:list_id>/edit", methods=["GET", "POST"])
 @login_required
-def study(list_id):
+def edit_list(list_id):
     user = get_current_user()
     word_list = WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
 
@@ -350,10 +350,37 @@ def study(list_id):
             )
             db.session.add(new_word)
             db.session.commit()
-            return redirect(url_for('study', list_id=list_id))
+            return redirect(url_for('edit_list', list_id=list_id))
 
     words = Word.query.filter_by(list_id=list_id).all()
-    return render_template("study.html", word_list=word_list, words=words)
+    return render_template("edit_list.html", word_list=word_list, words=words)
+
+
+@app.route("/list/<int:list_id>/flashcards")
+@login_required
+def flashcards(list_id):
+    user = get_current_user()
+    word_list = WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
+    words = Word.query.filter_by(list_id=list_id).all()
+    return render_template("flashcards.html", word_list=word_list, words=words)
+
+
+@app.route("/list/<int:list_id>/quiz")
+@login_required
+def quiz(list_id):
+    user = get_current_user()
+    word_list = WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
+    words = Word.query.filter_by(list_id=list_id).all()
+    return render_template("quiz.html", word_list=word_list, words=words)
+
+
+@app.route("/list/<int:list_id>/multiple-choice")
+@login_required
+def multiple_choice(list_id):
+    user = get_current_user()
+    word_list = WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
+    words = Word.query.filter_by(list_id=list_id).all()
+    return render_template("multiple_choice.html", word_list=word_list, words=words)
 
 
 @app.route("/list/<int:list_id>/delete_word/<int:word_id>", methods=["POST"])
@@ -365,7 +392,7 @@ def delete_word(list_id, word_id):
     word = Word.query.filter_by(id=word_id, list_id=list_id).first_or_404()
     db.session.delete(word)
     db.session.commit()
-    return redirect(url_for('study', list_id=list_id))
+    return redirect(url_for('edit_list', list_id=list_id))
 
 
 @app.route("/set_language/<lang>")
