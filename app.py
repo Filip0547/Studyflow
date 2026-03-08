@@ -163,11 +163,11 @@ def send_welcome_email(user_email, username):
 
 
 # ─── CONTEXT PROCESSOR ────────────────────────────────────
-# Makes `current_user` available in ALL templates automatically
+# Makes `current_user` and `get_locale` available in ALL templates automatically
 
 @app.context_processor
-def inject_user():
-    return dict(current_user=get_current_user())
+def inject_globals():
+    return dict(current_user=get_current_user(), get_locale=get_locale)
 
 
 # ─── ROUTES ───────────────────────────────────────────────
