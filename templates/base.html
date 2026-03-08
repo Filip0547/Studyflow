@@ -27,16 +27,13 @@
                     <a href="{{ url_for('register') }}" class="nav-btn nav-btn-primary">{{ _('Get Started') }}</a>
                 {% endif %}
                 <!-- Language Selector -->
-                <form method="post" action="{{ url_for('set_language') }}" class="language-selector">
-                    <select name="language" class="language-dropdown" onchange="this.form.submit()">
-                        <option value="en" {% if get_locale() == 'en' %}selected{% endif %}>English</option>
-                        <option value="nl" {% if get_locale() == 'nl' %}selected{% endif %}>Nederlands</option>
-                        <option value="pl" {% if get_locale() == 'pl' %}selected{% endif %}>Polski</option>
-                        <option value="es" {% if get_locale() == 'es' %}selected{% endif %}>Español</option>
-                        <option value="fr" {% if get_locale() == 'fr' %}selected{% endif %}>Français</option>
-                        <option value="ru" {% if get_locale() == 'ru' %}selected{% endif %}>Pусский</option>
-                    </select>
-                </form>
+                <div class="language-selector">
+                    <a href="{{ url_for('set_language', lang='en') }}" class="language-link {% if get_locale() == 'en' %}active{% endif %}">English</a>
+                    <a href="{{ url_for('set_language', lang='nl') }}" class="language-link {% if get_locale() == 'nl' %}active{% endif %}">Nederlands</a>
+                    <a href="{{ url_for('set_language', lang='pl') }}" class="language-link {% if get_locale() == 'pl' %}active{% endif %}">Polski</a>
+                    <a href="{{ url_for('set_language', lang='ru') }}" class="language-link {% if get_locale() == 'ru' %}active{% endif %}">Русский</a>
+                    <a href="{{ url_for('set_language', lang='es') }}" class="language-link {% if get_locale() == 'es' %}active{% endif %}">Español</a>
+                </div>
             </div>
         </div>
     </nav>

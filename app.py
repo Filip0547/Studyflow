@@ -12,7 +12,7 @@ from authlib.integrations.flask_client import OAuth
 load_dotenv()
 
 # Supported languages
-LANGUAGES = ['en', 'nl', 'pl', 'es', 'fr', 'ru']
+LANGUAGES = ['en', 'nl', 'pl', 'ru', 'es']
 
 app = Flask(__name__)
 # use a randomly-generated secret key each time (for dev); replace with env var in prod
@@ -43,11 +43,11 @@ babel = Babel(app)
 def get_locale():
     """Select user language from session, then browser, then default."""
     # First check if user has selected a language in session
-    lang = session.get('language')
-    if lang in LANGUAGES:
+    lang = session.get('lang')
+    if lang:
         return lang
     # Fall back to browser language preference
-    return request.accept_languages.best_match(LANGUAGES) or 'en'
+    return request.accept_languages.best_match(LANGUAGES)
 
 babel.locale_selector_func = get_locale
 
@@ -368,13 +368,11 @@ def delete_word(list_id, word_id):
     return redirect(url_for('study', list_id=list_id))
 
 
-@app.route("/set_language", methods=["POST"])
-@csrf.exempt
-def set_language():
+@app.route("/set_language/<lang>")
+def set_language(lang):
     """Set the user's preferred language."""
-    language = request.form.get('language')
-    if language in LANGUAGES:
-        session['language'] = language
+    if lang in LANGUAGES:
+        session['lang'] = lang
     return redirect(request.referrer or url_for('index'))
 
 

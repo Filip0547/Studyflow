@@ -141,29 +141,28 @@ a:hover { text-decoration: underline; }
     margin-left: 16px;
     padding-left: 16px;
     border-left: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
 }
 
-.language-dropdown {
+.language-link {
     font-family: var(--font);
-    background: var(--surface);
-    color: var(--text);
-    border: 1px solid var(--border);
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
+    color: var(--text-secondary);
+    text-decoration: none;
     font-size: 0.9rem;
-    transition: border-color var(--transition), background-color var(--transition);
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: color var(--transition), background-color var(--transition);
 }
 
-.language-dropdown:hover {
-    border-color: var(--primary);
-    background: var(--bg);
+.language-link:hover {
+    color: var(--primary);
+    background: var(--surface);
 }
 
-.language-dropdown:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+.language-link.active {
+    color: var(--primary);
+    font-weight: 500;
 }
 
 /* ---------- BUTTONS ---------- */
