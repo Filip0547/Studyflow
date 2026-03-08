@@ -17,7 +17,7 @@ LANGUAGES = ['en', 'nl', 'pl', 'ru', 'es']
 app = Flask(__name__)
 # use a randomly-generated secret key each time (for dev); replace with env var in prod
 app.secret_key = os.urandom(24)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///c:/Leerplatform/instance/database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Google OAuth Configuration
@@ -88,7 +88,26 @@ class Word(db.Model):
     list_id     = db.Column(db.Integer, db.ForeignKey('word_list.id'), nullable=False)
 
 
+def recreate_database_if_needed():
+    """Check if database schema matches models, recreate if outdated."""
+    try:
+        # Check if User table has email column
+        result = db.session.execute(db.text("PRAGMA table_info(user)")).fetchall()
+        columns = [row[1] for row in result]  # column names
+        if 'email' not in columns or 'google_id' not in columns:
+            print("Database schema outdated. Recreating database...")
+            # Drop all tables and recreate
+            db.drop_all()
+            db.create_all()
+            print("Database recreated successfully.")
+    except Exception as e:
+        print(f"Error checking database schema: {e}")
+        # If there's any error, try to create tables
+        db.create_all()
+
+
 with app.app_context():
+    recreate_database_if_needed()
     db.create_all()
 
 
