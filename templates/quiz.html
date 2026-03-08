@@ -52,6 +52,7 @@
     <script>
         let currentIndex = 0;
         let score = 0;
+        // eslint-disable-next-line no-undef
         const words = {{ words|tojson }};
         const quizUrl = "{{ url_for('quiz', list_id=word_list.id) }}";
         const dashboardUrl = "{{ url_for('dashboard') }}";

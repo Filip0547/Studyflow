@@ -1,0 +1,12 @@
+[DEFAULT]
+# Jinja2 linting configuration
+# This helps with template validation
+
+[template]
+# Allow undefined variables in templates (they're provided by Flask)
+undefined_variables = true
+
+[extensions]
+# Enable Jinja2 extensions used by Flask
+jinja2.ext.i18n = true
+jinja2.ext.autoescape = true
