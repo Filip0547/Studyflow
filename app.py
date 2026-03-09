@@ -112,16 +112,6 @@ def get_current_user():
     """Returns the logged-in User object, or None."""
     return current_user if current_user.is_authenticated else None
 
-def login_required(f):
-    """Simple login guard — use as a manual check or wrap routes."""
-    from functools import wraps
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if 'user_id' not in session:
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated
-
 
 def send_welcome_email(user_email, username):
     """Send a welcome email to the new user."""
@@ -330,7 +320,7 @@ def create_list():
         if not name:
             pass
         else:
-            new_list = WordList(name=name, user_id=session['user_id'])
+            new_list = WordList(name=name, user_id=current_user.id)
             db.session.add(new_list)
             db.session.commit()
             return redirect(url_for('edit_list', list_id=new_list.id))
