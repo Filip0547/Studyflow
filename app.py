@@ -17,7 +17,7 @@ LANGUAGES = ['en', 'nl', 'pl', 'ru', 'es']
 
 app = Flask(__name__)
 # use a randomly-generated secret key each time (for dev); replace with env var in prod
-app.secret_key = os.urandom(24)
+app.secret_key = os.getenv('SECRET_KEY', os.urandom(24).hex())
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
