@@ -1,0 +1,107 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: StudyFlow 1.0\n"
+"Language: de\n"
+"Content-Type: text/plain; charset=utf-8\n"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Logout"
+msgstr "Abmelden"
+
+msgid "Login"
+msgstr "Anmelden"
+
+msgid "Get Started"
+msgstr "Loslegen"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Learn smarter, not harder."
+msgstr "Lerne smarter, nicht harter."
+
+msgid "The smarter way to study"
+msgstr "Der smarteste Weg zu lernen"
+
+msgid "Master any subject"
+msgstr "Beherrsche jedes Fach"
+
+msgid "at your own pace"
+msgstr "in deinem eigenen Tempo"
+
+msgid "Create custom word lists with flexible study fields. Study with flashcards,"
+msgstr "Erstelle eigene Wortlisten mit flexiblen Lernfeldern. Lerne mit Karteikarten,"
+
+msgid "track your progress, and actually remember what you learn."
+msgstr "verfolge deinen Fortschritt und behalte wirklich, was du lernst."
+
+msgid "Start for free"
+msgstr "Kostenlos starten"
+
+msgid "Definition"
+msgstr "Definition"
+
+msgid "Lasting for a very short time"
+msgstr "Nur sehr kurz andauernd"
+
+msgid "The ephemeral beauty of cherry blossoms"
+msgstr "Die fluchtige Schonheit der Kirschbluten"
+
+msgid "Everything you need to study effectively"
+msgstr "Alles, was du fur effektives Lernen brauchst"
+
+msgid "Custom Study Lists"
+msgstr "Individuelle Lernlisten"
+
+msgid "Create word lists tailored to any subject — vocabulary, formulas, dates, concepts."
+msgstr "Erstelle Wortlisten fur jedes Fach — Vokabeln, Formeln, Daten, Konzepte."
+
+msgid "Flexible Fields"
+msgstr "Flexible Felder"
+
+msgid "Add as many fields as you need per word: description, examples, notes, and more."
+msgstr "Fuge pro Wort so viele Felder hinzu, wie du brauchst: Beschreibung, Beispiele, Notizen und mehr."
+
+msgid "Fast & Simple"
+msgstr "Schnell und einfach"
+
+msgid "A clean interface that gets out of your way so you can focus on learning."
+msgstr "Eine klare Oberflache, damit du dich auf das Lernen konzentrieren kannst."
+
+msgid "Have a question or feedback? We would love to hear from you."
+msgstr "Frage oder Feedback? Wir freuen uns auf deine Nachricht."
+
+msgid "We usually reply within 24 hours."
+msgstr "Wir antworten in der Regel innerhalb von 24 Stunden."
+
+msgid "Back to home"
+msgstr "Zuruck zur Startseite"
+
+msgid "Sign in"
+msgstr "Anmelden"
+
+msgid "Please log in to continue."
+msgstr "Bitte melde dich an, um fortzufahren."
+
+msgid "Quiz Complete!"
+msgstr "Quiz abgeschlossen!"
+
+msgid "Your score"
+msgstr "Dein Ergebnis"
+
+msgid "Excellent work!"
+msgstr "Ausgezeichnete Arbeit!"
+
+msgid "Good job!"
+msgstr "Gute Arbeit!"
+
+msgid "Keep practicing!"
+msgstr "Weiter uben!"
+
+msgid "Try Again"
+msgstr "Erneut versuchen"
+
+msgid "Back to Dashboard"
+msgstr "Zuruck zum Dashboard"

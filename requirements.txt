@@ -10,3 +10,4 @@ werkzeug
 authlib
 requests
 python-dotenv
+polib

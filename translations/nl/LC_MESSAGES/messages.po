@@ -259,3 +259,84 @@ msgstr ""
 "Gebruik het formulier hierboven om je eerste woord aan deze lijst toe te "
 "voegen."
 
+msgid "Contact"
+msgstr "Contact"
+
+msgid "The smarter way to study"
+msgstr "De slimmere manier om te studeren"
+
+msgid "Master any subject"
+msgstr "Beheers elk onderwerp"
+
+msgid "at your own pace"
+msgstr "in je eigen tempo"
+
+msgid "Create custom word lists with flexible study fields. Study with flashcards,"
+msgstr "Maak aangepaste woordenlijsten met flexibele studievelden. Leer met flashcards,"
+
+msgid "track your progress, and actually remember what you learn."
+msgstr "volg je voortgang en onthoud echt wat je leert."
+
+msgid "Start for free"
+msgstr "Begin gratis"
+
+msgid "Definition"
+msgstr "Definitie"
+
+msgid "Lasting for a very short time"
+msgstr "Slechts heel kort durend"
+
+msgid "The ephemeral beauty of cherry blossoms"
+msgstr "De vluchtige schoonheid van kersenbloesem"
+
+msgid "Everything you need to study effectively"
+msgstr "Alles wat je nodig hebt om effectief te studeren"
+
+msgid "Custom Study Lists"
+msgstr "Aangepaste studielijsten"
+
+msgid "Create word lists tailored to any subject — vocabulary, formulas, dates, concepts."
+msgstr "Maak woordenlijsten op maat voor elk onderwerp — woordenschat, formules, data, concepten."
+
+msgid "Flexible Fields"
+msgstr "Flexibele velden"
+
+msgid "Add as many fields as you need per word: description, examples, notes, and more."
+msgstr "Voeg per woord zoveel velden toe als je wilt: beschrijving, voorbeelden, notities en meer."
+
+msgid "Fast & Simple"
+msgstr "Snel en eenvoudig"
+
+msgid "A clean interface that gets out of your way so you can focus on learning."
+msgstr "Een heldere interface die niet in de weg zit, zodat je kunt focussen op leren."
+
+msgid "Have a question or feedback? We would love to hear from you."
+msgstr "Heb je een vraag of feedback? We horen graag van je."
+
+msgid "We usually reply within 24 hours."
+msgstr "We reageren meestal binnen 24 uur."
+
+msgid "Back to home"
+msgstr "Terug naar home"
+
+msgid "Please log in to continue."
+msgstr "Log in om door te gaan."
+
+msgid "Quiz Complete!"
+msgstr "Quiz voltooid!"
+
+msgid "Your score"
+msgstr "Je score"
+
+msgid "Excellent work!"
+msgstr "Uitstekend gedaan!"
+
+msgid "Good job!"
+msgstr "Goed gedaan!"
+
+msgid "Keep practicing!"
+msgstr "Blijf oefenen!"
+
+msgid "Try Again"
+msgstr "Probeer opnieuw"
+

@@ -1,0 +1,107 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: StudyFlow 1.0\n"
+"Language: pl\n"
+"Content-Type: text/plain; charset=utf-8\n"
+
+msgid "Dashboard"
+msgstr "Panel"
+
+msgid "Logout"
+msgstr "Wyloguj"
+
+msgid "Login"
+msgstr "Zaloguj"
+
+msgid "Get Started"
+msgstr "Zaczynaj"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Learn smarter, not harder."
+msgstr "Ucz sie madrzej, nie ciezej."
+
+msgid "The smarter way to study"
+msgstr "Sprytniejszy sposob nauki"
+
+msgid "Master any subject"
+msgstr "Opanuj dowolny temat"
+
+msgid "at your own pace"
+msgstr "we wlasnym tempie"
+
+msgid "Create custom word lists with flexible study fields. Study with flashcards,"
+msgstr "Tworz wlasne listy slow z elastycznymi polami. Ucz sie z fiszkami,"
+
+msgid "track your progress, and actually remember what you learn."
+msgstr "sledz postepy i naprawde zapamietuj to, czego sie uczysz."
+
+msgid "Start for free"
+msgstr "Zacznij za darmo"
+
+msgid "Definition"
+msgstr "Definicja"
+
+msgid "Lasting for a very short time"
+msgstr "Trwajace bardzo krotko"
+
+msgid "The ephemeral beauty of cherry blossoms"
+msgstr "Ulotne piekno kwitnacych wisni"
+
+msgid "Everything you need to study effectively"
+msgstr "Wszystko, czego potrzebujesz do skutecznej nauki"
+
+msgid "Custom Study Lists"
+msgstr "Wlasne listy nauki"
+
+msgid "Create word lists tailored to any subject — vocabulary, formulas, dates, concepts."
+msgstr "Tworz listy slow dopasowane do kazdego tematu — slownictwo, wzory, daty, pojecia."
+
+msgid "Flexible Fields"
+msgstr "Elastyczne pola"
+
+msgid "Add as many fields as you need per word: description, examples, notes, and more."
+msgstr "Dodaj tyle pol, ile potrzebujesz: opis, przyklady, notatki i wiecej."
+
+msgid "Fast & Simple"
+msgstr "Szybko i prosto"
+
+msgid "A clean interface that gets out of your way so you can focus on learning."
+msgstr "Przejrzysty interfejs, ktory pozwala skupic sie na nauce."
+
+msgid "Have a question or feedback? We would love to hear from you."
+msgstr "Masz pytanie lub opinie? Chetnie Cie wysluchamy."
+
+msgid "We usually reply within 24 hours."
+msgstr "Zwykle odpowiadamy w ciagu 24 godzin."
+
+msgid "Back to home"
+msgstr "Powrot do strony glownej"
+
+msgid "Sign in"
+msgstr "Zaloguj sie"
+
+msgid "Please log in to continue."
+msgstr "Zaloguj sie, aby kontynuowac."
+
+msgid "Quiz Complete!"
+msgstr "Quiz zakonczony!"
+
+msgid "Your score"
+msgstr "Twoj wynik"
+
+msgid "Excellent work!"
+msgstr "Swietna robota!"
+
+msgid "Good job!"
+msgstr "Dobra robota!"
+
+msgid "Keep practicing!"
+msgstr "Cwicz dalej!"
+
+msgid "Try Again"
+msgstr "Sprobuj ponownie"
+
+msgid "Back to Dashboard"
+msgstr "Powrot do panelu"

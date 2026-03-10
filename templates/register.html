@@ -10,7 +10,7 @@
             <p>{{ _('Start learning smarter today') }}</p>
         </div>
 
-        <form method="POST" action="{{ url_for('register') }}" class="auth-form">
+        <form method="POST" action="{{ localized_url('register') }}" class="auth-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             {{ form.hidden_tag() if form }}
 
@@ -58,7 +58,7 @@
         </form>
 
         <div class="auth-footer">
-            {{ _('Already have an account?') }} <a href="{{ url_for('login') }}">{{ _('Sign in') }}</a>
+            {{ _('Already have an account?') }} <a href="{{ localized_url('login') }}">{{ _('Sign in') }}</a>
         </div>
     </div>
 </div>

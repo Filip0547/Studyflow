@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ _('Contact') }} - StudyFlow{% endblock %}
+
+{% block content %}
+<div class="container page-top">
+    <div class="form-page-wrapper">
+        <div class="form-page-header">
+            <h1>{{ _('Contact') }}</h1>
+            <p>{{ _('Have a question or feedback? We would love to hear from you.') }}</p>
+        </div>
+
+        <div class="form-card">
+            <p><strong>{{ _('Email') }}:</strong> support@studyflow.com</p>
+            <p>{{ _('We usually reply within 24 hours.') }}</p>
+            <div class="form-actions" style="margin-top: 1rem;">
+                <a href="{{ localized_url('index') }}" class="btn btn-secondary">{{ _('Back to home') }}</a>
+                {% if current_user %}
+                    <a href="{{ localized_url('dashboard') }}" class="btn btn-primary">{{ _('Dashboard') }}</a>
+                {% else %}
+                    <a href="{{ localized_url('register') }}" class="btn btn-primary">{{ _('Get Started') }}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

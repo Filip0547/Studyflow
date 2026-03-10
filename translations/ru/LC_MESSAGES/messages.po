@@ -259,3 +259,84 @@ msgstr ""
 msgid "Use the form above to add your first word to this list."
 msgstr ""
 
+msgid "Contact"
+msgstr "Kontakty"
+
+msgid "The smarter way to study"
+msgstr "Umnyy sposob uchitsya"
+
+msgid "Master any subject"
+msgstr "Osvoite lyuboy predmet"
+
+msgid "at your own pace"
+msgstr "v svoem tempe"
+
+msgid "Create custom word lists with flexible study fields. Study with flashcards,"
+msgstr "Sozdavaite sobstvennye spiski slov s gibkimi polyami. Uchites s kartochkami,"
+
+msgid "track your progress, and actually remember what you learn."
+msgstr "otslezhivayte progress i deistvitelno zapominayte material."
+
+msgid "Start for free"
+msgstr "Nachat besplatno"
+
+msgid "Definition"
+msgstr "Opredelenie"
+
+msgid "Lasting for a very short time"
+msgstr "Dlitsya ochen korotko"
+
+msgid "The ephemeral beauty of cherry blossoms"
+msgstr "Mgnovennaya krasota tsveteniya vishni"
+
+msgid "Everything you need to study effectively"
+msgstr "Vse, chto nuzhno dlya effektivnoy ucheby"
+
+msgid "Custom Study Lists"
+msgstr "Polzovatelskie spiski"
+
+msgid "Create word lists tailored to any subject — vocabulary, formulas, dates, concepts."
+msgstr "Sozdavaite spiski pod lyuboy predmet — slova, formuly, daty, ponyatiya."
+
+msgid "Flexible Fields"
+msgstr "Gibkie polya"
+
+msgid "Add as many fields as you need per word: description, examples, notes, and more."
+msgstr "Dobavlyayte stolko poley, skolko nuzhno: opisanie, primery, zametki i drugoe."
+
+msgid "Fast & Simple"
+msgstr "Bystro i prosto"
+
+msgid "A clean interface that gets out of your way so you can focus on learning."
+msgstr "Prostoy interfeis, kotoryi ne meshaet vam fokusirovatsya na uchebe."
+
+msgid "Have a question or feedback? We would love to hear from you."
+msgstr "Est vopros ili otzyv? Budem rady uslyshat vas."
+
+msgid "We usually reply within 24 hours."
+msgstr "Obychno otvechaem v techenie 24 chasov."
+
+msgid "Back to home"
+msgstr "Nazad na glavnuyu"
+
+msgid "Please log in to continue."
+msgstr "Voidite, chtoby prodolzhit."
+
+msgid "Quiz Complete!"
+msgstr "Quiz zavershen!"
+
+msgid "Your score"
+msgstr "Vash rezultat"
+
+msgid "Excellent work!"
+msgstr "Otlichnaya rabota!"
+
+msgid "Good job!"
+msgstr "Khoroshaya rabota!"
+
+msgid "Keep practicing!"
+msgstr "Prodolzhayte praktikovat'sya!"
+
+msgid "Try Again"
+msgstr "Poprobovat snova"
+

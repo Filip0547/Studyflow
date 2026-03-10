@@ -6,32 +6,32 @@
 <!-- HERO SECTION -->
 <section class="hero">
     <div class="hero-content">
-        <span class="hero-badge">✦ The smarter way to study</span>
+        <span class="hero-badge">{{ _('The smarter way to study') }}</span>
         <h1 class="hero-title">
-            Master any subject<br>
-            <span class="hero-highlight">at your own pace</span>
+            {{ _('Master any subject') }}<br>
+            <span class="hero-highlight">{{ _('at your own pace') }}</span>
         </h1>
         <p class="hero-subtitle">
-            Create custom word lists with flexible study fields. Study with flashcards,
-            track your progress, and actually remember what you learn.
+            {{ _('Create custom word lists with flexible study fields. Study with flashcards,') }}
+            {{ _('track your progress, and actually remember what you learn.') }}
         </p>
         <div class="hero-actions">
-            <a href="{{ url_for('register') }}" class="btn btn-primary">Start for free</a>
-            <a href="{{ url_for('login') }}" class="btn btn-ghost">Sign in →</a>
+            <a href="{{ localized_url('register') }}" class="btn btn-primary">{{ _('Start for free') }}</a>
+            <a href="{{ localized_url('login') }}" class="btn btn-ghost">{{ _('Sign in') }} -></a>
         </div>
     </div>
     <div class="hero-visual">
         <div class="floating-card card-1">
-            <div class="fc-label">Word</div>
+            <div class="fc-label">{{ _('Word') }}</div>
             <div class="fc-value">Ephemeral</div>
         </div>
         <div class="floating-card card-2">
-            <div class="fc-label">Definition</div>
-            <div class="fc-value">Lasting for a very short time</div>
+            <div class="fc-label">{{ _('Definition') }}</div>
+            <div class="fc-value">{{ _('Lasting for a very short time') }}</div>
         </div>
         <div class="floating-card card-3">
-            <div class="fc-label">Example</div>
-            <div class="fc-value">The ephemeral beauty of cherry blossoms</div>
+            <div class="fc-label">{{ _('Example') }}</div>
+            <div class="fc-value">{{ _('The ephemeral beauty of cherry blossoms') }}</div>
         </div>
     </div>
 </section>
@@ -39,22 +39,22 @@
 <!-- FEATURES SECTION -->
 <section class="features">
     <div class="container">
-        <h2 class="section-title">Everything you need to study effectively</h2>
+        <h2 class="section-title">{{ _('Everything you need to study effectively') }}</h2>
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon">🗂️</div>
-                <h3>Custom Study Lists</h3>
-                <p>Create word lists tailored to any subject — vocabulary, formulas, dates, concepts.</p>
+                <h3>{{ _('Custom Study Lists') }}</h3>
+                <p>{{ _('Create word lists tailored to any subject — vocabulary, formulas, dates, concepts.') }}</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🔖</div>
-                <h3>Flexible Fields</h3>
-                <p>Add as many fields as you need per word: description, examples, notes, and more.</p>
+                <h3>{{ _('Flexible Fields') }}</h3>
+                <p>{{ _('Add as many fields as you need per word: description, examples, notes, and more.') }}</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">⚡</div>
-                <h3>Fast &amp; Simple</h3>
-                <p>A clean interface that gets out of your way so you can focus on learning.</p>
+                <h3>{{ _('Fast & Simple') }}</h3>
+                <p>{{ _('A clean interface that gets out of your way so you can focus on learning.') }}</p>
             </div>
         </div>
     </div>

@@ -258,3 +258,84 @@ msgstr ""
 msgid "Use the form above to add your first word to this list."
 msgstr ""
 
+msgid "Contact"
+msgstr "Contact"
+
+msgid "The smarter way to study"
+msgstr "La facon la plus intelligente d'etudier"
+
+msgid "Master any subject"
+msgstr "Maitrisez n'importe quelle matiere"
+
+msgid "at your own pace"
+msgstr "a votre rythme"
+
+msgid "Create custom word lists with flexible study fields. Study with flashcards,"
+msgstr "Creez des listes personnalisees avec des champs flexibles. Etudiez avec des flashcards,"
+
+msgid "track your progress, and actually remember what you learn."
+msgstr "suivez vos progres et retenez vraiment ce que vous apprenez."
+
+msgid "Start for free"
+msgstr "Commencez gratuitement"
+
+msgid "Definition"
+msgstr "Definition"
+
+msgid "Lasting for a very short time"
+msgstr "Qui dure tres peu de temps"
+
+msgid "The ephemeral beauty of cherry blossoms"
+msgstr "La beaute ephemere des fleurs de cerisier"
+
+msgid "Everything you need to study effectively"
+msgstr "Tout ce dont vous avez besoin pour etudier efficacement"
+
+msgid "Custom Study Lists"
+msgstr "Listes d'etude personnalisees"
+
+msgid "Create word lists tailored to any subject — vocabulary, formulas, dates, concepts."
+msgstr "Creez des listes adaptees a chaque sujet — vocabulaire, formules, dates, concepts."
+
+msgid "Flexible Fields"
+msgstr "Champs flexibles"
+
+msgid "Add as many fields as you need per word: description, examples, notes, and more."
+msgstr "Ajoutez autant de champs que necessaire: description, exemples, notes, et plus."
+
+msgid "Fast & Simple"
+msgstr "Rapide et simple"
+
+msgid "A clean interface that gets out of your way so you can focus on learning."
+msgstr "Une interface claire qui vous laisse vous concentrer sur l'apprentissage."
+
+msgid "Have a question or feedback? We would love to hear from you."
+msgstr "Une question ou un retour? Nous serions ravis de vous lire."
+
+msgid "We usually reply within 24 hours."
+msgstr "Nous repondons generalement sous 24 heures."
+
+msgid "Back to home"
+msgstr "Retour a l'accueil"
+
+msgid "Please log in to continue."
+msgstr "Connectez-vous pour continuer."
+
+msgid "Quiz Complete!"
+msgstr "Quiz termine!"
+
+msgid "Your score"
+msgstr "Votre score"
+
+msgid "Excellent work!"
+msgstr "Excellent travail!"
+
+msgid "Good job!"
+msgstr "Bon travail!"
+
+msgid "Keep practicing!"
+msgstr "Continuez a pratiquer!"
+
+msgid "Try Again"
+msgstr "Reessayer"
+

@@ -7,11 +7,11 @@
     <!-- PAGE HEADER -->
     <div class="page-header">
         <div>
-            <a href="{{ url_for('dashboard') }}" class="back-link">← {{ _('Dashboard') }}</a>
+            <a href="{{ localized_url('dashboard') }}" class="back-link">← {{ _('Dashboard') }}</a>
             <h1 class="page-title">{{ word_list.name }}</h1>
             <p class="page-subtitle">{{ _('Multiple Choice Quiz') }}</p>
         </div>
-        <a href="{{ url_for('edit_list', list_id=word_list.id) }}" class="btn btn-secondary">{{ _('Edit List') }}</a>
+        <a href="{{ localized_url('edit_list', list_id=word_list.id) }}" class="btn btn-secondary">{{ _('Edit List') }}</a>
     </div>
 
     {% if words %}
@@ -50,8 +50,15 @@
         const words = {{ words|tojson }};
         let answered = false;
         let currentOptions = [];
-        const multipleChoiceUrl = "{{ url_for('multiple_choice', list_id=word_list.id) }}";
-        const dashboardUrl = "{{ url_for('dashboard') }}";
+        const multipleChoiceUrl = "{{ localized_url('multiple_choice', list_id=word_list.id) }}";
+        const dashboardUrl = "{{ localized_url('dashboard') }}";
+        const quizCompleteText = "{{ _('Quiz Complete!') }}";
+        const yourScoreText = "{{ _('Your score') }}";
+        const excellentWorkText = "{{ _('Excellent work!') }}";
+        const goodJobText = "{{ _('Good job!') }}";
+        const keepPracticingText = "{{ _('Keep practicing!') }}";
+        const tryAgainText = "{{ _('Try Again') }}";
+        const backToDashboardText = "{{ _('Back to Dashboard') }}";
 
         function generateOptions(correctAnswer, allWords) {
             const options = [correctAnswer];
@@ -148,11 +155,11 @@
             const percentage = Math.round((score / words.length) * 100);
             document.querySelector('.quiz-container').innerHTML = `
                 <div class="quiz-results">
-                    <h2>Quiz Complete!</h2>
-                    <div class="score">Your score: ${score}/${words.length} (${percentage}%)</div>
-                    <div class="message">${percentage >= 80 ? 'Excellent work!' : percentage >= 60 ? 'Good job!' : 'Keep practicing!'}</div>
-                    <a href="${multipleChoiceUrl}" class="btn btn-primary">Try Again</a>
-                    <a href="${dashboardUrl}" class="btn btn-secondary">Back to Dashboard</a>
+                    <h2>${quizCompleteText}</h2>
+                    <div class="score">${yourScoreText}: ${score}/${words.length} (${percentage}%)</div>
+                    <div class="message">${percentage >= 80 ? excellentWorkText : percentage >= 60 ? goodJobText : keepPracticingText}</div>
+                    <a href="${multipleChoiceUrl}" class="btn btn-primary">${tryAgainText}</a>
+                    <a href="${dashboardUrl}" class="btn btn-secondary">${backToDashboardText}</a>
                 </div>
             `;
         }
@@ -188,7 +195,7 @@
         <div class="empty-icon">🔢</div>
         <h2>{{ _('No words in this list') }}</h2>
         <p>{{ _('Add some words first to take the multiple choice quiz.') }}</p>
-        <a href="{{ url_for('edit_list', list_id=word_list.id) }}" class="btn btn-primary">{{ _('Add Words') }}</a>
+        <a href="{{ localized_url('edit_list', list_id=word_list.id) }}" class="btn btn-primary">{{ _('Add Words') }}</a>
     </div>
     {% endif %}
 

@@ -7,7 +7,7 @@
     <!-- PAGE HEADER -->
     <div class="page-header">
         <div>
-            <a href="{{ url_for('dashboard') }}" class="back-link">← {{ _('Dashboard') }}</a>
+            <a href="{{ localized_url('dashboard') }}" class="back-link">← {{ _('Dashboard') }}</a>
             <h1 class="page-title">{{ word_list.name }}</h1>
             <p class="page-subtitle">{{ _('Edit your word list') }}</p>
         </div>
@@ -16,7 +16,7 @@
     <!-- ADD WORD FORM -->
     <div class="study-form-card">
         <h2 class="study-form-title">{{ _('Add a new word') }}</h2>
-        <form method="POST" action="{{ url_for('edit_list', list_id=word_list.id) }}">
+        <form method="POST" action="{{ localized_url('edit_list', list_id=word_list.id) }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             {{ form.hidden_tag() if form }}
 
@@ -79,7 +79,7 @@
                     <td>{{ word.example or '—' }}</td>
                     <td>{{ word.disadvantage or '—' }}</td>
                     <td>
-                        <form method="POST" action="{{ url_for('delete_word', list_id=word_list.id, word_id=word.id) }}" style="display:inline;">
+                        <form method="POST" action="{{ localized_url('delete_word', list_id=word_list.id, word_id=word.id) }}" style="display:inline;">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <button type="submit" class="btn btn-danger btn-sm">{{ _('Delete') }}</button>
                         </form>

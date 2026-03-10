@@ -1,0 +1,107 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: StudyFlow 1.0\n"
+"Language: en\n"
+"Content-Type: text/plain; charset=utf-8\n"
+
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Logout"
+msgstr "Logout"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Get Started"
+msgstr "Get Started"
+
+msgid "Contact"
+msgstr "Contact"
+
+msgid "Learn smarter, not harder."
+msgstr "Learn smarter, not harder."
+
+msgid "The smarter way to study"
+msgstr "The smarter way to study"
+
+msgid "Master any subject"
+msgstr "Master any subject"
+
+msgid "at your own pace"
+msgstr "at your own pace"
+
+msgid "Create custom word lists with flexible study fields. Study with flashcards,"
+msgstr "Create custom word lists with flexible study fields. Study with flashcards,"
+
+msgid "track your progress, and actually remember what you learn."
+msgstr "track your progress, and actually remember what you learn."
+
+msgid "Start for free"
+msgstr "Start for free"
+
+msgid "Definition"
+msgstr "Definition"
+
+msgid "Lasting for a very short time"
+msgstr "Lasting for a very short time"
+
+msgid "The ephemeral beauty of cherry blossoms"
+msgstr "The ephemeral beauty of cherry blossoms"
+
+msgid "Everything you need to study effectively"
+msgstr "Everything you need to study effectively"
+
+msgid "Custom Study Lists"
+msgstr "Custom Study Lists"
+
+msgid "Create word lists tailored to any subject — vocabulary, formulas, dates, concepts."
+msgstr "Create word lists tailored to any subject — vocabulary, formulas, dates, concepts."
+
+msgid "Flexible Fields"
+msgstr "Flexible Fields"
+
+msgid "Add as many fields as you need per word: description, examples, notes, and more."
+msgstr "Add as many fields as you need per word: description, examples, notes, and more."
+
+msgid "Fast & Simple"
+msgstr "Fast & Simple"
+
+msgid "A clean interface that gets out of your way so you can focus on learning."
+msgstr "A clean interface that gets out of your way so you can focus on learning."
+
+msgid "Have a question or feedback? We would love to hear from you."
+msgstr "Have a question or feedback? We would love to hear from you."
+
+msgid "We usually reply within 24 hours."
+msgstr "We usually reply within 24 hours."
+
+msgid "Back to home"
+msgstr "Back to home"
+
+msgid "Sign in"
+msgstr "Sign in"
+
+msgid "Please log in to continue."
+msgstr "Please log in to continue."
+
+msgid "Quiz Complete!"
+msgstr "Quiz Complete!"
+
+msgid "Your score"
+msgstr "Your score"
+
+msgid "Excellent work!"
+msgstr "Excellent work!"
+
+msgid "Good job!"
+msgstr "Good job!"
+
+msgid "Keep practicing!"
+msgstr "Keep practicing!"
+
+msgid "Try Again"
+msgstr "Try Again"
+
+msgid "Back to Dashboard"
+msgstr "Back to Dashboard"
