@@ -256,19 +256,24 @@ def login_google():
 def auth_google_callback():
     """Handle the Google OAuth callback."""
     try:
+        # Retrieve the OAuth access token from Google
         token = google.authorize_access_token()
     except Exception as e:
         flash('Failed to authorize with Google.', 'error')
         return redirect(url_for('login'))
     
-    # Get user info from Google
-    user_data = token.get('userinfo')
-    if not user_data:
+    try:
+        # Fetch the user's Google profile information
+        resp = google.get("userinfo")
+        user_info = resp.json()
+    except Exception as e:
         flash('Could not retrieve user information from Google.', 'error')
         return redirect(url_for('login'))
     
-    email = user_data.get('email')
-    google_id = user_data.get('sub')  # Google's unique user ID
+    # Extract email and name from user info
+    email = user_info.get("email")
+    name = user_info.get("name")
+    google_id = user_info.get("sub")  # Google's unique user ID
     
     if not email or not google_id:
         flash('Google account missing required information.', 'error')
