@@ -3,70 +3,102 @@
 
 {% block content %}
 <div class="container page-top">
-    <div class="form-page-wrapper" style="max-width: 900px;">
-        <div class="form-page-header">
+    <div class="privacy-wrapper">
+        <div class="privacy-hero form-card">
+            <div class="privacy-hero-badge">StudyFlow</div>
             <h1>{{ _('Privacy Policy for StudyFlow') }}</h1>
-            <p><strong>{{ _('Last updated: March 2026') }}</strong></p>
+            <p class="privacy-updated"><strong>{{ _('Last updated: March 2026') }}</strong></p>
+            <p class="privacy-intro">{{ _('Welcome to StudyFlow. Your privacy is important to us. This Privacy Policy explains what information we collect, how we use it, and how we protect it.') }}</p>
         </div>
 
-        <div class="form-card" style="line-height: 1.8;">
-            <p>{{ _('Welcome to StudyFlow. Your privacy is important to us. This Privacy Policy explains what information we collect, how we use it, and how we protect it.') }}</p>
+        <div class="privacy-layout">
+            <aside class="privacy-toc form-card">
+                <a href="#collect">{{ _('Information We Collect') }}</a>
+                <a href="#use">{{ _('How We Use Your Information') }}</a>
+                <a href="#google">{{ _('Google Authentication') }}</a>
+                <a href="#storage">{{ _('Data Storage and Security') }}</a>
+                <a href="#sharing">{{ _('Data Sharing') }}</a>
+                <a href="#rights">{{ _('Your Rights') }}</a>
+                <a href="#cookies">{{ _('Cookies') }}</a>
+                <a href="#changes">{{ _('Changes to This Policy') }}</a>
+                <a href="#contact">{{ _('Contact') }}</a>
+            </aside>
 
-            <h2>{{ _('Information We Collect') }}</h2>
-            <p>{{ _('When you use StudyFlow, we may collect the following information:') }}</p>
+            <div class="privacy-content form-card">
+                <section id="collect" class="privacy-section">
+                    <h2>{{ _('Information We Collect') }}</h2>
+                    <p>{{ _('When you use StudyFlow, we may collect the following information:') }}</p>
 
-            <h3>{{ _('Account Information') }}</h3>
-            <p>{{ _('When you create an account, we may collect your username, email address, and encrypted password.') }}</p>
+                    <h3>{{ _('Account Information') }}</h3>
+                    <p>{{ _('When you create an account, we may collect your username, email address, and encrypted password.') }}</p>
 
-            <h3>{{ _('Google Login Information') }}</h3>
-            <p>{{ _('If you sign in using Google, we receive basic profile information such as your name and email address from Google.') }}</p>
+                    <h3>{{ _('Google Login Information') }}</h3>
+                    <p>{{ _('If you sign in using Google, we receive basic profile information such as your name and email address from Google.') }}</p>
 
-            <h3>{{ _('Study Data') }}</h3>
-            <p>{{ _('We store the lists, words, flashcards, and study content that you create in order to provide the StudyFlow learning features.') }}</p>
+                    <h3>{{ _('Study Data') }}</h3>
+                    <p>{{ _('We store the lists, words, flashcards, and study content that you create in order to provide the StudyFlow learning features.') }}</p>
 
-            <h3>{{ _('Technical Information') }}</h3>
-            <p>{{ _('We may collect basic technical information such as browser type, device information, and IP address to improve the performance and security of the website.') }}</p>
+                    <h3>{{ _('Technical Information') }}</h3>
+                    <p>{{ _('We may collect basic technical information such as browser type, device information, and IP address to improve the performance and security of the website.') }}</p>
+                </section>
 
-            <h2>{{ _('How We Use Your Information') }}</h2>
-            <p>{{ _('We use the collected information to:') }}</p>
-            <ul>
-                <li>{{ _('create and manage your account') }}</li>
-                <li>{{ _('allow you to log in and access your dashboard') }}</li>
-                <li>{{ _('save and manage your study lists and flashcards') }}</li>
-                <li>{{ _('improve the performance and reliability of StudyFlow') }}</li>
-                <li>{{ _('maintain security and prevent misuse of the service') }}</li>
-            </ul>
+                <section id="use" class="privacy-section">
+                    <h2>{{ _('How We Use Your Information') }}</h2>
+                    <p>{{ _('We use the collected information to:') }}</p>
+                    <ul>
+                        <li>{{ _('create and manage your account') }}</li>
+                        <li>{{ _('allow you to log in and access your dashboard') }}</li>
+                        <li>{{ _('save and manage your study lists and flashcards') }}</li>
+                        <li>{{ _('improve the performance and reliability of StudyFlow') }}</li>
+                        <li>{{ _('maintain security and prevent misuse of the service') }}</li>
+                    </ul>
+                </section>
 
-            <h2>{{ _('Google Authentication') }}</h2>
-            <p>{{ _('StudyFlow allows users to sign in using Google. When you use Google login, authentication is handled securely through Google\'s OAuth system. We only receive basic profile information such as your email address and name.') }}</p>
-            <p>{{ _('StudyFlow does not access your Google password or other private Google data.') }}</p>
+                <section id="google" class="privacy-section">
+                    <h2>{{ _('Google Authentication') }}</h2>
+                    <p>{{ _('StudyFlow allows users to sign in using Google. When you use Google login, authentication is handled securely through Google\'s OAuth system. We only receive basic profile information such as your email address and name.') }}</p>
+                    <p>{{ _('StudyFlow does not access your Google password or other private Google data.') }}</p>
+                </section>
 
-            <h2>{{ _('Data Storage and Security') }}</h2>
-            <p>{{ _('We take reasonable measures to protect your information. Passwords are stored in encrypted form and cannot be read directly.') }}</p>
-            <p>{{ _('Your data is stored securely on our hosting infrastructure.') }}</p>
+                <section id="storage" class="privacy-section">
+                    <h2>{{ _('Data Storage and Security') }}</h2>
+                    <p>{{ _('We take reasonable measures to protect your information. Passwords are stored in encrypted form and cannot be read directly.') }}</p>
+                    <p>{{ _('Your data is stored securely on our hosting infrastructure.') }}</p>
+                </section>
 
-            <h2>{{ _('Data Sharing') }}</h2>
-            <p>{{ _('StudyFlow does not sell, trade, or rent your personal information to third parties.') }}</p>
-            <p>{{ _('We may only share information if required by law or to protect the security of the service.') }}</p>
+                <section id="sharing" class="privacy-section">
+                    <h2>{{ _('Data Sharing') }}</h2>
+                    <p>{{ _('StudyFlow does not sell, trade, or rent your personal information to third parties.') }}</p>
+                    <p>{{ _('We may only share information if required by law or to protect the security of the service.') }}</p>
+                </section>
 
-            <h2>{{ _('Your Rights') }}</h2>
-            <p>{{ _('You have the right to:') }}</p>
-            <ul>
-                <li>{{ _('access the information stored about you') }}</li>
-                <li>{{ _('request correction of your information') }}</li>
-                <li>{{ _('request deletion of your account and associated data') }}</li>
-            </ul>
-            <p>{{ _('If you would like your data removed, please contact us.') }}</p>
+                <section id="rights" class="privacy-section">
+                    <h2>{{ _('Your Rights') }}</h2>
+                    <p>{{ _('You have the right to:') }}</p>
+                    <ul>
+                        <li>{{ _('access the information stored about you') }}</li>
+                        <li>{{ _('request correction of your information') }}</li>
+                        <li>{{ _('request deletion of your account and associated data') }}</li>
+                    </ul>
+                    <p>{{ _('If you would like your data removed, please contact us.') }}</p>
+                </section>
 
-            <h2>{{ _('Cookies') }}</h2>
-            <p>{{ _('StudyFlow may use cookies or session storage to keep you logged in and improve the user experience.') }}</p>
+                <section id="cookies" class="privacy-section">
+                    <h2>{{ _('Cookies') }}</h2>
+                    <p>{{ _('StudyFlow may use cookies or session storage to keep you logged in and improve the user experience.') }}</p>
+                </section>
 
-            <h2>{{ _('Changes to This Policy') }}</h2>
-            <p>{{ _('We may update this Privacy Policy from time to time. Any updates will be posted on this page.') }}</p>
+                <section id="changes" class="privacy-section">
+                    <h2>{{ _('Changes to This Policy') }}</h2>
+                    <p>{{ _('We may update this Privacy Policy from time to time. Any updates will be posted on this page.') }}</p>
+                </section>
 
-            <h2>{{ _('Contact') }}</h2>
-            <p>{{ _('If you have any questions about this Privacy Policy, you can contact us at:') }}</p>
-            <p><strong>studyflow.contact@gmail.com</strong></p>
+                <section id="contact" class="privacy-section privacy-contact">
+                    <h2>{{ _('Contact') }}</h2>
+                    <p>{{ _('If you have any questions about this Privacy Policy, you can contact us at:') }}</p>
+                    <p><a href="mailto:studyflow.contact@gmail.com"><strong>studyflow.contact@gmail.com</strong></a></p>
+                </section>
+            </div>
         </div>
     </div>
 </div>

@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from sqlalchemy import or_
 from sqlalchemy.exc import SQLAlchemyError
 
-from flask import Flask, abort, flash, redirect, render_template, request, url_for
+from flask import Flask, abort, flash, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from flask_babel import Babel, gettext
@@ -450,25 +450,33 @@ def login_google(lang):
         flash(translate_text('Google login is not configured yet. Please use username/password login.'), 'error')
         return redirect(localized_url('login', lang=lang))
 
-    redirect_uri = localized_url('auth_google_callback', lang=lang, _external=True)
+    session['oauth_lang'] = lang
+    redirect_uri = url_for('auth_google_callback_entry', _external=True)
     return google.authorize_redirect(redirect_uri)
+
+
+@app.route("/auth/google/callback")
+def auth_google_callback_entry():
+    lang = validate_language(session.get('oauth_lang', DEFAULT_LANGUAGE))
+    return auth_google_callback(lang)
 
 
 @app.route("/login/google/authorized", defaults={'lang': DEFAULT_LANGUAGE})
 @app.route("/<lang>/login/google/authorized")
 def auth_google_callback(lang):
     lang = validate_language(lang)
+    target_lang = validate_language(session.pop('oauth_lang', lang))
     """Handle the Google OAuth callback."""
     if google is None:
         flash(translate_text('Google login is not configured yet. Please use username/password login.'), 'error')
-        return redirect(localized_url('login', lang=lang))
+        return redirect(localized_url('login', lang=target_lang))
 
     try:
         # Retrieve the OAuth access token from Google
         token = google.authorize_access_token()
     except Exception:
         flash(translate_text('Failed to authorize with Google.'), 'error')
-        return redirect(localized_url('login', lang=lang))
+        return redirect(localized_url('login', lang=target_lang))
     
     try:
         # Fetch the user's Google profile information
@@ -476,7 +484,7 @@ def auth_google_callback(lang):
         user_info = resp.json()
     except Exception:
         flash(translate_text('Could not retrieve user information from Google.'), 'error')
-        return redirect(localized_url('login', lang=lang))
+        return redirect(localized_url('login', lang=target_lang))
     
     # Extract email and name from user info
     email = user_info.get("email")
@@ -485,7 +493,7 @@ def auth_google_callback(lang):
     
     if not email or not google_id:
         flash(translate_text('Google account missing required information.'), 'error')
-        return redirect(localized_url('login', lang=lang))
+        return redirect(localized_url('login', lang=target_lang))
     
     # Check if user already exists by Google ID
     user = User.query.filter_by(google_id=google_id).first()
@@ -519,7 +527,7 @@ def auth_google_callback(lang):
     
     # Log the user in using Flask-Login
     login_user(user)
-    return redirect(localized_url('dashboard', lang=lang))
+    return redirect(localized_url('dashboard', lang=target_lang))
 
 
 @app.route("/logout", defaults={'lang': DEFAULT_LANGUAGE})

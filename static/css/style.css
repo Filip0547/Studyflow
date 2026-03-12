@@ -615,6 +615,119 @@ a:hover { text-decoration: underline; }
     box-shadow: var(--shadow);
 }
 
+/* ---------- PRIVACY POLICY ---------- */
+.privacy-wrapper {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.privacy-hero {
+    background: linear-gradient(145deg, #ffffff 0%, #f6f8ff 100%);
+    border-color: #dfe4ff;
+    margin-bottom: 20px;
+}
+
+.privacy-hero-badge {
+    display: inline-block;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+}
+
+.privacy-hero h1 {
+    font-size: clamp(1.65rem, 3.2vw, 2.2rem);
+    margin-bottom: 8px;
+}
+
+.privacy-updated {
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+
+.privacy-intro {
+    color: var(--text);
+    max-width: 72ch;
+}
+
+.privacy-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 18px;
+    align-items: start;
+}
+
+.privacy-toc {
+    position: sticky;
+    top: 84px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.privacy-toc a {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    padding: 8px 10px;
+    transition: background var(--transition), color var(--transition);
+}
+
+.privacy-toc a:hover {
+    background: var(--bg);
+    color: var(--primary);
+}
+
+.privacy-content {
+    padding: 28px 32px;
+}
+
+.privacy-section + .privacy-section {
+    border-top: 1px solid var(--border);
+    margin-top: 22px;
+    padding-top: 22px;
+}
+
+.privacy-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.privacy-section h3 {
+    font-size: 1rem;
+    margin: 14px 0 6px;
+}
+
+.privacy-section p,
+.privacy-section li {
+    color: var(--text);
+    line-height: 1.75;
+}
+
+.privacy-section ul {
+    margin-top: 8px;
+    padding-left: 20px;
+}
+
+.privacy-contact {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+}
+
+.privacy-contact a {
+    color: var(--primary);
+}
+
 /* ---------- DASHBOARD ---------- */
 .page-header {
     display: flex;
@@ -1003,4 +1116,7 @@ a:hover { text-decoration: underline; }
     .word-fields-grid { grid-template-columns: 1fr; }
     .page-header { flex-direction: column; align-items: stretch; }
     .nav-links { gap: 10px; }
+    .privacy-layout { grid-template-columns: 1fr; }
+    .privacy-toc { position: static; }
+    .privacy-content { padding: 24px; }
 }
