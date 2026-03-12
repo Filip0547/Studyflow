@@ -538,6 +538,13 @@ def contact(lang):
     return render_template("contact.html")
 
 
+@app.route("/privacy-policy", defaults={'lang': DEFAULT_LANGUAGE})
+@app.route("/<lang>/privacy-policy")
+def privacy_policy(lang):
+    validate_language(lang)
+    return render_template("privacy_policy.html")
+
+
 @app.route("/dashboard", defaults={'lang': DEFAULT_LANGUAGE})
 @app.route("/<lang>/dashboard")
 @login_required

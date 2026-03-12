@@ -406,3 +406,126 @@ msgstr "Слово успешно добавлено."
 msgid "Submit Answer"
 msgstr "Отправить ответ"
 
+msgid "Privacy Policy"
+msgstr "Политика конфиденциальности"
+
+msgid "Privacy Policy for StudyFlow"
+msgstr "Политика конфиденциальности StudyFlow"
+
+msgid "Last updated: March 2026"
+msgstr "Последнее обновление: март 2026"
+
+msgid "Welcome to StudyFlow. Your privacy is important to us. This Privacy Policy explains what information we collect, how we use it, and how we protect it."
+msgstr "Добро пожаловать в StudyFlow. Ваша конфиденциальность важна для нас. Эта Политика конфиденциальности объясняет, какую информацию мы собираем, как ее используем и как ее защищаем."
+
+msgid "Information We Collect"
+msgstr "Какую информацию мы собираем"
+
+msgid "When you use StudyFlow, we may collect the following information:"
+msgstr "Когда вы используете StudyFlow, мы можем собирать следующую информацию:"
+
+msgid "Account Information"
+msgstr "Информация об аккаунте"
+
+msgid "When you create an account, we may collect your username, email address, and encrypted password."
+msgstr "Когда вы создаете аккаунт, мы можем собирать ваше имя пользователя, адрес электронной почты и зашифрованный пароль."
+
+msgid "Google Login Information"
+msgstr "Информация при входе через Google"
+
+msgid "If you sign in using Google, we receive basic profile information such as your name and email address from Google."
+msgstr "Если вы входите с помощью Google, мы получаем базовую информацию профиля, такую как ваше имя и адрес электронной почты."
+
+msgid "Study Data"
+msgstr "Учебные данные"
+
+msgid "We store the lists, words, flashcards, and study content that you create in order to provide the StudyFlow learning features."
+msgstr "Мы храним списки, слова, flashcards и учебный контент, которые вы создаете, чтобы предоставлять обучающие функции StudyFlow."
+
+msgid "Technical Information"
+msgstr "Техническая информация"
+
+msgid "We may collect basic technical information such as browser type, device information, and IP address to improve the performance and security of the website."
+msgstr "Мы можем собирать базовую техническую информацию, такую как тип браузера, информацию об устройстве и IP-адрес, чтобы улучшать производительность и безопасность сайта."
+
+msgid "How We Use Your Information"
+msgstr "Как мы используем вашу информацию"
+
+msgid "We use the collected information to:"
+msgstr "Мы используем собранную информацию, чтобы:"
+
+msgid "create and manage your account"
+msgstr "создавать и управлять вашим аккаунтом"
+
+msgid "allow you to log in and access your dashboard"
+msgstr "позволять вам входить в систему и получать доступ к панели"
+
+msgid "save and manage your study lists and flashcards"
+msgstr "сохранять и управлять вашими учебными списками и flashcards"
+
+msgid "improve the performance and reliability of StudyFlow"
+msgstr "улучшать производительность и надежность StudyFlow"
+
+msgid "maintain security and prevent misuse of the service"
+msgstr "поддерживать безопасность и предотвращать злоупотребление сервисом"
+
+msgid "Google Authentication"
+msgstr "Аутентификация Google"
+
+msgid "StudyFlow allows users to sign in using Google. When you use Google login, authentication is handled securely through Google's OAuth system. We only receive basic profile information such as your email address and name."
+msgstr "StudyFlow позволяет пользователям входить через Google. Когда вы используете вход через Google, аутентификация безопасно обрабатывается через систему OAuth Google. Мы получаем только базовую информацию профиля, такую как ваш адрес электронной почты и имя."
+
+msgid "StudyFlow does not access your Google password or other private Google data."
+msgstr "StudyFlow не имеет доступа к вашему паролю Google или другим личным данным Google."
+
+msgid "Data Storage and Security"
+msgstr "Хранение данных и безопасность"
+
+msgid "We take reasonable measures to protect your information. Passwords are stored in encrypted form and cannot be read directly."
+msgstr "Мы принимаем разумные меры для защиты вашей информации. Пароли хранятся в зашифрованном виде и не могут быть прочитаны напрямую."
+
+msgid "Your data is stored securely on our hosting infrastructure."
+msgstr "Ваши данные безопасно хранятся на нашей хостинг-инфраструктуре."
+
+msgid "Data Sharing"
+msgstr "Передача данных"
+
+msgid "StudyFlow does not sell, trade, or rent your personal information to third parties."
+msgstr "StudyFlow не продает, не обменивает и не сдает в аренду вашу личную информацию третьим сторонам."
+
+msgid "We may only share information if required by law or to protect the security of the service."
+msgstr "Мы можем делиться информацией только если это требуется законом или для защиты безопасности сервиса."
+
+msgid "Your Rights"
+msgstr "Ваши права"
+
+msgid "You have the right to:"
+msgstr "Вы имеете право:"
+
+msgid "access the information stored about you"
+msgstr "получать доступ к информации, которая хранится о вас"
+
+msgid "request correction of your information"
+msgstr "запросить исправление вашей информации"
+
+msgid "request deletion of your account and associated data"
+msgstr "запросить удаление аккаунта и связанных данных"
+
+msgid "If you would like your data removed, please contact us."
+msgstr "Если вы хотите удалить свои данные, пожалуйста, свяжитесь с нами."
+
+msgid "Cookies"
+msgstr "Cookies"
+
+msgid "StudyFlow may use cookies or session storage to keep you logged in and improve the user experience."
+msgstr "StudyFlow может использовать cookies или хранилище сессии, чтобы сохранять вас авторизованными и улучшать пользовательский опыт."
+
+msgid "Changes to This Policy"
+msgstr "Изменения этой политики"
+
+msgid "We may update this Privacy Policy from time to time. Any updates will be posted on this page."
+msgstr "Мы можем время от времени обновлять эту Политику конфиденциальности. Любые обновления будут опубликованы на этой странице."
+
+msgid "If you have any questions about this Privacy Policy, you can contact us at:"
+msgstr "Если у вас есть вопросы по этой Политике конфиденциальности, вы можете связаться с нами:"
+
