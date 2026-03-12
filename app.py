@@ -3,6 +3,8 @@ from functools import lru_cache
 
 import polib
 from dotenv import load_dotenv
+from sqlalchemy import or_
+from sqlalchemy.exc import SQLAlchemyError
 
 from flask import Flask, abort, flash, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
@@ -27,7 +29,7 @@ LANGUAGE_NAMES = {
     'es': 'Espanol',
     'fr': 'Francais',
     'de': 'Deutsch',
-    'ru': 'Russkiy',
+    'ru': 'Русский',
 }
 
 app = Flask(__name__)
@@ -169,6 +171,36 @@ def active_page():
     return request.endpoint or ''
 
 
+def parse_initial_words(raw_words):
+    """Parse textarea lines in `word|description|example|disadvantage` format."""
+    parsed_words = []
+    if not raw_words:
+        return parsed_words
+
+    for line in raw_words.splitlines():
+        cleaned = line.strip()
+        if not cleaned:
+            continue
+
+        parts = [part.strip() for part in cleaned.split('|')]
+        if not parts[0]:
+            continue
+
+        while len(parts) < 4:
+            parts.append('')
+
+        parsed_words.append(
+            {
+                'word': parts[0],
+                'description': parts[1],
+                'example': parts[2],
+                'disadvantage': parts[3],
+            }
+        )
+
+    return parsed_words
+
+
 def asset_url(filename):
     """Static URL with per-file cache busting."""
     full_path = os.path.join(app.static_folder, filename)
@@ -176,15 +208,15 @@ def asset_url(filename):
     return url_for('static', filename=filename, v=version)
 
 # Register Google OAuth
-google = oauth.register(
-    name='google',
-    client_id=app.config['GOOGLE_CLIENT_ID'],
-    client_secret=app.config['GOOGLE_CLIENT_SECRET'],
-    access_token_url="https://oauth2.googleapis.com/token",
-    authorize_url="https://accounts.google.com/o/oauth2/auth",
-    api_base_url="https://www.googleapis.com/oauth2/v1/",
-    client_kwargs={"scope": "openid email profile"},
-)
+google = None
+if app.config['GOOGLE_CLIENT_ID'] and app.config['GOOGLE_CLIENT_SECRET']:
+    google = oauth.register(
+        name='google',
+        client_id=app.config['GOOGLE_CLIENT_ID'],
+        client_secret=app.config['GOOGLE_CLIENT_SECRET'],
+        server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+        client_kwargs={'scope': 'openid email profile'},
+    )
 
 
 @login_manager.user_loader
@@ -297,6 +329,7 @@ def inject_globals():
         language_names=LANGUAGE_NAMES,
         languages=LANGUAGES,
         default_language=DEFAULT_LANGUAGE,
+        google_login_enabled=google is not None,
         asset_url=asset_url,
         _=translate_text,
     )
@@ -306,6 +339,19 @@ def inject_globals():
 def unauthorized():
     flash(translate_text('Please log in to continue.'), 'error')
     return redirect(localized_url('login', lang=get_current_language()))
+
+
+@app.errorhandler(SQLAlchemyError)
+def handle_db_error(error):
+    db.session.rollback()
+    flash(translate_text('A database error occurred. Please try again.'), 'error')
+    return redirect(localized_url('index', lang=get_current_language()))
+
+
+@app.errorhandler(500)
+def handle_internal_error(error):
+    flash(translate_text('Something went wrong. Please try again.'), 'error')
+    return redirect(localized_url('index', lang=get_current_language()))
 
 
 # ─── ROUTES ───────────────────────────────────────────────
@@ -331,10 +377,13 @@ def register(lang):
         username = request.form.get('username', '').strip()
         email = request.form.get('email', '').strip()
         password = request.form.get('password', '')
+        accepted_privacy = request.form.get('accept_privacy') == 'on'
 
         # Validation errors
         if not username or not email or not password:
             flash(translate_text('All fields are required.'), 'error')
+        elif not accepted_privacy:
+            flash(translate_text('You must accept the privacy policy to create an account.'), 'error')
         elif len(password) < 4:
             flash(translate_text('Password must be at least 4 characters long.'), 'error')
         elif not ('@' in email and '.' in email):
@@ -374,15 +423,20 @@ def login(lang):
         return redirect(localized_url('dashboard', lang=lang))
 
     if request.method == "POST":
-        username = request.form.get('username', '').strip()
+        identifier = request.form.get('username', '').strip()
         password = request.form.get('password', '')
-        user = User.query.filter_by(username=username).first()
 
-        if user and check_password_hash(user.password, password):
+        user = User.query.filter(
+            or_(User.username == identifier, User.email == identifier)
+        ).first()
+
+        if user and user.password and check_password_hash(user.password, password):
             login_user(user)
             return redirect(localized_url('dashboard', lang=lang))
+        elif user and not user.password:
+            flash(translate_text('This account uses Google sign-in. Please continue with Google.'), 'error')
         else:
-            flash(translate_text('Invalid username or password.'), 'error')
+            flash(translate_text('Invalid username/email or password.'), 'error')
 
     return render_template("login.html")
 
@@ -392,6 +446,10 @@ def login(lang):
 def login_google(lang):
     lang = validate_language(lang)
     """Redirect user to the Google OAuth login page."""
+    if google is None:
+        flash(translate_text('Google login is not configured yet. Please use username/password login.'), 'error')
+        return redirect(localized_url('login', lang=lang))
+
     redirect_uri = localized_url('auth_google_callback', lang=lang, _external=True)
     return google.authorize_redirect(redirect_uri)
 
@@ -401,18 +459,22 @@ def login_google(lang):
 def auth_google_callback(lang):
     lang = validate_language(lang)
     """Handle the Google OAuth callback."""
+    if google is None:
+        flash(translate_text('Google login is not configured yet. Please use username/password login.'), 'error')
+        return redirect(localized_url('login', lang=lang))
+
     try:
         # Retrieve the OAuth access token from Google
         token = google.authorize_access_token()
-    except Exception as e:
+    except Exception:
         flash(translate_text('Failed to authorize with Google.'), 'error')
         return redirect(localized_url('login', lang=lang))
     
     try:
         # Fetch the user's Google profile information
-        resp = google.get("userinfo")
+        resp = google.get('userinfo')
         user_info = resp.json()
-    except Exception as e:
+    except Exception:
         flash(translate_text('Could not retrieve user information from Google.'), 'error')
         return redirect(localized_url('login', lang=lang))
     
@@ -433,14 +495,26 @@ def auth_google_callback(lang):
         user = User.query.filter_by(email=email).first()
         
         if not user:
+            safe_username = email.split('@')[0]
+            base_username = safe_username or 'google_user'
+            candidate = base_username
+            suffix = 1
+            while User.query.filter_by(username=candidate).first():
+                suffix += 1
+                candidate = f"{base_username}{suffix}"
+
             # Create a new user account
             user = User(
                 email=email,
                 google_id=google_id,
-                username=None,  # No username for Google OAuth users
+                username=candidate,
                 password=None   # No password for Google OAuth users
             )
             db.session.add(user)
+            db.session.commit()
+            flash(translate_text('Account created successfully! You are now signed in with Google.'), 'success')
+        else:
+            user.google_id = user.google_id or google_id
             db.session.commit()
     
     # Log the user in using Flask-Login
@@ -481,13 +555,29 @@ def create_list(lang):
     lang = validate_language(lang)
     if request.method == "POST":
         name = request.form.get('name', '').strip()
+        initial_words_raw = request.form.get('initial_words', '').strip()
         if not name:
-            pass
+            flash(translate_text('List name is required.'), 'error')
         else:
             new_list = WordList(name=name, user_id=current_user.id)
             db.session.add(new_list)
+            db.session.flush()
+
+            initial_words = parse_initial_words(initial_words_raw)
+            for item in initial_words:
+                db.session.add(
+                    Word(
+                        word=item['word'],
+                        description=item['description'],
+                        example=item['example'],
+                        disadvantage=item['disadvantage'],
+                        list_id=new_list.id,
+                    )
+                )
+
             db.session.commit()
-            return redirect(localized_url('edit_list', lang=lang, list_id=new_list.id))
+            flash(translate_text('List created successfully.'), 'success')
+            return redirect(localized_url('dashboard', lang=lang))
 
     return render_template("create_list.html")
 
@@ -507,7 +597,7 @@ def edit_list(list_id, lang):
         disadvantage= request.form.get('disadvantage', '').strip()
 
         if not word:
-            pass
+            flash(translate_text('Word is required.'), 'error')
         else:
             new_word = Word(
                 word=word,
@@ -518,6 +608,7 @@ def edit_list(list_id, lang):
             )
             db.session.add(new_word)
             db.session.commit()
+            flash(translate_text('Word added successfully.'), 'success')
             return redirect(localized_url('edit_list', lang=lang, list_id=list_id))
 
     words = Word.query.filter_by(list_id=list_id).all()
@@ -532,7 +623,16 @@ def flashcards(list_id, lang):
     user = get_current_user()
     word_list = WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
     words = Word.query.filter_by(list_id=list_id).all()
-    return render_template("flashcards.html", word_list=word_list, words=words)
+    words_data = [
+        {
+            'word': w.word,
+            'description': w.description,
+            'example': w.example,
+            'disadvantage': w.disadvantage,
+        }
+        for w in words
+    ]
+    return render_template("flashcards.html", word_list=word_list, words=words, words_data=words_data)
 
 
 @app.route("/list/<int:list_id>/quiz", defaults={'lang': DEFAULT_LANGUAGE})
@@ -543,7 +643,17 @@ def quiz(list_id, lang):
     user = get_current_user()
     word_list = WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
     words = Word.query.filter_by(list_id=list_id).all()
-    return render_template("quiz.html", word_list=word_list, words=words)
+    study_words = [w for w in words if (w.description or '').strip()]
+    words_data = [
+        {
+            'word': w.word,
+            'description': w.description,
+            'example': w.example,
+            'disadvantage': w.disadvantage,
+        }
+        for w in study_words
+    ]
+    return render_template("quiz.html", word_list=word_list, words=study_words, words_data=words_data)
 
 
 @app.route("/list/<int:list_id>/multiple-choice", defaults={'lang': DEFAULT_LANGUAGE})
@@ -554,7 +664,17 @@ def multiple_choice(list_id, lang):
     user = get_current_user()
     word_list = WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
     words = Word.query.filter_by(list_id=list_id).all()
-    return render_template("multiple_choice.html", word_list=word_list, words=words)
+    study_words = [w for w in words if (w.description or '').strip()]
+    words_data = [
+        {
+            'word': w.word,
+            'description': w.description,
+            'example': w.example,
+            'disadvantage': w.disadvantage,
+        }
+        for w in study_words
+    ]
+    return render_template("multiple_choice.html", word_list=word_list, words=study_words, words_data=words_data)
 
 
 @app.route("/list/<int:list_id>/delete_word/<int:word_id>", defaults={'lang': DEFAULT_LANGUAGE}, methods=["POST"])

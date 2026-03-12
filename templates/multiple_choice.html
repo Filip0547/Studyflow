@@ -25,12 +25,9 @@
             <form id="quiz-form" method="POST" onsubmit="checkAnswer(event)">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" id="correct-answer" value="{{ words[0].description }}">
-                <div class="options-grid">
-                    <button type="button" class="option-btn" data-option="0"></button>
-                    <button type="button" class="option-btn" data-option="1"></button>
-                    <button type="button" class="option-btn" data-option="2"></button>
-                    <button type="button" class="option-btn" data-option="3"></button>
+                <div id="options-grid" class="options-grid">
                 </div>
+                <button type="submit" class="btn btn-primary">{{ _('Submit Answer') }}</button>
             </form>
 
             <div id="feedback" class="quiz-feedback" style="display: none;"></div>
@@ -47,7 +44,7 @@
         let currentIndex = 0;
         let score = 0;
         // eslint-disable-next-line no-undef
-        const words = {{ words|tojson }};
+        const words = {{ words_data|tojson }};
         let answered = false;
         let currentOptions = [];
         const multipleChoiceUrl = "{{ localized_url('multiple_choice', list_id=word_list.id) }}";
@@ -66,7 +63,7 @@
                 .filter(w => w.description !== correctAnswer)
                 .map(w => w.description);
 
-            // Shuffle and pick 3 wrong answers
+            // Shuffle and pick up to 3 wrong answers (if available)
             const shuffled = otherAnswers.sort(() => 0.5 - Math.random());
             options.push(...shuffled.slice(0, 3));
 
@@ -80,10 +77,22 @@
             document.getElementById('correct-answer').value = word.description;
 
             currentOptions = generateOptions(word.description, words);
-            const optionBtns = document.querySelectorAll('.option-btn');
+            const optionsGrid = document.getElementById('options-grid');
+            optionsGrid.innerHTML = '';
 
-            optionBtns.forEach((btn, index) => {
-                btn.textContent = currentOptions[index];
+            currentOptions.forEach((optionText, index) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'option-btn';
+                btn.setAttribute('data-option', index);
+                btn.textContent = optionText;
+                btn.addEventListener('click', function() {
+                    selectOption(this);
+                });
+                optionsGrid.appendChild(btn);
+            });
+
+            document.querySelectorAll('.option-btn').forEach((btn) => {
                 btn.classList.remove('selected', 'correct', 'incorrect');
                 btn.disabled = false;
             });
@@ -167,11 +176,6 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             updateQuestion();
-            document.querySelectorAll('.option-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    selectOption(this);
-                });
-            });
         });
 
         // Keyboard support
@@ -179,7 +183,9 @@
             if (event.key >= '1' && event.key <= '4' && !answered) {
                 const index = parseInt(event.key) - 1;
                 const btn = document.querySelectorAll('.option-btn')[index];
-                selectOption(btn);
+                if (btn) {
+                    selectOption(btn);
+                }
             } else if (event.key === 'Enter' && !answered) {
                 document.getElementById('quiz-form').dispatchEvent(new Event('submit'));
             } else if (event.key === 'ArrowRight' && answered) {

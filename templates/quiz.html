@@ -53,7 +53,7 @@
         let currentIndex = 0;
         let score = 0;
         // eslint-disable-next-line no-undef
-        const words = {{ words|tojson }};
+        const words = {{ words_data|tojson }};
         const quizUrl = "{{ localized_url('quiz', list_id=word_list.id) }}";
         const dashboardUrl = "{{ localized_url('dashboard') }}";
         const quizCompleteText = "{{ _('Quiz Complete!') }}";
@@ -82,7 +82,7 @@
             if (answered) return;
 
             const userAnswer = document.getElementById('answer').value.trim().toLowerCase();
-            const correctAnswer = words[currentIndex].description.toLowerCase();
+            const correctAnswer = (words[currentIndex].description || '').trim().toLowerCase();
             const feedback = document.getElementById('feedback');
 
             if (userAnswer === correctAnswer) {

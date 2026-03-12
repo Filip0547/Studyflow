@@ -142,27 +142,36 @@ a:hover { text-decoration: underline; }
     padding-left: 16px;
     border-left: 1px solid var(--border);
     display: flex;
-    gap: 12px;
+    align-items: center;
 }
 
-.language-link {
+.language-select {
     font-family: var(--font);
-    color: var(--text-secondary);
-    text-decoration: none;
+    color: var(--text);
     font-size: 0.9rem;
-    padding: 4px 8px;
-    border-radius: 4px;
-    transition: color var(--transition), background-color var(--transition);
-}
-
-.language-link:hover {
-    color: var(--primary);
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
     background: var(--surface);
+    cursor: pointer;
 }
 
-.language-link.active {
-    color: var(--primary);
-    font-weight: 500;
+.language-select:hover,
+.language-select:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* ---------- BUTTONS ---------- */
@@ -288,6 +297,14 @@ a:hover { text-decoration: underline; }
     text-align: center;
     color: var(--text-muted);
     font-size: 0.85rem;
+}
+
+.footer-link {
+    color: var(--text-muted);
+}
+
+.footer-link:hover {
+    color: var(--primary);
 }
 
 /* ---------- HERO ---------- */
@@ -545,6 +562,30 @@ a:hover { text-decoration: underline; }
     justify-content: flex-end;
     gap: 12px;
     margin-top: 8px;
+}
+
+.form-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.form-check input[type="checkbox"] {
+    margin-top: 3px;
+}
+
+.form-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.field-help {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
 }
 
 /* ---------- CREATE LIST PAGE ---------- */

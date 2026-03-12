@@ -19,7 +19,6 @@
                 <span class="logo-text">StudyFlow</span>
             </a>
             <div class="nav-links">
-                <a href="{{ localized_url('contact') }}" class="nav-btn nav-btn-secondary {% if active_page() == 'contact' %}active{% endif %}">{{ _('Contact') }}</a>
                 {% if current_user %}
                     <a href="{{ localized_url('dashboard') }}" class="nav-btn nav-btn-primary">{{ _('Dashboard') }}</a>
                     <a href="{{ localized_url('logout') }}" class="nav-btn nav-btn-secondary">{{ _('Logout') }}</a>
@@ -29,13 +28,34 @@
                 {% endif %}
                 <!-- Language Selector -->
                 <div class="language-selector">
-                    {% for lang_code in languages %}
-                        <a href="{{ switch_language_url(lang_code) }}" class="language-link {% if get_current_language() == lang_code %}active{% endif %}">{{ language_names[lang_code] }}</a>
-                    {% endfor %}
+                    <label for="language-select" class="visually-hidden">{{ _('Language') }}</label>
+                    <select
+                        id="language-select"
+                        class="language-select"
+                        onchange="window.location.href=this.value"
+                        aria-label="{{ _('Language') }}"
+                    >
+                        {% for lang_code in languages %}
+                            <option value="{{ switch_language_url(lang_code) }}" {% if get_current_language() == lang_code %}selected{% endif %}>{{ language_names[lang_code] }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
         </div>
     </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container" role="status" aria-live="polite">
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">
+            <span>{{ message }}</span>
+            <button type="button" class="flash-close" onclick="this.parentElement.remove()">x</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
 
     <!-- MAIN CONTENT -->
     <main class="main-content">
@@ -46,6 +66,7 @@
     <footer class="footer">
         <div class="footer-container">
             <p>© 2024 StudyFlow — {{ _('Learn smarter, not harder.') }}</p>
+            <p><a href="{{ localized_url('contact') }}" class="footer-link">{{ _('Contact') }}</a></p>
         </div>
     </footer>
 

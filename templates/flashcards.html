@@ -48,7 +48,7 @@
         let currentIndex = 0;
         let isFlipped = false;
         // eslint-disable-next-line no-undef
-        const words = {{ words|tojson }};
+        const words = {{ words_data|tojson }};
 
         function updateCard() {
             const word = words[currentIndex];
