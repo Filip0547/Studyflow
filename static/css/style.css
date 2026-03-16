@@ -143,9 +143,10 @@ a:hover { text-decoration: underline; }
     border-left: 1px solid var(--border);
     display: flex;
     align-items: center;
+    position: relative;
 }
 
-.language-select {
+.lang-current {
     font-family: var(--font);
     color: var(--text);
     font-size: 0.9rem;
@@ -154,13 +155,67 @@ a:hover { text-decoration: underline; }
     border: 1px solid var(--border);
     background: var(--surface);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
 }
 
-.language-select:hover,
-.language-select:focus {
+.lang-current:hover,
+.lang-current:focus {
     border-color: var(--primary);
     outline: none;
 }
+
+.lang-arrow {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    margin-left: 2px;
+}
+
+.lang-list {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 4px 0;
+    min-width: 160px;
+    z-index: 999;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.language-selector.open .lang-list {
+    display: block;
+}
+
+.lang-list li a {
+    display: block;
+    padding: 8px 14px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.lang-list li a:hover {
+    background: var(--primary);
+    color: #fff;
+}
+
+.lang-list li[aria-selected="true"] a {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.lang-list li[aria-selected="true"] a:hover {
+    color: #fff;
+}
+
 
 .visually-hidden {
     position: absolute;

@@ -27,19 +27,25 @@
                     <a href="{{ localized_url('register') }}" class="nav-btn nav-btn-primary">{{ _('Get Started') }}</a>
                 {% endif %}
                 <!-- Language Selector -->
-                <div class="language-selector">
-                    <label for="language-select" class="visually-hidden">{{ _('Language') }}</label>
-                    <select
-                        id="language-select"
-                        class="language-select"
-                        onchange="window.location.href=this.value"
-                        aria-label="{{ _('Language') }}"
-                    >
+                <div class="language-selector" id="lang-dropdown">
+                    <button type="button" class="lang-current" onclick="document.getElementById('lang-dropdown').classList.toggle('open')" aria-haspopup="listbox" aria-label="{{ _('Language') }}">
+                        {% for lang_code in languages %}{% if get_current_language() == lang_code %}{{ language_names[lang_code] }}{% endif %}{% endfor %}
+                        <span class="lang-arrow">▾</span>
+                    </button>
+                    <ul class="lang-list" role="listbox">
                         {% for lang_code in languages %}
-                            <option value="{{ switch_language_url(lang_code) }}" {% if get_current_language() == lang_code %}selected{% endif %}>{{ language_names[lang_code] }}</option>
+                        <li role="option" {% if get_current_language() == lang_code %}aria-selected="true"{% endif %}>
+                            <a href="{{ switch_language_url(lang_code) }}">{{ language_names[lang_code] }}</a>
+                        </li>
                         {% endfor %}
-                    </select>
+                    </ul>
                 </div>
+                <script>
+                    document.addEventListener('click', function(e) {
+                        var d = document.getElementById('lang-dropdown');
+                        if (d && !d.contains(e.target)) d.classList.remove('open');
+                    });
+                </script>
             </div>
         </div>
     </nav>
