@@ -831,13 +831,16 @@ def auth_google_callback(lang):
     target_lang = validate_language(session.pop('oauth_lang', lang))
     """Handle the Google OAuth callback."""
     if google is None:
+        print("[Google OAuth] Google is not configured (google is None)")
         flash(translate_text('Google login is not configured yet. Please use username/password login.'), 'error')
         return redirect(localized_url('login', lang=target_lang))
 
     try:
         # Retrieve the OAuth access token from Google
         token = google.authorize_access_token()
-    except Exception:
+        print("[Google OAuth] Token received successfully")
+    except Exception as e:
+        print(f"[Google OAuth] authorize_access_token failed: {str(e)}")
         flash(translate_text('Failed to authorize with Google.'), 'error')
         return redirect(localized_url('login', lang=target_lang))
     
@@ -845,7 +848,9 @@ def auth_google_callback(lang):
         # Fetch the user's Google profile information
         resp = google.get('userinfo')
         user_info = resp.json()
-    except Exception:
+        print(f"[Google OAuth] User info retrieved: {user_info}")
+    except Exception as e:
+        print(f"[Google OAuth] google.get('userinfo') failed: {str(e)}")
         flash(translate_text('Could not retrieve user information from Google.'), 'error')
         return redirect(localized_url('login', lang=target_lang))
     
