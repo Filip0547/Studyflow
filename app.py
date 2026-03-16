@@ -31,13 +31,23 @@ DEFAULT_LANGUAGE = 'en'
 PREFIX_LANGUAGES = ['nl', 'pl', 'es', 'fr', 'de', 'ru']
 LANGUAGES = [DEFAULT_LANGUAGE] + PREFIX_LANGUAGES
 LANGUAGE_NAMES = {
-    'en': '🇬🇧 English',
-    'nl': '🇳🇱 Nederlands',
-    'pl': '🇵🇱 Polski',
-    'es': '🇪🇸 Español',
-    'fr': '🇫🇷 Français',
-    'de': '🇩🇪 Deutsch',
-    'ru': '🇷🇺 Русский',
+    'en': 'English',
+    'nl': 'Nederlands',
+    'pl': 'Polski',
+    'es': 'Español',
+    'fr': 'Français',
+    'de': 'Deutsch',
+    'ru': 'Русский',
+}
+
+LANGUAGE_FLAGS = {
+    'en': 'gb',
+    'nl': 'nl',
+    'pl': 'pl',
+    'es': 'es',
+    'fr': 'fr',
+    'de': 'de',
+    'ru': 'ru',
 }
 
 app = Flask(__name__)
@@ -685,6 +695,7 @@ def inject_globals():
         switch_language_url=switch_language_url,
         active_page=active_page,
         language_names=LANGUAGE_NAMES,
+        language_flags=LANGUAGE_FLAGS,
         languages=LANGUAGES,
         default_language=DEFAULT_LANGUAGE,
         google_login_enabled=google is not None,
