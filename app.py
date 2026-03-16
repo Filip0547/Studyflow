@@ -846,7 +846,7 @@ def auth_google_callback(lang):
     
     try:
         # Fetch the user's Google profile information
-        resp = google.get('userinfo')
+        resp = google.get('https://www.googleapis.com/oauth2/v1/userinfo')
         user_info = resp.json()
         print(f"[Google OAuth] User info retrieved: {user_info}")
     except Exception as e:
