@@ -27,6 +27,10 @@ msgstr ""
 msgid "Something went wrong. Please try again."
 msgstr ""
 
+#: app.py:1062 app.py:1066
+msgid "Invalid progress payload."
+msgstr "Invalid progress payload."
+
 #: app.py:658
 msgid "All fields are required."
 msgstr ""
@@ -415,6 +419,78 @@ msgstr "Importing..."
 #: templates/edit_list.html:264
 msgid "Import failed."
 msgstr "Import failed."
+
+#: templates/dashboard.html:42 templates/learn_mode.html:2 templates/learn_mode.html:10
+msgid "Learn Mode"
+msgstr "Learn Mode"
+
+#: templates/learn_mode.html:16 templates/learn_mode.html:68
+msgid "Reading"
+msgstr "Reading"
+
+#: templates/learn_mode.html:17 templates/learn_mode.html:122
+msgid "learned"
+msgstr "learned"
+
+#: templates/learn_mode.html:30
+msgid "Type the correct term"
+msgstr "Type the correct term"
+
+#: templates/learn_mode.html:71
+msgid "Typing With Hint"
+msgstr "Typing With Hint"
+
+#: templates/learn_mode.html:72
+msgid "Typing Without Hint"
+msgstr "Typing Without Hint"
+
+#: templates/learn_mode.html:73
+msgid "Completed"
+msgstr "Completed"
+
+#: templates/learn_mode.html:77
+msgid "Read this term and definition, then continue."
+msgstr "Read this term and definition, then continue."
+
+#: templates/learn_mode.html:78
+msgid "What does this term mean?"
+msgstr "What does this term mean?"
+
+#: templates/learn_mode.html:79
+msgid "Type the term that matches this definition."
+msgstr "Type the term that matches this definition."
+
+#: templates/learn_mode.html:80
+msgid "Type the full term without hints."
+msgstr "Type the full term without hints."
+
+#: templates/learn_mode.html:86
+msgid "Choose an option first."
+msgstr "Choose an option first."
+
+#: templates/learn_mode.html:87
+msgid "All words are learned for this session."
+msgstr "All words are learned for this session."
+
+#: templates/learn_mode.html:88
+msgid "Restart Learn Mode"
+msgstr "Restart Learn Mode"
+
+#: templates/learn_mode.html:428
+msgid "Add some words with a definition first to use Learn Mode."
+msgstr "Add some words with a definition first to use Learn Mode."
+
+#: templates/learn_mode.html:40 templates/learn_mode.html:96
+msgid "Reset Progress"
+msgstr "Reset Progress"
+
+#: templates/learn_mode.html:97
+msgid "Are you sure you want to reset your Learn Mode progress?"
+msgstr "Are you sure you want to reset your Learn Mode progress?"
+
+#: templates/learn_mode.html:98
+msgid "Could not reset progress. Please try again."
+msgstr "Could not reset progress. Please try again."
 
 #: templates/edit_list.html:268
 msgid "Do not forget to save the list."

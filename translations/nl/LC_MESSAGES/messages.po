@@ -30,6 +30,10 @@ msgstr ""
 msgid "Something went wrong. Please try again."
 msgstr ""
 
+#: app.py:1062 app.py:1066
+msgid "Invalid progress payload."
+msgstr "Ongeldige voortgangsgegevens."
+
 #: app.py:658
 msgid "All fields are required."
 msgstr ""
@@ -423,6 +427,78 @@ msgstr "Importeren..."
 #: templates/edit_list.html:264
 msgid "Import failed."
 msgstr "Importeren mislukt."
+
+#: templates/dashboard.html:42 templates/learn_mode.html:2 templates/learn_mode.html:10
+msgid "Learn Mode"
+msgstr "Leermodus"
+
+#: templates/learn_mode.html:16 templates/learn_mode.html:68
+msgid "Reading"
+msgstr "Lezen"
+
+#: templates/learn_mode.html:17 templates/learn_mode.html:122
+msgid "learned"
+msgstr "geleerd"
+
+#: templates/learn_mode.html:30
+msgid "Type the correct term"
+msgstr "Typ de juiste term"
+
+#: templates/learn_mode.html:71
+msgid "Typing With Hint"
+msgstr "Typen met hint"
+
+#: templates/learn_mode.html:72
+msgid "Typing Without Hint"
+msgstr "Typen zonder hint"
+
+#: templates/learn_mode.html:73
+msgid "Completed"
+msgstr "Voltooid"
+
+#: templates/learn_mode.html:77
+msgid "Read this term and definition, then continue."
+msgstr "Lees deze term en definitie en ga daarna verder."
+
+#: templates/learn_mode.html:78
+msgid "What does this term mean?"
+msgstr "Wat betekent deze term?"
+
+#: templates/learn_mode.html:79
+msgid "Type the term that matches this definition."
+msgstr "Typ de term die bij deze definitie hoort."
+
+#: templates/learn_mode.html:80
+msgid "Type the full term without hints."
+msgstr "Typ de volledige term zonder hints."
+
+#: templates/learn_mode.html:86
+msgid "Choose an option first."
+msgstr "Kies eerst een optie."
+
+#: templates/learn_mode.html:87
+msgid "All words are learned for this session."
+msgstr "Alle woorden zijn geleerd voor deze sessie."
+
+#: templates/learn_mode.html:88
+msgid "Restart Learn Mode"
+msgstr "Leermodus opnieuw starten"
+
+#: templates/learn_mode.html:428
+msgid "Add some words with a definition first to use Learn Mode."
+msgstr "Voeg eerst woorden met een definitie toe om de Leermodus te gebruiken."
+
+#: templates/learn_mode.html:40 templates/learn_mode.html:96
+msgid "Reset Progress"
+msgstr "Voortgang resetten"
+
+#: templates/learn_mode.html:97
+msgid "Are you sure you want to reset your Learn Mode progress?"
+msgstr "Weet je zeker dat je je voortgang in Leermodus wilt resetten?"
+
+#: templates/learn_mode.html:98
+msgid "Could not reset progress. Please try again."
+msgstr "Kon de voortgang niet resetten. Probeer het opnieuw."
 
 #: templates/edit_list.html:268
 msgid "Do not forget to save the list."

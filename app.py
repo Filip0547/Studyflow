@@ -1,5 +1,6 @@
 import csv
 import io
+import json
 import os
 import re
 from functools import lru_cache
@@ -281,6 +282,23 @@ def build_quiz_rows(words):
     return [row for row in build_flashcard_rows(words) if row['description']]
 
 
+def build_learn_rows(words):
+    """Return rows suitable for Learn Mode (term + definition required)."""
+    rows = []
+    for source in words:
+        row = normalize_word_source(source)
+        if not row['word'] or not row['description']:
+            continue
+        rows.append(
+            {
+                'id': getattr(source, 'id', len(rows) + 1),
+                'word': row['word'],
+                'description': row['description'],
+            }
+        )
+    return rows
+
+
 def decode_text_bytes(file_bytes):
     """Decode uploaded text using a few common encodings."""
     for encoding in ('utf-8-sig', 'utf-8', 'cp1252', 'latin-1'):
@@ -330,6 +348,18 @@ def parse_import_text(raw_text, separator='auto'):
     active_separator = detect_separator(lines, preferred=separator)
     rows = []
 
+    def parse_single_line_payload(line_text):
+        """Parse common one-line formats like `word - description` or `word: description`."""
+        cleaned = re.sub(r'^\s*[-*•]\s*', '', line_text.strip())
+        if not cleaned:
+            return ('', '')
+
+        match = re.match(r'^(?P<word>.+?)\s*(?:->|=>|:|=|\s[-–—]\s)\s*(?P<description>.+)$', cleaned)
+        if match:
+            return (match.group('word').strip(), match.group('description').strip())
+
+        return (cleaned, '')
+
     if active_separator:
         for line in lines:
             if active_separator == 'double-space':
@@ -341,6 +371,14 @@ def parse_import_text(raw_text, separator='auto'):
 
             if not parts:
                 continue
+
+            if not parts[0] and len(parts) > 1 and parts[1]:
+                parts = parts[1:]
+
+            if len(parts) == 1:
+                parsed_word, parsed_description = parse_single_line_payload(parts[0])
+                parts = [parsed_word, parsed_description, '', '']
+
             while len(parts) < 4:
                 parts.append('')
             if len(parts) > 4:
@@ -356,9 +394,17 @@ def parse_import_text(raw_text, separator='auto'):
     fallback_rows = []
     index = 0
     while index < len(lines):
-        word = lines[index]
+        parsed_word, parsed_description = parse_single_line_payload(lines[index])
+
+        if parsed_description:
+            row = normalize_word_entry(parsed_word, parsed_description)
+            if row['word']:
+                fallback_rows.append(row)
+            index += 1
+            continue
+
         description = lines[index + 1] if index + 1 < len(lines) else ''
-        row = normalize_word_entry(word, description)
+        row = normalize_word_entry(parsed_word, description)
         if row['word']:
             fallback_rows.append(row)
         index += 2
@@ -524,6 +570,18 @@ class Word(db.Model):
     example     = db.Column(db.String(500))
     disadvantage= db.Column(db.String(500))
     list_id     = db.Column(db.Integer, db.ForeignKey('word_list.id'), nullable=False)
+
+
+class LearnProgress(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    list_id = db.Column(db.Integer, db.ForeignKey('word_list.id'), nullable=False)
+    state_json = db.Column(db.Text, nullable=False, default='{}')
+    updated_at = db.Column(db.DateTime, nullable=False, server_default=db.func.now(), onupdate=db.func.now())
+
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'list_id', name='uq_learn_progress_user_list'),
+    )
 
 
 with app.app_context():
@@ -971,6 +1029,77 @@ def multiple_choice(list_id, lang):
     word_list = WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
     study_words = build_quiz_rows(Word.query.filter_by(list_id=list_id).all())
     return render_template("multiple_choice.html", word_list=word_list, words=study_words, words_data=study_words)
+
+
+@app.route("/list/<int:list_id>/learn", defaults={'lang': DEFAULT_LANGUAGE})
+@app.route("/<lang>/list/<int:list_id>/learn")
+@login_required
+def learn_mode(list_id, lang):
+    validate_language(lang)
+    user = get_current_user()
+    word_list = WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
+    study_words = build_learn_rows(Word.query.filter_by(list_id=list_id).all())
+    progress_row = LearnProgress.query.filter_by(user_id=user.id, list_id=list_id).first()
+
+    initial_state = None
+    if progress_row and progress_row.state_json:
+        try:
+            loaded_state = json.loads(progress_row.state_json)
+            if isinstance(loaded_state, dict):
+                initial_state = loaded_state
+        except (TypeError, ValueError):
+            initial_state = None
+
+    return render_template(
+        "learn_mode.html",
+        word_list=word_list,
+        words=study_words,
+        words_data=study_words,
+        initial_state=initial_state,
+    )
+
+
+@app.route("/list/<int:list_id>/learn-progress", defaults={'lang': DEFAULT_LANGUAGE}, methods=["POST"])
+@app.route("/<lang>/list/<int:list_id>/learn-progress", methods=["POST"])
+@login_required
+def save_learn_progress(list_id, lang):
+    validate_language(lang)
+    user = get_current_user()
+    WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
+
+    payload = request.get_json(silent=True) or {}
+    state = payload.get('state')
+    if not isinstance(state, dict):
+        return jsonify({'error': translate_text('Invalid progress payload.')}), 400
+
+    allowed_phases = {'reading', 'multiple_choice', 'typing_hint', 'typing_plain', 'completed'}
+    if state.get('phase') not in allowed_phases:
+        return jsonify({'error': translate_text('Invalid progress payload.')}), 400
+
+    progress_row = LearnProgress.query.filter_by(user_id=user.id, list_id=list_id).first()
+    if not progress_row:
+        progress_row = LearnProgress(user_id=user.id, list_id=list_id)
+        db.session.add(progress_row)
+
+    progress_row.state_json = json.dumps(state)
+    db.session.commit()
+    return jsonify({'ok': True})
+
+
+@app.route("/list/<int:list_id>/learn-progress/reset", defaults={'lang': DEFAULT_LANGUAGE}, methods=["POST"])
+@app.route("/<lang>/list/<int:list_id>/learn-progress/reset", methods=["POST"])
+@login_required
+def reset_learn_progress(list_id, lang):
+    validate_language(lang)
+    user = get_current_user()
+    WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
+
+    progress_row = LearnProgress.query.filter_by(user_id=user.id, list_id=list_id).first()
+    if progress_row:
+        db.session.delete(progress_row)
+        db.session.commit()
+
+    return jsonify({'ok': True})
 
 
 @app.route("/list/<int:list_id>/delete_word/<int:word_id>", defaults={'lang': DEFAULT_LANGUAGE}, methods=["POST"])

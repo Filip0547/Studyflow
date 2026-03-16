@@ -220,14 +220,19 @@
             });
         }
 
-        function appendRow(row = {}) {
+        function appendRow(row = {}, options = {}) {
+            const { prepend = false } = options;
             const fragment = rowTemplate.content.cloneNode(true);
             const inputs = fragment.querySelectorAll('input');
             inputs[0].value = row.word || '';
             inputs[1].value = row.description || '';
             inputs[2].value = row.example || '';
             inputs[3].value = row.disadvantage || '';
-            rowContainer.appendChild(fragment);
+            if (prepend) {
+                rowContainer.insertBefore(fragment, rowContainer.firstChild);
+            } else {
+                rowContainer.appendChild(fragment);
+            }
             renumberRows();
         }
 
@@ -264,7 +269,7 @@
                     throw new Error(payload.error || '{{ _('Import failed.') }}');
                 }
 
-                payload.rows.forEach((row) => appendRow(row));
+                payload.rows.slice().reverse().forEach((row) => appendRow(row, { prepend: true }));
                 importFeedback.textContent = payload.message + ' ' + '{{ _('Do not forget to save the list.') }}';
                 importFeedback.className = 'import-feedback success';
                 importForm.reset();

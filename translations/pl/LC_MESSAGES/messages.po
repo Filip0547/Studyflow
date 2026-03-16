@@ -28,6 +28,10 @@ msgstr ""
 msgid "Something went wrong. Please try again."
 msgstr ""
 
+#: app.py:1062 app.py:1066
+msgid "Invalid progress payload."
+msgstr "Nieprawidlowe dane postepu."
+
 #: app.py:658
 msgid "All fields are required."
 msgstr ""
@@ -417,6 +421,78 @@ msgstr "Importowanie..."
 #: templates/edit_list.html:264
 msgid "Import failed."
 msgstr "Import nie powiódł się."
+
+#: templates/dashboard.html:42 templates/learn_mode.html:2 templates/learn_mode.html:10
+msgid "Learn Mode"
+msgstr "Tryb nauki"
+
+#: templates/learn_mode.html:16 templates/learn_mode.html:68
+msgid "Reading"
+msgstr "Czytanie"
+
+#: templates/learn_mode.html:17 templates/learn_mode.html:122
+msgid "learned"
+msgstr "opanowane"
+
+#: templates/learn_mode.html:30
+msgid "Type the correct term"
+msgstr "Wpisz poprawny termin"
+
+#: templates/learn_mode.html:71
+msgid "Typing With Hint"
+msgstr "Pisanie z podpowiedzią"
+
+#: templates/learn_mode.html:72
+msgid "Typing Without Hint"
+msgstr "Pisanie bez podpowiedzi"
+
+#: templates/learn_mode.html:73
+msgid "Completed"
+msgstr "Ukończono"
+
+#: templates/learn_mode.html:77
+msgid "Read this term and definition, then continue."
+msgstr "Przeczytaj ten termin i definicję, a potem kontynuuj."
+
+#: templates/learn_mode.html:78
+msgid "What does this term mean?"
+msgstr "Co oznacza ten termin?"
+
+#: templates/learn_mode.html:79
+msgid "Type the term that matches this definition."
+msgstr "Wpisz termin pasujący do tej definicji."
+
+#: templates/learn_mode.html:80
+msgid "Type the full term without hints."
+msgstr "Wpisz pełny termin bez podpowiedzi."
+
+#: templates/learn_mode.html:86
+msgid "Choose an option first."
+msgstr "Najpierw wybierz opcję."
+
+#: templates/learn_mode.html:87
+msgid "All words are learned for this session."
+msgstr "Wszystkie słowa są opanowane w tej sesji."
+
+#: templates/learn_mode.html:88
+msgid "Restart Learn Mode"
+msgstr "Uruchom ponownie tryb nauki"
+
+#: templates/learn_mode.html:428
+msgid "Add some words with a definition first to use Learn Mode."
+msgstr "Dodaj najpierw słowa z definicją, aby użyć trybu nauki."
+
+#: templates/learn_mode.html:40 templates/learn_mode.html:96
+msgid "Reset Progress"
+msgstr "Resetuj postep"
+
+#: templates/learn_mode.html:97
+msgid "Are you sure you want to reset your Learn Mode progress?"
+msgstr "Czy na pewno chcesz zresetowac postep w trybie nauki?"
+
+#: templates/learn_mode.html:98
+msgid "Could not reset progress. Please try again."
+msgstr "Nie udalo sie zresetowac postepu. Sprobuj ponownie."
 
 #: templates/edit_list.html:268
 msgid "Do not forget to save the list."

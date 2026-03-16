@@ -1,0 +1,742 @@
+{% extends "base.html" %}
+{% block title %}{{ word_list.name }} - Learn Mode - StudyFlow{% endblock %}
+
+{% block content %}
+<div class="container page-top">
+    <div class="page-header">
+        <div>
+            <a href="{{ localized_url('dashboard') }}" class="back-link"><- {{ _('Dashboard') }}</a>
+            <h1 class="page-title">{{ word_list.name }}</h1>
+            <p class="page-subtitle">{{ _('Learn Mode') }}</p>
+        </div>
+    </div>
+
+    {% if words %}
+    <section class="learn-shell" id="learn-shell">
+        <div class="learn-topbar">
+            <span class="learn-phase" id="phase-label">{{ _('Reading') }}</span>
+            <span class="learn-progress" id="learned-progress">0 / {{ words|length }} {{ _('learned') }}</span>
+        </div>
+
+        <div class="learn-card" id="learn-card">
+            <p class="learn-step-copy" id="step-copy"></p>
+            <h2 class="learn-term" id="learn-term"></h2>
+            <p class="learn-definition" id="learn-definition"></p>
+            <p class="learn-hint" id="learn-hint" hidden></p>
+
+            <div class="learn-options" id="learn-options" hidden></div>
+
+            <form id="typing-form" class="typing-form" hidden>
+                <label for="typed-term">{{ _('Type the correct term') }}</label>
+                <input id="typed-term" type="text" class="form-input" autocomplete="off" required>
+                <button type="submit" class="btn btn-primary">{{ _('Submit Answer') }}</button>
+            </form>
+
+            <div id="learn-feedback" class="learn-feedback" aria-live="polite"></div>
+        </div>
+
+        <div class="learn-actions">
+            <button id="primary-action" class="btn btn-primary">{{ _('Next') }}</button>
+            <button id="reset-progress-action" class="btn btn-secondary" type="button">{{ _('Reset Progress') }}</button>
+        </div>
+    </section>
+
+    <script>
+        const allWords = {{ words_data|tojson }};
+        const initialState = {{ initial_state|tojson }};
+        const progressSaveUrl = "{{ localized_url('save_learn_progress', list_id=word_list.id) }}";
+        const progressResetUrl = "{{ localized_url('reset_learn_progress', list_id=word_list.id) }}";
+        const csrfToken = "{{ csrf_token() }}";
+        const batchSize = 2;
+        const learnedIds = new Set();
+        let queue = shuffle([...allWords]);
+        let currentBatch = [];
+        let phase = 'reading';
+        let batchIndex = 0;
+        let currentOptions = [];
+        let batchResults = {};
+        let canAdvance = true;
+        let persistTimer = null;
+
+        const phaseLabel = document.getElementById('phase-label');
+        const progressLabel = document.getElementById('learned-progress');
+        const stepCopy = document.getElementById('step-copy');
+        const termEl = document.getElementById('learn-term');
+        const definitionEl = document.getElementById('learn-definition');
+        const hintEl = document.getElementById('learn-hint');
+        const optionsEl = document.getElementById('learn-options');
+        const typingForm = document.getElementById('typing-form');
+        const typedTermInput = document.getElementById('typed-term');
+        const feedbackEl = document.getElementById('learn-feedback');
+        const primaryAction = document.getElementById('primary-action');
+        const resetProgressAction = document.getElementById('reset-progress-action');
+
+        const labels = {
+            reading: "{{ _('Reading') }}",
+            multiple_choice: "{{ _('Multiple Choice') }}",
+            typing_hint: "{{ _('Typing With Hint') }}",
+            typing_plain: "{{ _('Typing Without Hint') }}",
+            completed: "{{ _('Completed') }}"
+        };
+
+        const text = {
+            readPrompt: "{{ _('Read this term and definition, then continue.') }}",
+            mcPrompt: "{{ _('What does this term mean?') }}",
+            typeHintPrompt: "{{ _('Type the term that matches this definition.') }}",
+            typeNoHintPrompt: "{{ _('Type the full term without hints.') }}",
+            correct: "{{ _('Correct!') }}",
+            incorrect: "{{ _('Incorrect.') }}",
+            correctWas: "{{ _('Correct answer:') }}",
+            next: "{{ _('Next') }}",
+            continue: "{{ _('Continue') }}",
+            finish: "{{ _('Finish') }}",
+            pickOption: "{{ _('Choose an option first.') }}",
+            learnedDone: "{{ _('All words are learned for this session.') }}",
+            restart: "{{ _('Restart Learn Mode') }}",
+            back: "{{ _('Back to Dashboard') }}",
+            resetProgress: "{{ _('Reset Progress') }}",
+            resetConfirm: "{{ _('Are you sure you want to reset your Learn Mode progress?') }}",
+            resetFailed: "{{ _('Could not reset progress. Please try again.') }}"
+        };
+
+        function shuffle(items) {
+            for (let i = items.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [items[i], items[j]] = [items[j], items[i]];
+            }
+            return items;
+        }
+
+        function normalizeTerm(value) {
+            return (value || '').toLowerCase().trim().replace(/\s+/g, ' ');
+        }
+
+        function buildHint(term) {
+            return (term || '')
+                .split(/\s+/)
+                .filter(Boolean)
+                .map((part) => {
+                    if (part.length <= 1) {
+                        return part;
+                    }
+                    return part[0] + '_'.repeat(part.length - 1);
+                })
+                .join(' ');
+        }
+
+        function getUnlearnedWords() {
+            return allWords.filter((word) => !learnedIds.has(word.id));
+        }
+
+        function resolveWordsByIds(ids, options = {}) {
+            const { allowLearned = false } = options;
+            const wordMap = new Map(allWords.map((word) => [word.id, word]));
+            const resolved = [];
+            (ids || []).forEach((id) => {
+                const parsed = Number(id);
+                const word = wordMap.get(parsed);
+                if (!word) {
+                    return;
+                }
+                if (!allowLearned && learnedIds.has(word.id)) {
+                    return;
+                }
+                if (!resolved.some((item) => item.id === word.id)) {
+                    resolved.push(word);
+                }
+            });
+            return resolved;
+        }
+
+        function buildSerializableState() {
+            const serializableResults = {};
+            currentBatch.forEach((word) => {
+                const saved = batchResults[word.id] || {};
+                serializableResults[word.id] = {
+                    multiple_choice: Boolean(saved.multiple_choice),
+                    typing_hint: Boolean(saved.typing_hint),
+                    typing_plain: Boolean(saved.typing_plain)
+                };
+            });
+
+            return {
+                version: 1,
+                phase,
+                learned_ids: Array.from(learnedIds),
+                queue_ids: queue.map((word) => word.id),
+                current_batch_ids: currentBatch.map((word) => word.id),
+                batch_index: batchIndex,
+                batch_results: serializableResults,
+                can_advance: Boolean(canAdvance)
+            };
+        }
+
+        async function persistProgressNow() {
+            try {
+                await fetch(progressSaveUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({ state: buildSerializableState() }),
+                    keepalive: true
+                });
+            } catch (error) {
+                // Ignore temporary persistence failures and keep the learning flow responsive.
+            }
+        }
+
+        async function clearPersistedProgress() {
+            const response = await fetch(progressResetUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ reset: true })
+            });
+
+            if (!response.ok) {
+                throw new Error(text.resetFailed);
+            }
+        }
+
+        function schedulePersist() {
+            if (persistTimer) {
+                clearTimeout(persistTimer);
+            }
+            persistTimer = setTimeout(() => {
+                persistProgressNow();
+            }, 200);
+        }
+
+        function tryHydrateFromInitialState() {
+            if (!initialState || typeof initialState !== 'object') {
+                return false;
+            }
+
+            const allowedPhases = new Set(['reading', 'multiple_choice', 'typing_hint', 'typing_plain', 'completed']);
+            if (!allowedPhases.has(initialState.phase)) {
+                return false;
+            }
+
+            learnedIds.clear();
+            resolveWordsByIds(initialState.learned_ids || [], { allowLearned: true }).forEach((word) => {
+                learnedIds.add(word.id);
+            });
+
+            queue = resolveWordsByIds(initialState.queue_ids || []);
+            currentBatch = resolveWordsByIds(initialState.current_batch_ids || []);
+            phase = initialState.phase;
+            batchIndex = Number.isInteger(initialState.batch_index) ? initialState.batch_index : 0;
+            canAdvance = Boolean(initialState.can_advance);
+
+            if (!currentBatch.length && phase !== 'completed') {
+                return false;
+            }
+
+            if (batchIndex < 0 || batchIndex >= Math.max(currentBatch.length, 1)) {
+                batchIndex = 0;
+            }
+
+            batchResults = {};
+            currentBatch.forEach((word) => {
+                const saved = (initialState.batch_results && initialState.batch_results[String(word.id)])
+                    || (initialState.batch_results && initialState.batch_results[word.id])
+                    || {};
+                batchResults[word.id] = {
+                    multiple_choice: Boolean(saved.multiple_choice),
+                    typing_hint: Boolean(saved.typing_hint),
+                    typing_plain: Boolean(saved.typing_plain)
+                };
+            });
+
+            if (phase === 'completed') {
+                renderCompletion();
+            } else {
+                renderCurrentStep();
+            }
+            return true;
+        }
+
+        function updateProgress() {
+            progressLabel.textContent = `${learnedIds.size} / ${allWords.length} {{ _('learned') }}`;
+        }
+
+        function startNextBatch() {
+            if (learnedIds.size >= allWords.length) {
+                renderCompletion();
+                return;
+            }
+
+            if (queue.length === 0) {
+                queue = shuffle(getUnlearnedWords());
+            }
+
+            currentBatch = [];
+            while (currentBatch.length < batchSize && queue.length > 0) {
+                const candidate = queue.shift();
+                if (!candidate || learnedIds.has(candidate.id)) {
+                    continue;
+                }
+                if (currentBatch.some((entry) => entry.id === candidate.id)) {
+                    continue;
+                }
+                currentBatch.push(candidate);
+            }
+
+            if (!currentBatch.length) {
+                renderCompletion();
+                return;
+            }
+
+            batchResults = {};
+            currentBatch.forEach((word) => {
+                batchResults[word.id] = { multiple_choice: false, typing_hint: false, typing_plain: false };
+            });
+
+            phase = 'reading';
+            batchIndex = 0;
+            canAdvance = true;
+            renderCurrentStep();
+            schedulePersist();
+        }
+
+        function setFeedback(message, variant) {
+            feedbackEl.textContent = message || '';
+            feedbackEl.className = 'learn-feedback';
+            if (variant) {
+                feedbackEl.classList.add(variant);
+            }
+        }
+
+        function buildOptionsForWord(word) {
+            const otherDefinitions = allWords
+                .filter((entry) => entry.id !== word.id)
+                .map((entry) => entry.description)
+                .filter((value) => value && normalizeTerm(value) !== normalizeTerm(word.description));
+
+            const uniqueOthers = [...new Set(otherDefinitions)];
+            const distractors = shuffle([...uniqueOthers]).slice(0, 3);
+            return shuffle([word.description, ...distractors]);
+        }
+
+        function renderCurrentStep() {
+            updateProgress();
+            setFeedback('', null);
+            primaryAction.dataset.mode = 'advance';
+
+            const currentWord = currentBatch[batchIndex];
+            if (!currentWord) {
+                finalizeBatch();
+                return;
+            }
+
+            phaseLabel.textContent = labels[phase];
+            termEl.hidden = false;
+            definitionEl.hidden = false;
+            optionsEl.hidden = true;
+            typingForm.hidden = true;
+            hintEl.hidden = true;
+            primaryAction.hidden = false;
+
+            if (phase === 'reading') {
+                stepCopy.textContent = text.readPrompt;
+                termEl.textContent = currentWord.word;
+                definitionEl.textContent = currentWord.description;
+                primaryAction.textContent = batchIndex < currentBatch.length - 1 ? text.next : text.continue;
+                canAdvance = true;
+                schedulePersist();
+                return;
+            }
+
+            if (phase === 'multiple_choice') {
+                stepCopy.textContent = text.mcPrompt;
+                termEl.textContent = currentWord.word;
+                definitionEl.textContent = '';
+                optionsEl.hidden = false;
+                optionsEl.innerHTML = '';
+                currentOptions = buildOptionsForWord(currentWord);
+                currentOptions.forEach((optionText) => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'option-btn';
+                    button.textContent = optionText;
+                    button.addEventListener('click', () => handleMultipleChoiceAnswer(optionText));
+                    optionsEl.appendChild(button);
+                });
+                primaryAction.hidden = true;
+                canAdvance = false;
+                schedulePersist();
+                return;
+            }
+
+            if (phase === 'typing_hint' || phase === 'typing_plain') {
+                stepCopy.textContent = phase === 'typing_hint' ? text.typeHintPrompt : text.typeNoHintPrompt;
+                termEl.hidden = true;
+                definitionEl.textContent = currentWord.description;
+                typingForm.hidden = false;
+                typedTermInput.value = '';
+                typedTermInput.focus();
+                primaryAction.hidden = true;
+                canAdvance = false;
+
+                if (phase === 'typing_hint') {
+                    hintEl.hidden = false;
+                    hintEl.textContent = buildHint(currentWord.word);
+                }
+                schedulePersist();
+                return;
+            }
+        }
+
+        function handleMultipleChoiceAnswer(selectedText) {
+            const currentWord = currentBatch[batchIndex];
+            const isCorrect = normalizeTerm(selectedText) === normalizeTerm(currentWord.description);
+
+            if (isCorrect) {
+                batchResults[currentWord.id].multiple_choice = true;
+                setFeedback(text.correct, 'success');
+            } else {
+                setFeedback(`${text.incorrect} ${text.correctWas} ${currentWord.description}`, 'error');
+            }
+
+            optionsEl.querySelectorAll('.option-btn').forEach((button) => {
+                const isMatch = normalizeTerm(button.textContent) === normalizeTerm(currentWord.description);
+                button.disabled = true;
+                if (isMatch) {
+                    button.classList.add('correct');
+                }
+                if (normalizeTerm(button.textContent) === normalizeTerm(selectedText) && !isMatch) {
+                    button.classList.add('incorrect');
+                }
+            });
+
+            canAdvance = true;
+            primaryAction.hidden = false;
+            primaryAction.textContent = batchIndex < currentBatch.length - 1 ? text.next : text.continue;
+            schedulePersist();
+        }
+
+        function handleTypingAnswer(event) {
+            event.preventDefault();
+            const currentWord = currentBatch[batchIndex];
+            const input = typedTermInput.value;
+            const isCorrect = normalizeTerm(input) === normalizeTerm(currentWord.word);
+
+            if (isCorrect) {
+                batchResults[currentWord.id][phase] = true;
+                setFeedback(text.correct, 'success');
+            } else {
+                setFeedback(`${text.incorrect} ${text.correctWas} ${currentWord.word}`, 'error');
+            }
+
+            typedTermInput.disabled = true;
+            typingForm.querySelector('button[type="submit"]').disabled = true;
+            canAdvance = true;
+            primaryAction.hidden = false;
+            primaryAction.textContent = batchIndex < currentBatch.length - 1 ? text.next : text.continue;
+            schedulePersist();
+        }
+
+        function advancePhaseOrWord() {
+            if (!canAdvance) {
+                if (phase === 'multiple_choice') {
+                    setFeedback(text.pickOption, 'error');
+                }
+                return;
+            }
+
+            if (phase === 'reading') {
+                if (batchIndex < currentBatch.length - 1) {
+                    batchIndex += 1;
+                    renderCurrentStep();
+                    return;
+                }
+
+                phase = 'multiple_choice';
+                batchIndex = 0;
+                renderCurrentStep();
+                return;
+            }
+
+            if (phase === 'multiple_choice') {
+                if (batchIndex < currentBatch.length - 1) {
+                    batchIndex += 1;
+                    renderCurrentStep();
+                    return;
+                }
+
+                phase = 'typing_hint';
+                batchIndex = 0;
+                renderCurrentStep();
+                return;
+            }
+
+            if (phase === 'typing_hint') {
+                if (batchIndex < currentBatch.length - 1) {
+                    batchIndex += 1;
+                    renderCurrentStep();
+                    return;
+                }
+
+                phase = 'typing_plain';
+                batchIndex = 0;
+                renderCurrentStep();
+                return;
+            }
+
+            if (phase === 'typing_plain') {
+                if (batchIndex < currentBatch.length - 1) {
+                    batchIndex += 1;
+                    renderCurrentStep();
+                    return;
+                }
+
+                finalizeBatch();
+            }
+        }
+
+        function finalizeBatch() {
+            const failedWords = [];
+            currentBatch.forEach((word) => {
+                const result = batchResults[word.id];
+                if (result.multiple_choice && result.typing_hint && result.typing_plain) {
+                    learnedIds.add(word.id);
+                } else {
+                    failedWords.push(word);
+                }
+            });
+
+            if (failedWords.length) {
+                queue = shuffle(queue.concat(failedWords));
+            }
+
+            startNextBatch();
+        }
+
+        function renderCompletion() {
+            phase = 'completed';
+            phaseLabel.textContent = labels.completed;
+            updateProgress();
+            stepCopy.textContent = text.learnedDone;
+            termEl.hidden = true;
+            definitionEl.hidden = true;
+            hintEl.hidden = true;
+            optionsEl.hidden = true;
+            typingForm.hidden = true;
+            setFeedback('', null);
+
+            primaryAction.textContent = text.restart;
+            primaryAction.hidden = false;
+            primaryAction.dataset.mode = 'restart';
+            schedulePersist();
+
+            const controls = document.querySelector('.learn-actions');
+            let backLink = document.getElementById('learn-back-link');
+            if (!backLink) {
+                backLink = document.createElement('a');
+                backLink.id = 'learn-back-link';
+                backLink.className = 'btn btn-secondary';
+                backLink.href = "{{ localized_url('dashboard') }}";
+                backLink.textContent = text.back;
+                controls.appendChild(backLink);
+            }
+        }
+
+        typingForm.addEventListener('submit', handleTypingAnswer);
+
+        resetProgressAction.addEventListener('click', async function() {
+            if (!window.confirm(text.resetConfirm)) {
+                return;
+            }
+
+            try {
+                await clearPersistedProgress();
+                learnedIds.clear();
+                queue = shuffle([...allWords]);
+                currentBatch = [];
+                batchResults = {};
+                batchIndex = 0;
+                phase = 'reading';
+                canAdvance = true;
+                setFeedback('', null);
+                startNextBatch();
+            } catch (error) {
+                setFeedback(error.message || text.resetFailed, 'error');
+            }
+        });
+
+        primaryAction.addEventListener('click', function() {
+            if (primaryAction.dataset.mode === 'restart') {
+                learnedIds.clear();
+                queue = shuffle([...allWords]);
+                startNextBatch();
+                schedulePersist();
+                return;
+            }
+
+            // Re-enable typing controls after each evaluation step.
+            typedTermInput.disabled = false;
+            const submitBtn = typingForm.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = false;
+            }
+
+            advancePhaseOrWord();
+        });
+
+        window.addEventListener('beforeunload', () => {
+            if (persistTimer) {
+                clearTimeout(persistTimer);
+            }
+            persistProgressNow();
+        });
+
+        if (!tryHydrateFromInitialState()) {
+            startNextBatch();
+        }
+    </script>
+
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">?</div>
+        <h2>{{ _('No words in this list') }}</h2>
+        <p>{{ _('Add some words with a definition first to use Learn Mode.') }}</p>
+        <a href="{{ localized_url('edit_list', list_id=word_list.id) }}" class="btn btn-primary">{{ _('Add Words') }}</a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.learn-shell {
+    max-width: 780px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.learn-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.learn-phase {
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.learn-progress {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.learn-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.learn-step-copy {
+    color: var(--text-muted);
+}
+
+.learn-term {
+    font-size: 1.8rem;
+    line-height: 1.2;
+}
+
+.learn-definition {
+    font-size: 1.1rem;
+}
+
+.learn-hint {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 1.1rem;
+    letter-spacing: 0.06em;
+    color: var(--primary);
+    background: var(--primary-light);
+    border-radius: var(--radius);
+    padding: 0.65rem 0.85rem;
+}
+
+.learn-options {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.option-btn {
+    width: 100%;
+    text-align: left;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: #fff;
+    color: var(--text);
+    padding: 0.85rem 1rem;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.option-btn:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.option-btn.correct {
+    border-color: #16a34a;
+    background: #dcfce7;
+}
+
+.option-btn.incorrect {
+    border-color: #dc2626;
+    background: #fee2e2;
+}
+
+.typing-form {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.learn-feedback {
+    min-height: 1.5rem;
+    font-weight: 600;
+}
+
+.learn-feedback.success {
+    color: #15803d;
+}
+
+.learn-feedback.error {
+    color: #b91c1c;
+}
+
+.learn-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+@media (max-width: 640px) {
+    .learn-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .learn-term {
+        font-size: 1.4rem;
+    }
+}
+</style>
+{% endblock %}
