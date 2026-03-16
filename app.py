@@ -3,19 +3,22 @@ import io
 import json
 import os
 import re
+from datetime import timedelta
 from functools import lru_cache
 from itertools import zip_longest
+from threading import Thread
 
 import polib
 from dotenv import load_dotenv
 from sqlalchemy import or_
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from flask import Flask, abort, flash, jsonify, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from flask_babel import Babel, gettext
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.routing import BuildError
 from flask_wtf import CSRFProtect
 from authlib.integrations.flask_client import OAuth
@@ -38,11 +41,23 @@ LANGUAGE_NAMES = {
 }
 
 app = Flask(__name__)
-# use a randomly-generated secret key each time (for dev); replace with env var in prod
-app.secret_key = os.getenv('SECRET_KEY', os.urandom(24).hex())
+# Keep SECRET_KEY stable so sessions and OAuth state survive restarts/deploys.
+app.secret_key = os.getenv('SECRET_KEY', 'dev-only-insecure-secret-change-me')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
+app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=int(os.getenv('REMEMBER_COOKIE_DAYS', '30')))
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['REMEMBER_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['REMEMBER_COOKIE_SAMESITE'] = 'Lax'
+
+# Render runs behind a proxy; trust forwarded proto/host for correct external URLs.
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
+if os.getenv('RENDER') or os.getenv('RENDER_EXTERNAL_URL'):
+    app.config['SESSION_COOKIE_SECURE'] = True
+    app.config['REMEMBER_COOKIE_SECURE'] = True
 
 # Google OAuth Configuration
 app.config['GOOGLE_CLIENT_ID'] = os.getenv('GOOGLE_CLIENT_ID')
@@ -55,6 +70,7 @@ app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', True)
 app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER', 'noreply@studyflow.com')
+app.config['MAIL_TIMEOUT'] = int(os.getenv('MAIL_TIMEOUT', 10))
 
 # initialize extensions
 db = SQLAlchemy(app)
@@ -646,6 +662,16 @@ def send_welcome_email(user_email, username):
         return False
 
 
+def send_welcome_email_async(user_email, username):
+    """Send welcome email in the background so registration returns quickly."""
+
+    def _send():
+        with app.app_context():
+            send_welcome_email(user_email, username)
+
+    Thread(target=_send, daemon=True).start()
+
+
 # ─── CONTEXT PROCESSOR ────────────────────────────────────
 # Makes `current_user` and `get_locale` available in ALL templates automatically
 
@@ -732,17 +758,22 @@ def register(lang):
                 email=email,
                 password=hashed
             )
-            db.session.add(new_user)
-            db.session.commit()
-            
-            # Send welcome email
-            email_sent = send_welcome_email(email, username)
-            if email_sent:
-                flash(translate_text('Account created successfully! Check your email for a welcome message.'), 'success')
-            else:
-                flash(translate_text('Account created! (Welcome email could not be sent, but your account is ready.)'), 'info')
-            
-            return redirect(localized_url('login', lang=lang))
+            try:
+                db.session.add(new_user)
+                db.session.commit()
+            except IntegrityError:
+                db.session.rollback()
+                flash(translate_text('Username or email is already in use.'), 'error')
+                return render_template("register.html")
+            except SQLAlchemyError:
+                db.session.rollback()
+                flash(translate_text('Could not create your account right now. Please try again.'), 'error')
+                return render_template("register.html")
+
+            send_welcome_email_async(email, username)
+            login_user(new_user, remember=True)
+            flash(translate_text('Account created successfully! You are now signed in.'), 'success')
+            return redirect(localized_url('dashboard', lang=lang))
 
     return render_template("register.html")
 
@@ -763,7 +794,7 @@ def login(lang):
         ).first()
 
         if user and user.password and check_password_hash(user.password, password):
-            login_user(user)
+            login_user(user, remember=True)
             return redirect(localized_url('dashboard', lang=lang))
         elif user and not user.password:
             flash(translate_text('This account uses Google sign-in. Please continue with Google.'), 'error')
@@ -783,7 +814,7 @@ def login_google(lang):
         return redirect(localized_url('login', lang=lang))
 
     session['oauth_lang'] = lang
-    redirect_uri = url_for('auth_google_callback_entry', _external=True)
+    redirect_uri = os.getenv('GOOGLE_REDIRECT_URI') or url_for('auth_google_callback_entry', _external=True)
     return google.authorize_redirect(redirect_uri)
 
 
@@ -850,15 +881,25 @@ def auth_google_callback(lang):
                 username=candidate,
                 password=None   # No password for Google OAuth users
             )
-            db.session.add(user)
-            db.session.commit()
+            try:
+                db.session.add(user)
+                db.session.commit()
+            except SQLAlchemyError:
+                db.session.rollback()
+                flash(translate_text('Could not complete Google sign-in. Please try again.'), 'error')
+                return redirect(localized_url('login', lang=target_lang))
             flash(translate_text('Account created successfully! You are now signed in with Google.'), 'success')
         else:
             user.google_id = user.google_id or google_id
-            db.session.commit()
+            try:
+                db.session.commit()
+            except SQLAlchemyError:
+                db.session.rollback()
+                flash(translate_text('Could not complete Google sign-in. Please try again.'), 'error')
+                return redirect(localized_url('login', lang=target_lang))
     
     # Log the user in using Flask-Login
-    login_user(user)
+    login_user(user, remember=True)
     return redirect(localized_url('dashboard', lang=target_lang))
 
 
@@ -1126,4 +1167,5 @@ def set_language(lang):
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    debug = os.environ.get('FLASK_DEBUG', '').lower() in {'1', 'true', 'yes', 'on'}
+    app.run(host='0.0.0.0', port=port, debug=debug)
