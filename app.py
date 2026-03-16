@@ -858,7 +858,7 @@ def auth_google_callback(lang):
     # Extract email and name from user info
     email = user_info.get("email")
     name = user_info.get("name")
-    google_id = user_info.get("sub")  # Google's unique user ID
+    google_id = user_info.get("sub") or user_info.get("id")  # v1 uses 'sub', v2 uses 'id'
     
     if not email or not google_id:
         flash(translate_text('Google account missing required information.'), 'error')
