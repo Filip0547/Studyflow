@@ -167,6 +167,15 @@ a:hover { text-decoration: underline; }
     outline: none;
 }
 
+.lang-flag {
+    width: 16px;
+    height: 12px;
+    object-fit: cover;
+    border-radius: 2px;
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
 .lang-arrow {
     font-size: 0.75rem;
     opacity: 0.6;

@@ -29,14 +29,14 @@
                 <!-- Language Selector -->
                 <div class="language-selector" id="lang-dropdown">
                     <button type="button" class="lang-current" onclick="document.getElementById('lang-dropdown').classList.toggle('open')" aria-haspopup="listbox" aria-label="{{ _('Language') }}">
-                        {% for lang_code in languages %}{% if get_current_language() == lang_code %}<img src="https://flagcdn.com/20x15/{{ language_flags[lang_code] }}.png" width="20" height="15" alt="{{ lang_code }}"> {{ language_names[lang_code] }}{% endif %}{% endfor %}
+                        {% for lang_code in languages %}{% if get_current_language() == lang_code %}<img class="lang-flag" src="https://flagcdn.com/40x30/{{ language_flags[lang_code] }}.png" alt="{{ lang_code }}"> {{ language_names[lang_code] }}{% endif %}{% endfor %}
                         <span class="lang-arrow">▾</span>
                     </button>
                     <ul class="lang-list" role="listbox">
                         {% for lang_code in languages %}
                         <li role="option" {% if get_current_language() == lang_code %}aria-selected="true"{% endif %}>
                             <a href="{{ switch_language_url(lang_code) }}">
-                                <img src="https://flagcdn.com/20x15/{{ language_flags[lang_code] }}.png" width="20" height="15" alt="{{ lang_code }}">
+                                <img class="lang-flag" src="https://flagcdn.com/40x30/{{ language_flags[lang_code] }}.png" alt="{{ lang_code }}">
                                 {{ language_names[lang_code] }}
                             </a>
                         </li>
