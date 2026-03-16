@@ -31,13 +31,13 @@ DEFAULT_LANGUAGE = 'en'
 PREFIX_LANGUAGES = ['nl', 'pl', 'es', 'fr', 'de', 'ru']
 LANGUAGES = [DEFAULT_LANGUAGE] + PREFIX_LANGUAGES
 LANGUAGE_NAMES = {
-    'en': 'English',
-    'nl': 'Nederlands',
-    'pl': 'Polski',
-    'es': 'Espanol',
-    'fr': 'Francais',
-    'de': 'Deutsch',
-    'ru': 'Русский',
+    'en': '🇬🇧 English',
+    'nl': '🇳🇱 Nederlands',
+    'pl': '🇵🇱 Polski',
+    'es': '🇪🇸 Español',
+    'fr': '🇫🇷 Français',
+    'de': '🇩🇪 Deutsch',
+    'ru': '🇷🇺 Русский',
 }
 
 app = Flask(__name__)
@@ -831,14 +831,12 @@ def auth_google_callback(lang):
     target_lang = validate_language(session.pop('oauth_lang', lang))
     """Handle the Google OAuth callback."""
     if google is None:
-        print("[Google OAuth] Google is not configured (google is None)")
         flash(translate_text('Google login is not configured yet. Please use username/password login.'), 'error')
         return redirect(localized_url('login', lang=target_lang))
 
     try:
         # Retrieve the OAuth access token from Google
         token = google.authorize_access_token()
-        print("[Google OAuth] Token received successfully")
     except Exception as e:
         print(f"[Google OAuth] authorize_access_token failed: {str(e)}")
         flash(translate_text('Failed to authorize with Google.'), 'error')
@@ -849,7 +847,6 @@ def auth_google_callback(lang):
         # Use oauth2/v2/userinfo which includes all standard fields
         resp = google.get('https://www.googleapis.com/oauth2/v2/userinfo')
         user_info = resp.json()
-        print(f"[Google OAuth] User info retrieved: {user_info}")
     except Exception as e:
         print(f"[Google OAuth] google.get('userinfo') failed: {str(e)}")
         flash(translate_text('Could not retrieve user information from Google.'), 'error')
