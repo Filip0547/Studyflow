@@ -11,3 +11,9 @@ authlib
 requests
 python-dotenv
 polib
+Pillow
+python-docx
+pypdf
+openpyxl
+rapidocr-onnxruntime
+numpy

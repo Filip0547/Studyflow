@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: StudyFlow 1.0\n"
 "Report-Msgid-Bugs-To: team@studyflow.com\n"
-"POT-Creation-Date: 2026-03-08 00:32+0100\n"
+"POT-Creation-Date: 2026-03-16 14:20+0100\n"
 "PO-Revision-Date: 2026-03-08 00:32+0100\n"
 "Last-Translator: StudyFlow Team <team@studyflow.com>\n"
 "Language: ru\n"
@@ -19,7 +19,121 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: templates/base.html:23 templates/dashboard.html:2 templates/study.html:10
+#: app.py:614
+#, fuzzy
+msgid "Please log in to continue."
+msgstr "Войдите, чтобы продолжить изучение"
+
+#: app.py:621
+msgid "A database error occurred. Please try again."
+msgstr ""
+
+#: app.py:627
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+#: app.py:658
+msgid "All fields are required."
+msgstr ""
+
+#: app.py:660
+msgid "You must accept the privacy policy to create an account."
+msgstr ""
+
+#: app.py:662
+msgid "Password must be at least 4 characters long."
+msgstr ""
+
+#: app.py:664
+#, fuzzy
+msgid "Please enter a valid email address."
+msgstr "Введите ваш адрес электронной почты"
+
+#: app.py:666
+msgid "Username is already taken."
+msgstr ""
+
+#: app.py:668
+msgid "Email is already registered."
+msgstr ""
+
+#: app.py:683
+msgid "Account created successfully! Check your email for a welcome message."
+msgstr ""
+
+#: app.py:685
+msgid ""
+"Account created! (Welcome email could not be sent, but your account is "
+"ready.)"
+msgstr ""
+
+#: app.py:711
+msgid "This account uses Google sign-in. Please continue with Google."
+msgstr ""
+
+#: app.py:713
+msgid "Invalid username/email or password."
+msgstr ""
+
+#: app.py:724 app.py:745
+msgid "Google login is not configured yet. Please use username/password login."
+msgstr ""
+
+#: app.py:752
+#, fuzzy
+msgid "Failed to authorize with Google."
+msgstr "Продолжить с Google"
+
+#: app.py:760
+msgid "Could not retrieve user information from Google."
+msgstr ""
+
+#: app.py:769
+#, fuzzy
+msgid "Google account missing required information."
+msgstr "Информация при входе через Google"
+
+#: app.py:797
+msgid "Account created successfully! You are now signed in with Google."
+msgstr ""
+
+#: app.py:848 app.py:873
+msgid "List name is required."
+msgstr ""
+
+#: app.py:853
+#, fuzzy
+msgid "List created successfully."
+msgstr "Список успешно сохранён."
+
+#: app.py:895
+msgid "List saved successfully."
+msgstr "Список успешно сохранён."
+
+#: app.py:926
+msgid "Unsupported file type. Use txt, csv, tsv, docx, xlsx, pdf, or an image."
+msgstr ""
+"Неподдерживаемый тип файла. Используйте txt, csv, tsv, docx, xlsx, pdf "
+"или изображение."
+
+#: app.py:928
+msgid "The file could not be read. Try a clearer image or a simpler document."
+msgstr ""
+"Не удалось прочитать файл. Попробуйте более чёткое изображение или более "
+"простой документ."
+
+#: app.py:933
+msgid "No words were found in the pasted text or uploaded file."
+msgstr "В вставленном тексте или загруженном файле слова не найдены."
+
+#: app.py:937
+#, python-format
+msgid "%(count)s rows imported into the editor."
+msgstr "%(count)s строк импортировано в редактор."
+
+#: templates/base.html:23 templates/contact.html:18 templates/dashboard.html:2
+#: templates/edit_list.html:9 templates/flashcards.html:10
+#: templates/multiple_choice.html:10 templates/quiz.html:10
 msgid "Dashboard"
 msgstr "Панель управления"
 
@@ -31,19 +145,45 @@ msgstr "Выйти"
 msgid "Login"
 msgstr "Войти"
 
-#: templates/base.html:27
+#: templates/base.html:27 templates/contact.html:20
 msgid "Get Started"
 msgstr "Начать"
 
-#: templates/base.html:52
+#: templates/base.html:31 templates/base.html:36
+msgid "Language"
+msgstr "Язык"
+
+#: templates/base.html:68
 msgid "Learn smarter, not harder."
 msgstr "Учитесь умнее, а не усерднее."
 
-#: templates/create_list.html:2 templates/create_list.html:34
+#: templates/base.html:69 templates/contact.html:2 templates/contact.html:8
+#: templates/privacy_policy.html:24 templates/privacy_policy.html:97
+msgid "Contact"
+msgstr "Контакты"
+
+#: templates/contact.html:9
+msgid "Have a question or feedback? We would love to hear from you."
+msgstr "Есть вопрос или отзыв? Мы будем рады вас услышать."
+
+#: templates/contact.html:13 templates/register.html:18
+msgid "Email"
+msgstr "Электронная почта"
+
+#: templates/contact.html:14
+msgid "We usually reply within 24 hours."
+msgstr "Обычно отвечаем в течение 24 часов."
+
+#: templates/contact.html:16
+msgid "Back to home"
+msgstr "Назад на главную"
+
+#: templates/create_list.html:2
 msgid "Create List"
 msgstr "Создать список"
 
-#: templates/create_list.html:9
+#: templates/create_list.html:9 templates/multiple_choice.html:58
+#: templates/quiz.html:65
 msgid "Back to Dashboard"
 msgstr "Вернуться к панели"
 
@@ -52,10 +192,14 @@ msgid "Create a new list"
 msgstr "Создать новый список"
 
 #: templates/create_list.html:11
-msgid "Give your study list a name to get started."
-msgstr "Дайте название вашему списку для изучения, чтобы начать."
+msgid ""
+"Give your list a name first. Right after that you will land on the edit "
+"page with 3 starter rows."
+msgstr ""
+"Сначала дайте списку название. После этого вы сразу попадёте на страницу "
+"редактирования с 3 стартовыми строками."
 
-#: templates/create_list.html:20
+#: templates/create_list.html:20 templates/edit_list.html:36
 msgid "List Name"
 msgstr "Название списка"
 
@@ -64,8 +208,25 @@ msgid "e.g. Spanish Vocabulary, Biology Chapter 3..."
 msgstr "напр. Испанский словарь, Биология Глава 3..."
 
 #: templates/create_list.html:33
+msgid "Next step"
+msgstr "Следующий шаг"
+
+#: templates/create_list.html:34
+msgid ""
+"On the next page you can add rows manually, paste a copied list, or "
+"upload a document or image to extract words automatically."
+msgstr ""
+"На следующей странице можно вручную добавить строки, вставить "
+"скопированный список или загрузить документ либо изображение, чтобы "
+"автоматически извлечь слова."
+
+#: templates/create_list.html:38
 msgid "Cancel"
 msgstr "Отмена"
+
+#: templates/create_list.html:39
+msgid "Continue to Edit Page"
+msgstr "Перейти к странице редактирования"
 
 #: templates/dashboard.html:10
 msgid "Your Study Lists"
@@ -91,11 +252,11 @@ msgstr "Списков пока нет — создайте первый!"
 msgid "Create New List"
 msgstr "Создать новый список"
 
-#: templates/dashboard.html:39
+#: templates/dashboard.html:39 templates/flashcards.html:12
 msgid "Flashcards"
 msgstr "Карточки"
 
-#: templates/dashboard.html:40
+#: templates/dashboard.html:40 templates/quiz.html:12
 msgid "Normal Quiz"
 msgstr "Обычный тест"
 
@@ -103,7 +264,8 @@ msgstr "Обычный тест"
 msgid "Multiple Choice"
 msgstr "Множественный выбор"
 
-#: templates/dashboard.html:44
+#: templates/dashboard.html:44 templates/flashcards.html:14
+#: templates/multiple_choice.html:14 templates/quiz.html:14
 msgid "Edit List"
 msgstr "Редактировать список"
 
@@ -119,6 +281,267 @@ msgstr "Создайте свой первый список и начните д
 msgid "Create your first list"
 msgstr "Создайте свой первый список"
 
+#: templates/edit_list.html:11
+msgid ""
+"Build your list with a word, an explanation, one extra field, and an "
+"optional disadvantage."
+msgstr ""
+"Соберите список из слова, объяснения, дополнительного поля и "
+"необязательного недостатка."
+
+#: templates/edit_list.html:14
+msgid "saved rows"
+msgstr "сохранённых строк"
+
+#: templates/edit_list.html:15
+msgid "Open Quiz"
+msgstr "Открыть квиз"
+
+#: templates/edit_list.html:26
+msgid "Edit list"
+msgstr "Редактировать список"
+
+#: templates/edit_list.html:27
+msgid ""
+"Rows without a word are skipped automatically. Quiz modes only use rows "
+"that have an explanation."
+msgstr ""
+"Строки без слова автоматически пропускаются. Режимы квиза используют "
+"только строки, в которых есть объяснение."
+
+#: templates/edit_list.html:30
+msgid "Add Row"
+msgstr "Добавить строку"
+
+#: templates/edit_list.html:31
+msgid "Save List"
+msgstr "Сохранить список"
+
+#: templates/edit_list.html:53 templates/edit_list.html:170
+#: templates/index.html:25
+msgid "Word"
+msgstr "Слово"
+
+#: templates/edit_list.html:58 templates/edit_list.html:175
+msgid "Word or term"
+msgstr "Слово или термин"
+
+#: templates/edit_list.html:63 templates/edit_list.html:179
+#: templates/flashcards.html:27 templates/flashcards.html:68
+msgid "Description"
+msgstr "Описание"
+
+#: templates/edit_list.html:68 templates/edit_list.html:184
+msgid "Explanation or meaning"
+msgstr "Объяснение или значение"
+
+#: templates/edit_list.html:73 templates/edit_list.html:188
+msgid "Advantage / Example / Extra"
+msgstr "Преимущество / Пример / Дополнительно"
+
+#: templates/edit_list.html:78 templates/edit_list.html:193
+msgid "Example sentence, benefit, note..."
+msgstr "Пример предложения, плюс, заметка..."
+
+#: templates/edit_list.html:83 templates/edit_list.html:197
+#: templates/flashcards.html:39 templates/flashcards.html:74
+msgid "Disadvantage"
+msgstr "Недостаток"
+
+#: templates/edit_list.html:88 templates/edit_list.html:202
+msgid "Limitation, warning, downside..."
+msgstr "Ограничение, предупреждение, недостаток..."
+
+#: templates/edit_list.html:93 templates/edit_list.html:206
+msgid "Remove"
+msgstr "Удалить"
+
+#: templates/edit_list.html:103
+msgid "Import words fast"
+msgstr "Быстрый импорт слов"
+
+#: templates/edit_list.html:104
+msgid ""
+"Paste a copied list or upload a file. Imported rows are added to the "
+"editor below and become available in the quiz after saving."
+msgstr ""
+"Вставьте скопированный список или загрузите файл. Импортированные строки "
+"будут добавлены в редактор ниже и станут доступны в квизе после "
+"сохранения."
+
+#: templates/edit_list.html:113
+msgid "Paste copied words"
+msgstr "Вставить скопированные слова"
+
+#: templates/edit_list.html:119
+msgid ""
+"Examples:\n"
+"word<TAB>meaning\n"
+"word=meaning\n"
+"word|meaning|extra|disadvantage"
+msgstr ""
+"Примеры:\n"
+"слово<TAB>значение\n"
+"слово=значение\n"
+"слово|значение|дополнительно|недостаток"
+
+#: templates/edit_list.html:125
+msgid "Upload a document or image"
+msgstr "Загрузить документ или изображение"
+
+#: templates/edit_list.html:133
+msgid "Supported: txt, csv, tsv, docx, xlsx, pdf, png, jpg, jpeg, webp, bmp"
+msgstr "Поддерживается: txt, csv, tsv, docx, xlsx, pdf, png, jpg, jpeg, webp, bmp"
+
+#: templates/edit_list.html:137
+msgid "My words are separated by"
+msgstr "Мои слова разделены"
+
+#: templates/edit_list.html:140
+msgid "Tab"
+msgstr "Табуляцией"
+
+#: templates/edit_list.html:144
+msgid "Equals sign (=)"
+msgstr "Знаком равно (=)"
+
+#: templates/edit_list.html:148
+msgid "Pipe (|)"
+msgstr "Вертикальной чертой (|)"
+
+#: templates/edit_list.html:152
+msgid "Auto detect"
+msgstr "Определять автоматически"
+
+#: templates/edit_list.html:157
+msgid "Import Into Editor"
+msgstr "Импортировать в редактор"
+
+#: templates/edit_list.html:253
+msgid "Importing..."
+msgstr "Импортирование..."
+
+#: templates/edit_list.html:264
+msgid "Import failed."
+msgstr "Импорт не удался."
+
+#: templates/edit_list.html:268
+msgid "Do not forget to save the list."
+msgstr "Не забудьте сохранить список."
+
+#: templates/flashcards.html:33 templates/flashcards.html:71
+msgid "Extra"
+msgstr "Дополнительно"
+
+#: templates/flashcards.html:48 templates/multiple_choice.html:37
+#: templates/quiz.html:46
+msgid "Previous"
+msgstr "Предыдущий"
+
+#: templates/flashcards.html:49
+msgid "Flip Card"
+msgstr "Перевернуть карточку"
+
+#: templates/flashcards.html:50
+msgid "Next"
+msgstr "Следующий"
+
+#: templates/flashcards.html:119 templates/multiple_choice.html:202
+#: templates/quiz.html:144
+msgid "No words in this list"
+msgstr "В этом списке нет слов"
+
+#: templates/flashcards.html:120
+msgid "Add some words first to start studying with flashcards."
+msgstr "Сначала добавьте несколько слов, чтобы начать учиться с флеш-карточками."
+
+#: templates/flashcards.html:121 templates/multiple_choice.html:204
+#: templates/quiz.html:146
+msgid "Add Words"
+msgstr "Добавить слова"
+
+#: templates/index.html:9
+msgid "The smarter way to study"
+msgstr "Более умный способ учиться"
+
+#: templates/index.html:11
+msgid "Master any subject"
+msgstr "Освойте любой предмет"
+
+#: templates/index.html:12
+msgid "at your own pace"
+msgstr "в своем темпе"
+
+#: templates/index.html:15
+msgid ""
+"Create custom word lists with flexible study fields. Study with "
+"flashcards,"
+msgstr "Создавайте собственные списки слов с гибкими полями. Учитесь с карточками,"
+
+#: templates/index.html:16
+msgid "track your progress, and actually remember what you learn."
+msgstr "отслеживайте прогресс и действительно запоминайте материал."
+
+#: templates/index.html:19
+msgid "Start for free"
+msgstr "Начать бесплатно"
+
+#: templates/index.html:20 templates/login.html:44 templates/register.html:82
+msgid "Sign in"
+msgstr "Войти"
+
+#: templates/index.html:29
+msgid "Definition"
+msgstr "Определение"
+
+#: templates/index.html:30
+msgid "Lasting for a very short time"
+msgstr "Длится очень короткое время"
+
+#: templates/index.html:33
+msgid "Example"
+msgstr "Пример"
+
+#: templates/index.html:34
+msgid "The ephemeral beauty of cherry blossoms"
+msgstr "Мимолетная красота цветущей сакуры"
+
+#: templates/index.html:42
+msgid "Everything you need to study effectively"
+msgstr "Все, что нужно для эффективной учебы"
+
+#: templates/index.html:46
+msgid "Custom Study Lists"
+msgstr "Пользовательские списки"
+
+#: templates/index.html:47
+msgid ""
+"Create word lists tailored to any subject — vocabulary, formulas, dates, "
+"concepts."
+msgstr "Создавайте списки под любой предмет — слова, формулы, даты, понятия."
+
+#: templates/index.html:51
+msgid "Flexible Fields"
+msgstr "Гибкие поля"
+
+#: templates/index.html:52
+msgid ""
+"Add as many fields as you need per word: description, examples, notes, "
+"and more."
+msgstr ""
+"Добавляйте столько полей, сколько нужно: описание, примеры, заметки и "
+"другое."
+
+#: templates/index.html:56
+msgid "Fast & Simple"
+msgstr "Быстро и просто"
+
+#: templates/index.html:57
+msgid "A clean interface that gets out of your way so you can focus on learning."
+msgstr ""
+"Чистый интерфейс, который не отвлекает и помогает сосредоточиться на "
+"учебе."
+
 #: templates/login.html:9
 msgid "Welcome back"
 msgstr "Добро пожаловать обратно"
@@ -127,13 +550,13 @@ msgstr "Добро пожаловать обратно"
 msgid "Sign in to continue studying"
 msgstr "Войдите, чтобы продолжить изучение"
 
-#: templates/login.html:18 templates/register.html:32
-msgid "Username"
-msgstr "Имя пользователя"
+#: templates/login.html:18
+msgid "Username or Email"
+msgstr "Имя пользователя или Email"
 
 #: templates/login.html:24
-msgid "Enter your username"
-msgstr "Введите ваше имя пользователя"
+msgid "Enter your username or email"
+msgstr "Введите имя пользователя или Email"
 
 #: templates/login.html:32 templates/register.html:45
 msgid "Password"
@@ -143,15 +566,11 @@ msgstr "Пароль"
 msgid "Enter your password"
 msgstr "Введите ваш пароль"
 
-#: templates/login.html:44 templates/register.html:61
-msgid "Sign in"
-msgstr "Войти"
-
-#: templates/login.html:48
+#: templates/login.html:48 templates/register.html:68
 msgid "or"
 msgstr "или"
 
-#: templates/login.html:58
+#: templates/login.html:58 templates/register.html:78
 msgid "Continue with Google"
 msgstr "Продолжить с Google"
 
@@ -163,11 +582,293 @@ msgstr "У вас нет аккаунта?"
 msgid "Create one"
 msgstr "Создайте"
 
+#: templates/multiple_choice.html:12
+#, fuzzy
+msgid "Multiple Choice Quiz"
+msgstr "Множественный выбор"
+
+#: templates/multiple_choice.html:21 templates/quiz.html:21
+msgid "What is the translation of:"
+msgstr ""
+
+#: templates/multiple_choice.html:30 templates/quiz.html:39
+msgid "Submit Answer"
+msgstr "Отправить ответ"
+
+#: templates/multiple_choice.html:39 templates/quiz.html:48
+msgid "Next Question"
+msgstr ""
+
+#: templates/multiple_choice.html:52 templates/quiz.html:59
+msgid "Quiz Complete!"
+msgstr "Тест завершен!"
+
+#: templates/multiple_choice.html:53 templates/quiz.html:60
+msgid "Your score"
+msgstr "Ваш результат"
+
+#: templates/multiple_choice.html:54 templates/quiz.html:61
+msgid "Excellent work!"
+msgstr "Отличная работа!"
+
+#: templates/multiple_choice.html:55 templates/quiz.html:62
+msgid "Good job!"
+msgstr "Хорошая работа!"
+
+#: templates/multiple_choice.html:56 templates/quiz.html:63
+msgid "Keep practicing!"
+msgstr "Продолжайте практиковаться!"
+
+#: templates/multiple_choice.html:57 templates/quiz.html:64
+msgid "Try Again"
+msgstr "Попробовать снова"
+
+#: templates/multiple_choice.html:203
+msgid "Add some words first to take the multiple choice quiz."
+msgstr ""
+
+#: templates/privacy_policy.html:2
+msgid "Privacy Policy"
+msgstr "Политика конфиденциальности"
+
+#: templates/privacy_policy.html:9
+msgid "Privacy Policy for StudyFlow"
+msgstr "Политика конфиденциальности StudyFlow"
+
+#: templates/privacy_policy.html:10
+msgid "Last updated: March 2026"
+msgstr "Последнее обновление: март 2026"
+
+#: templates/privacy_policy.html:11
+msgid ""
+"Welcome to StudyFlow. Your privacy is important to us. This Privacy "
+"Policy explains what information we collect, how we use it, and how we "
+"protect it."
+msgstr ""
+"Добро пожаловать в StudyFlow. Ваша конфиденциальность важна для нас. Эта "
+"Политика конфиденциальности объясняет, какую информацию мы собираем, как "
+"ее используем и как ее защищаем."
+
+#: templates/privacy_policy.html:16 templates/privacy_policy.html:29
+msgid "Information We Collect"
+msgstr "Какую информацию мы собираем"
+
+#: templates/privacy_policy.html:17 templates/privacy_policy.html:46
+msgid "How We Use Your Information"
+msgstr "Как мы используем вашу информацию"
+
+#: templates/privacy_policy.html:18 templates/privacy_policy.html:58
+msgid "Google Authentication"
+msgstr "Аутентификация Google"
+
+#: templates/privacy_policy.html:19 templates/privacy_policy.html:64
+msgid "Data Storage and Security"
+msgstr "Хранение данных и безопасность"
+
+#: templates/privacy_policy.html:20 templates/privacy_policy.html:70
+msgid "Data Sharing"
+msgstr "Передача данных"
+
+#: templates/privacy_policy.html:21 templates/privacy_policy.html:76
+msgid "Your Rights"
+msgstr "Ваши права"
+
+#: templates/privacy_policy.html:22 templates/privacy_policy.html:87
+msgid "Cookies"
+msgstr "Cookies"
+
+#: templates/privacy_policy.html:23 templates/privacy_policy.html:92
+msgid "Changes to This Policy"
+msgstr "Изменения этой политики"
+
+#: templates/privacy_policy.html:30
+msgid "When you use StudyFlow, we may collect the following information:"
+msgstr "Когда вы используете StudyFlow, мы можем собирать следующую информацию:"
+
+#: templates/privacy_policy.html:32
+msgid "Account Information"
+msgstr "Информация об аккаунте"
+
+#: templates/privacy_policy.html:33
+msgid ""
+"When you create an account, we may collect your username, email address, "
+"and encrypted password."
+msgstr ""
+"Когда вы создаете аккаунт, мы можем собирать ваше имя пользователя, адрес"
+" электронной почты и зашифрованный пароль."
+
+#: templates/privacy_policy.html:35
+msgid "Google Login Information"
+msgstr "Информация при входе через Google"
+
+#: templates/privacy_policy.html:36
+msgid ""
+"If you sign in using Google, we receive basic profile information such as"
+" your name and email address from Google."
+msgstr ""
+"Если вы входите с помощью Google, мы получаем базовую информацию профиля,"
+" такую как ваше имя и адрес электронной почты."
+
+#: templates/privacy_policy.html:38
+msgid "Study Data"
+msgstr "Учебные данные"
+
+#: templates/privacy_policy.html:39
+msgid ""
+"We store the lists, words, flashcards, and study content that you create "
+"in order to provide the StudyFlow learning features."
+msgstr ""
+"Мы храним списки, слова, flashcards и учебный контент, которые вы "
+"создаете, чтобы предоставлять обучающие функции StudyFlow."
+
+#: templates/privacy_policy.html:41
+msgid "Technical Information"
+msgstr "Техническая информация"
+
+#: templates/privacy_policy.html:42
+msgid ""
+"We may collect basic technical information such as browser type, device "
+"information, and IP address to improve the performance and security of "
+"the website."
+msgstr ""
+"Мы можем собирать базовую техническую информацию, такую как тип браузера,"
+" информацию об устройстве и IP-адрес, чтобы улучшать производительность и"
+" безопасность сайта."
+
+#: templates/privacy_policy.html:47
+msgid "We use the collected information to:"
+msgstr "Мы используем собранную информацию, чтобы:"
+
+#: templates/privacy_policy.html:49
+msgid "create and manage your account"
+msgstr "создавать и управлять вашим аккаунтом"
+
+#: templates/privacy_policy.html:50
+msgid "allow you to log in and access your dashboard"
+msgstr "позволять вам входить в систему и получать доступ к панели"
+
+#: templates/privacy_policy.html:51
+msgid "save and manage your study lists and flashcards"
+msgstr "сохранять и управлять вашими учебными списками и flashcards"
+
+#: templates/privacy_policy.html:52
+msgid "improve the performance and reliability of StudyFlow"
+msgstr "улучшать производительность и надежность StudyFlow"
+
+#: templates/privacy_policy.html:53
+msgid "maintain security and prevent misuse of the service"
+msgstr "поддерживать безопасность и предотвращать злоупотребление сервисом"
+
+#: templates/privacy_policy.html:59
+msgid ""
+"StudyFlow allows users to sign in using Google. When you use Google "
+"login, authentication is handled securely through Google's OAuth system. "
+"We only receive basic profile information such as your email address and "
+"name."
+msgstr ""
+"StudyFlow позволяет пользователям входить через Google. Когда вы "
+"используете вход через Google, аутентификация безопасно обрабатывается "
+"через систему OAuth Google. Мы получаем только базовую информацию "
+"профиля, такую как ваш адрес электронной почты и имя."
+
+#: templates/privacy_policy.html:60
+msgid ""
+"StudyFlow does not access your Google password or other private Google "
+"data."
+msgstr ""
+"StudyFlow не имеет доступа к вашему паролю Google или другим личным "
+"данным Google."
+
+#: templates/privacy_policy.html:65
+msgid ""
+"We take reasonable measures to protect your information. Passwords are "
+"stored in encrypted form and cannot be read directly."
+msgstr ""
+"Мы принимаем разумные меры для защиты вашей информации. Пароли хранятся в"
+" зашифрованном виде и не могут быть прочитаны напрямую."
+
+#: templates/privacy_policy.html:66
+msgid "Your data is stored securely on our hosting infrastructure."
+msgstr "Ваши данные безопасно хранятся на нашей хостинг-инфраструктуре."
+
+#: templates/privacy_policy.html:71
+msgid ""
+"StudyFlow does not sell, trade, or rent your personal information to "
+"third parties."
+msgstr ""
+"StudyFlow не продает, не обменивает и не сдает в аренду вашу личную "
+"информацию третьим сторонам."
+
+#: templates/privacy_policy.html:72
+msgid ""
+"We may only share information if required by law or to protect the "
+"security of the service."
+msgstr ""
+"Мы можем делиться информацией только если это требуется законом или для "
+"защиты безопасности сервиса."
+
+#: templates/privacy_policy.html:77
+msgid "You have the right to:"
+msgstr "Вы имеете право:"
+
+#: templates/privacy_policy.html:79
+msgid "access the information stored about you"
+msgstr "получать доступ к информации, которая хранится о вас"
+
+#: templates/privacy_policy.html:80
+msgid "request correction of your information"
+msgstr "запросить исправление вашей информации"
+
+#: templates/privacy_policy.html:81
+msgid "request deletion of your account and associated data"
+msgstr "запросить удаление аккаунта и связанных данных"
+
+#: templates/privacy_policy.html:83
+msgid "If you would like your data removed, please contact us."
+msgstr "Если вы хотите удалить свои данные, пожалуйста, свяжитесь с нами."
+
+#: templates/privacy_policy.html:88
+msgid ""
+"StudyFlow may use cookies or session storage to keep you logged in and "
+"improve the user experience."
+msgstr ""
+"StudyFlow может использовать cookies или хранилище сессии, чтобы "
+"сохранять вас авторизованными и улучшать пользовательский опыт."
+
+#: templates/privacy_policy.html:93
+msgid ""
+"We may update this Privacy Policy from time to time. Any updates will be "
+"posted on this page."
+msgstr ""
+"Мы можем время от времени обновлять эту Политику конфиденциальности. "
+"Любые обновления будут опубликованы на этой странице."
+
+#: templates/privacy_policy.html:98
+msgid ""
+"If you have any questions about this Privacy Policy, you can contact us "
+"at:"
+msgstr ""
+"Если у вас есть вопросы по этой Политике конфиденциальности, вы можете "
+"связаться с нами:"
+
+#: templates/quiz.html:28
+#, fuzzy
+msgid "Your answer:"
+msgstr "Показать ответ"
+
+#: templates/quiz.html:34
+msgid "Type your answer here"
+msgstr ""
+
+#: templates/quiz.html:145
+msgid "Add some words first to take the quiz."
+msgstr ""
+
 #: templates/register.html:2
 msgid "Register"
 msgstr "Регистрация"
 
-#: templates/register.html:9 templates/register.html:57
+#: templates/register.html:9 templates/register.html:64
 msgid "Create account"
 msgstr "Создать аккаунт"
 
@@ -175,13 +876,13 @@ msgstr "Создать аккаунт"
 msgid "Start learning smarter today"
 msgstr "Начните учиться умнее сегодня"
 
-#: templates/register.html:18
-msgid "Email"
-msgstr "Электронная почта"
-
 #: templates/register.html:24
 msgid "Enter your email address"
 msgstr "Введите ваш адрес электронной почты"
+
+#: templates/register.html:32
+msgid "Username"
+msgstr "Имя пользователя"
 
 #: templates/register.html:38
 msgid "Choose a username"
@@ -191,341 +892,111 @@ msgstr "Выберите имя пользователя"
 msgid "Create a password"
 msgstr "Создайте пароль"
 
-#: templates/register.html:61
-msgid "Already have an account?"
-msgstr "У вас уже есть аккаунт?"
-
-#: templates/study.html:16
-msgid "Add a new word"
-msgstr "Добавить новое слово"
-
-#: templates/study.html:24
-msgid "Word / Term"
-msgstr "Слово / Термин"
-
-#: templates/study.html:30
-msgid "Enter the word or term"
-msgstr "Введите слово или термин"
-
-#: templates/study.html:52
-msgid "Add Word"
-msgstr "Добавить слово"
-
-#: templates/study.html:64
-msgid "Word"
-msgstr "Слово"
-
-#: templates/study.html:65
-msgid "Description"
-msgstr "Описание"
-
-#: templates/study.html:66
-msgid "Example"
-msgstr "Пример"
-
-#: templates/study.html:67
-msgid "Disadvantage"
-msgstr "Недостаток"
-
-#: templates/study.html:68
-msgid "Actions"
-msgstr "Действия"
-
-#: templates/study.html:82
-msgid "Delete"
-msgstr "Удалить"
-
-#: templates/study.html:93
-msgid "Study Mode"
-msgstr "Режим изучения"
-
-#: templates/study.html:100
-msgid "Previous"
-msgstr "Предыдущий"
-
-#: templates/study.html:101
-msgid "Show Answer"
-msgstr "Показать ответ"
-
-#: templates/study.html:102
-msgid "Next"
-msgstr "Следующий"
-
-#: templates/study.html:110
-msgid "No words yet"
-msgstr ""
-
-#: templates/study.html:111
-msgid "Use the form above to add your first word to this list."
-msgstr ""
-
-msgid "Contact"
-msgstr "Контакты"
-
-msgid "The smarter way to study"
-msgstr "Более умный способ учиться"
-
-msgid "Master any subject"
-msgstr "Освойте любой предмет"
-
-msgid "at your own pace"
-msgstr "в своем темпе"
-
-msgid "Create custom word lists with flexible study fields. Study with flashcards,"
-msgstr "Создавайте собственные списки слов с гибкими полями. Учитесь с карточками,"
-
-msgid "track your progress, and actually remember what you learn."
-msgstr "отслеживайте прогресс и действительно запоминайте материал."
-
-msgid "Start for free"
-msgstr "Начать бесплатно"
-
-msgid "Definition"
-msgstr "Определение"
-
-msgid "Lasting for a very short time"
-msgstr "Длится очень короткое время"
-
-msgid "The ephemeral beauty of cherry blossoms"
-msgstr "Мимолетная красота цветущей сакуры"
-
-msgid "Everything you need to study effectively"
-msgstr "Все, что нужно для эффективной учебы"
-
-msgid "Custom Study Lists"
-msgstr "Пользовательские списки"
-
-msgid "Create word lists tailored to any subject — vocabulary, formulas, dates, concepts."
-msgstr "Создавайте списки под любой предмет — слова, формулы, даты, понятия."
-
-msgid "Flexible Fields"
-msgstr "Гибкие поля"
-
-msgid "Add as many fields as you need per word: description, examples, notes, and more."
-msgstr "Добавляйте столько полей, сколько нужно: описание, примеры, заметки и другое."
-
-msgid "Fast & Simple"
-msgstr "Быстро и просто"
-
-msgid "A clean interface that gets out of your way so you can focus on learning."
-msgstr "Чистый интерфейс, который не отвлекает и помогает сосредоточиться на учебе."
-
-msgid "Have a question or feedback? We would love to hear from you."
-msgstr "Есть вопрос или отзыв? Мы будем рады вас услышать."
-
-msgid "We usually reply within 24 hours."
-msgstr "Обычно отвечаем в течение 24 часов."
-
-msgid "Back to home"
-msgstr "Назад на главную"
-
-msgid "Please log in to continue."
-msgstr "Войдите, чтобы продолжить."
-
-msgid "Quiz Complete!"
-msgstr "Тест завершен!"
-
-msgid "Your score"
-msgstr "Ваш результат"
-
-msgid "Excellent work!"
-msgstr "Отличная работа!"
-
-msgid "Good job!"
-msgstr "Хорошая работа!"
-
-msgid "Keep practicing!"
-msgstr "Продолжайте практиковаться!"
-
-msgid "Try Again"
-msgstr "Попробовать снова"
-
-msgid "Language"
-msgstr "Язык"
-
-msgid "Username or Email"
-msgstr "Имя пользователя или Email"
-
-msgid "Enter your username or email"
-msgstr "Введите имя пользователя или Email"
-
-msgid "not configured"
-msgstr "не настроено"
-
+#: templates/register.html:60
 msgid "I agree to the"
 msgstr "Я согласен с"
 
+#: templates/register.html:60
 msgid "privacy policy"
 msgstr "политикой конфиденциальности"
 
-msgid "Create your list here. Editing existing lists happens on a separate edit page."
-msgstr "Создайте список здесь. Редактирование существующих списков происходит на отдельной странице."
+#: templates/register.html:82
+msgid "Already have an account?"
+msgstr "У вас уже есть аккаунт?"
 
-msgid "Initial words (optional)"
-msgstr "Начальные слова (необязательно)"
+#~ msgid "Give your study list a name to get started."
+#~ msgstr "Дайте название вашему списку для изучения, чтобы начать."
 
-msgid "One line per word. Format: word|description|example|disadvantage"
-msgstr "Одна строка на слово. Формат: слово|описание|пример|недостаток"
+#~ msgid "Enter your username"
+#~ msgstr "Введите ваше имя пользователя"
 
-msgid "Example: ephemeral|lasting very short|The ephemeral beauty of spring|hard to preserve"
-msgstr "Пример: эпемерный|очень короткий|Мимолетная красота весны|трудно сохранить"
+#~ msgid "Add a new word"
+#~ msgstr "Добавить новое слово"
 
-msgid "A database error occurred. Please try again."
-msgstr "Произошла ошибка базы данных. Пожалуйста, попробуйте снова."
+#~ msgid "Enter the word or term"
+#~ msgstr "Введите слово или термин"
 
-msgid "Something went wrong. Please try again."
-msgstr "Что-то пошло не так. Пожалуйста, попробуйте снова."
+#~ msgid "Actions"
+#~ msgstr "Действия"
 
-msgid "You must accept the privacy policy to create an account."
-msgstr "Чтобы создать аккаунт, необходимо согласиться с политикой конфиденциальности."
+#~ msgid "Delete"
+#~ msgstr "Удалить"
 
-msgid "This account uses Google sign-in. Please continue with Google."
-msgstr "Этот аккаунт использует вход через Google. Пожалуйста, продолжите через Google."
+#~ msgid "Study Mode"
+#~ msgstr "Режим изучения"
 
-msgid "Invalid username/email or password."
-msgstr "Неверное имя пользователя/email или пароль."
+#~ msgid "No words yet"
+#~ msgstr ""
 
-msgid "Google login is not configured yet. Please use username/password login."
-msgstr "Вход через Google еще не настроен. Используйте вход по имени пользователя и паролю."
+#~ msgid "Use the form above to add your first word to this list."
+#~ msgstr ""
 
-msgid "Account created successfully! You are now signed in with Google."
-msgstr "Аккаунт успешно создан! Вы вошли через Google."
+#~ msgid "Please log in to continue."
+#~ msgstr "Войдите, чтобы продолжить."
 
-msgid "List name is required."
-msgstr "Название списка обязательно."
+#~ msgid "not configured"
+#~ msgstr "не настроено"
 
-msgid "List created successfully."
-msgstr "Список успешно создан."
+#~ msgid ""
+#~ "Create your list here. Editing existing"
+#~ " lists happens on a separate edit "
+#~ "page."
+#~ msgstr ""
+#~ "Создайте список здесь. Редактирование "
+#~ "существующих списков происходит на отдельной"
+#~ " странице."
 
-msgid "Word is required."
-msgstr "Слово обязательно."
+#~ msgid "Initial words (optional)"
+#~ msgstr "Начальные слова (необязательно)"
 
-msgid "Word added successfully."
-msgstr "Слово успешно добавлено."
+#~ msgid "One line per word. Format: word|description|example|disadvantage"
+#~ msgstr "Одна строка на слово. Формат: слово|описание|пример|недостаток"
 
-msgid "Submit Answer"
-msgstr "Отправить ответ"
+#~ msgid ""
+#~ "Example: ephemeral|lasting very short|The "
+#~ "ephemeral beauty of spring|hard to "
+#~ "preserve"
+#~ msgstr ""
+#~ "Пример: эпемерный|очень короткий|Мимолетная красота"
+#~ " весны|трудно сохранить"
 
-msgid "Privacy Policy"
-msgstr "Политика конфиденциальности"
+#~ msgid "A database error occurred. Please try again."
+#~ msgstr "Произошла ошибка базы данных. Пожалуйста, попробуйте снова."
 
-msgid "Privacy Policy for StudyFlow"
-msgstr "Политика конфиденциальности StudyFlow"
+#~ msgid "Something went wrong. Please try again."
+#~ msgstr "Что-то пошло не так. Пожалуйста, попробуйте снова."
 
-msgid "Last updated: March 2026"
-msgstr "Последнее обновление: март 2026"
+#~ msgid "You must accept the privacy policy to create an account."
+#~ msgstr ""
+#~ "Чтобы создать аккаунт, необходимо согласиться"
+#~ " с политикой конфиденциальности."
 
-msgid "Welcome to StudyFlow. Your privacy is important to us. This Privacy Policy explains what information we collect, how we use it, and how we protect it."
-msgstr "Добро пожаловать в StudyFlow. Ваша конфиденциальность важна для нас. Эта Политика конфиденциальности объясняет, какую информацию мы собираем, как ее используем и как ее защищаем."
+#~ msgid "This account uses Google sign-in. Please continue with Google."
+#~ msgstr ""
+#~ "Этот аккаунт использует вход через "
+#~ "Google. Пожалуйста, продолжите через Google."
 
-msgid "Information We Collect"
-msgstr "Какую информацию мы собираем"
+#~ msgid "Invalid username/email or password."
+#~ msgstr "Неверное имя пользователя/email или пароль."
 
-msgid "When you use StudyFlow, we may collect the following information:"
-msgstr "Когда вы используете StudyFlow, мы можем собирать следующую информацию:"
+#~ msgid "Google login is not configured yet. Please use username/password login."
+#~ msgstr ""
+#~ "Вход через Google еще не настроен. "
+#~ "Используйте вход по имени пользователя и"
+#~ " паролю."
 
-msgid "Account Information"
-msgstr "Информация об аккаунте"
+#~ msgid "Account created successfully! You are now signed in with Google."
+#~ msgstr "Аккаунт успешно создан! Вы вошли через Google."
 
-msgid "When you create an account, we may collect your username, email address, and encrypted password."
-msgstr "Когда вы создаете аккаунт, мы можем собирать ваше имя пользователя, адрес электронной почты и зашифрованный пароль."
+#~ msgid "List name is required."
+#~ msgstr "Название списка обязательно."
 
-msgid "Google Login Information"
-msgstr "Информация при входе через Google"
+#~ msgid "List created successfully."
+#~ msgstr "Список успешно создан."
 
-msgid "If you sign in using Google, we receive basic profile information such as your name and email address from Google."
-msgstr "Если вы входите с помощью Google, мы получаем базовую информацию профиля, такую как ваше имя и адрес электронной почты."
+#~ msgid "Word is required."
+#~ msgstr "Слово обязательно."
 
-msgid "Study Data"
-msgstr "Учебные данные"
-
-msgid "We store the lists, words, flashcards, and study content that you create in order to provide the StudyFlow learning features."
-msgstr "Мы храним списки, слова, flashcards и учебный контент, которые вы создаете, чтобы предоставлять обучающие функции StudyFlow."
-
-msgid "Technical Information"
-msgstr "Техническая информация"
-
-msgid "We may collect basic technical information such as browser type, device information, and IP address to improve the performance and security of the website."
-msgstr "Мы можем собирать базовую техническую информацию, такую как тип браузера, информацию об устройстве и IP-адрес, чтобы улучшать производительность и безопасность сайта."
-
-msgid "How We Use Your Information"
-msgstr "Как мы используем вашу информацию"
-
-msgid "We use the collected information to:"
-msgstr "Мы используем собранную информацию, чтобы:"
-
-msgid "create and manage your account"
-msgstr "создавать и управлять вашим аккаунтом"
-
-msgid "allow you to log in and access your dashboard"
-msgstr "позволять вам входить в систему и получать доступ к панели"
-
-msgid "save and manage your study lists and flashcards"
-msgstr "сохранять и управлять вашими учебными списками и flashcards"
-
-msgid "improve the performance and reliability of StudyFlow"
-msgstr "улучшать производительность и надежность StudyFlow"
-
-msgid "maintain security and prevent misuse of the service"
-msgstr "поддерживать безопасность и предотвращать злоупотребление сервисом"
-
-msgid "Google Authentication"
-msgstr "Аутентификация Google"
-
-msgid "StudyFlow allows users to sign in using Google. When you use Google login, authentication is handled securely through Google's OAuth system. We only receive basic profile information such as your email address and name."
-msgstr "StudyFlow позволяет пользователям входить через Google. Когда вы используете вход через Google, аутентификация безопасно обрабатывается через систему OAuth Google. Мы получаем только базовую информацию профиля, такую как ваш адрес электронной почты и имя."
-
-msgid "StudyFlow does not access your Google password or other private Google data."
-msgstr "StudyFlow не имеет доступа к вашему паролю Google или другим личным данным Google."
-
-msgid "Data Storage and Security"
-msgstr "Хранение данных и безопасность"
-
-msgid "We take reasonable measures to protect your information. Passwords are stored in encrypted form and cannot be read directly."
-msgstr "Мы принимаем разумные меры для защиты вашей информации. Пароли хранятся в зашифрованном виде и не могут быть прочитаны напрямую."
-
-msgid "Your data is stored securely on our hosting infrastructure."
-msgstr "Ваши данные безопасно хранятся на нашей хостинг-инфраструктуре."
-
-msgid "Data Sharing"
-msgstr "Передача данных"
-
-msgid "StudyFlow does not sell, trade, or rent your personal information to third parties."
-msgstr "StudyFlow не продает, не обменивает и не сдает в аренду вашу личную информацию третьим сторонам."
-
-msgid "We may only share information if required by law or to protect the security of the service."
-msgstr "Мы можем делиться информацией только если это требуется законом или для защиты безопасности сервиса."
-
-msgid "Your Rights"
-msgstr "Ваши права"
-
-msgid "You have the right to:"
-msgstr "Вы имеете право:"
-
-msgid "access the information stored about you"
-msgstr "получать доступ к информации, которая хранится о вас"
-
-msgid "request correction of your information"
-msgstr "запросить исправление вашей информации"
-
-msgid "request deletion of your account and associated data"
-msgstr "запросить удаление аккаунта и связанных данных"
-
-msgid "If you would like your data removed, please contact us."
-msgstr "Если вы хотите удалить свои данные, пожалуйста, свяжитесь с нами."
-
-msgid "Cookies"
-msgstr "Cookies"
-
-msgid "StudyFlow may use cookies or session storage to keep you logged in and improve the user experience."
-msgstr "StudyFlow может использовать cookies или хранилище сессии, чтобы сохранять вас авторизованными и улучшать пользовательский опыт."
-
-msgid "Changes to This Policy"
-msgstr "Изменения этой политики"
-
-msgid "We may update this Privacy Policy from time to time. Any updates will be posted on this page."
-msgstr "Мы можем время от времени обновлять эту Политику конфиденциальности. Любые обновления будут опубликованы на этой странице."
-
-msgid "If you have any questions about this Privacy Policy, you can contact us at:"
-msgstr "Если у вас есть вопросы по этой Политике конфиденциальности, вы можете связаться с нами:"
+#~ msgid "Word added successfully."
+#~ msgstr "Слово успешно добавлено."
 

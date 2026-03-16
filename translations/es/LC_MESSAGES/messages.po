@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: StudyFlow 1.0\n"
 "Report-Msgid-Bugs-To: team@studyflow.com\n"
-"POT-Creation-Date: 2026-03-08 00:32+0100\n"
+"POT-Creation-Date: 2026-03-16 14:20+0100\n"
 "PO-Revision-Date: 2026-03-08 00:32+0100\n"
 "Last-Translator: StudyFlow Team <team@studyflow.com>\n"
 "Language: es\n"
@@ -18,7 +18,120 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: templates/base.html:23 templates/dashboard.html:2 templates/study.html:10
+#: app.py:614
+#, fuzzy
+msgid "Please log in to continue."
+msgstr "Inicia sesión para continuar estudiando"
+
+#: app.py:621
+msgid "A database error occurred. Please try again."
+msgstr ""
+
+#: app.py:627
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+#: app.py:658
+msgid "All fields are required."
+msgstr ""
+
+#: app.py:660
+msgid "You must accept the privacy policy to create an account."
+msgstr ""
+
+#: app.py:662
+msgid "Password must be at least 4 characters long."
+msgstr ""
+
+#: app.py:664
+#, fuzzy
+msgid "Please enter a valid email address."
+msgstr "Ingresa tu dirección de correo electrónico"
+
+#: app.py:666
+msgid "Username is already taken."
+msgstr ""
+
+#: app.py:668
+msgid "Email is already registered."
+msgstr ""
+
+#: app.py:683
+msgid "Account created successfully! Check your email for a welcome message."
+msgstr ""
+
+#: app.py:685
+msgid ""
+"Account created! (Welcome email could not be sent, but your account is "
+"ready.)"
+msgstr ""
+
+#: app.py:711
+msgid "This account uses Google sign-in. Please continue with Google."
+msgstr ""
+
+#: app.py:713
+msgid "Invalid username/email or password."
+msgstr ""
+
+#: app.py:724 app.py:745
+msgid "Google login is not configured yet. Please use username/password login."
+msgstr ""
+
+#: app.py:752
+#, fuzzy
+msgid "Failed to authorize with Google."
+msgstr "Continuar con Google"
+
+#: app.py:760
+msgid "Could not retrieve user information from Google."
+msgstr ""
+
+#: app.py:769
+msgid "Google account missing required information."
+msgstr ""
+
+#: app.py:797
+msgid "Account created successfully! You are now signed in with Google."
+msgstr ""
+
+#: app.py:848 app.py:873
+msgid "List name is required."
+msgstr ""
+
+#: app.py:853
+#, fuzzy
+msgid "List created successfully."
+msgstr "Lista guardada correctamente."
+
+#: app.py:895
+msgid "List saved successfully."
+msgstr "Lista guardada correctamente."
+
+#: app.py:926
+msgid "Unsupported file type. Use txt, csv, tsv, docx, xlsx, pdf, or an image."
+msgstr ""
+"Tipo de archivo no compatible. Usa txt, csv, tsv, docx, xlsx, pdf o una "
+"imagen."
+
+#: app.py:928
+msgid "The file could not be read. Try a clearer image or a simpler document."
+msgstr ""
+"No se pudo leer el archivo. Prueba con una imagen más clara o un "
+"documento más simple."
+
+#: app.py:933
+msgid "No words were found in the pasted text or uploaded file."
+msgstr "No se encontraron palabras en el texto pegado o en el archivo subido."
+
+#: app.py:937
+#, python-format
+msgid "%(count)s rows imported into the editor."
+msgstr "Se importaron %(count)s filas al editor."
+
+#: templates/base.html:23 templates/contact.html:18 templates/dashboard.html:2
+#: templates/edit_list.html:9 templates/flashcards.html:10
+#: templates/multiple_choice.html:10 templates/quiz.html:10
 msgid "Dashboard"
 msgstr "Panel de Control"
 
@@ -30,19 +143,45 @@ msgstr "Cerrar Sesión"
 msgid "Login"
 msgstr "Iniciar Sesión"
 
-#: templates/base.html:27
+#: templates/base.html:27 templates/contact.html:20
 msgid "Get Started"
 msgstr "Comenzar"
 
-#: templates/base.html:52
+#: templates/base.html:31 templates/base.html:36
+msgid "Language"
+msgstr ""
+
+#: templates/base.html:68
 msgid "Learn smarter, not harder."
 msgstr "Aprende de manera más inteligente, no más dura."
 
-#: templates/create_list.html:2 templates/create_list.html:34
+#: templates/base.html:69 templates/contact.html:2 templates/contact.html:8
+#: templates/privacy_policy.html:24 templates/privacy_policy.html:97
+msgid "Contact"
+msgstr "Contacto"
+
+#: templates/contact.html:9
+msgid "Have a question or feedback? We would love to hear from you."
+msgstr "Tienes preguntas o comentarios? Nos encantara escucharte."
+
+#: templates/contact.html:13 templates/register.html:18
+msgid "Email"
+msgstr "Correo Electrónico"
+
+#: templates/contact.html:14
+msgid "We usually reply within 24 hours."
+msgstr "Normalmente respondemos en menos de 24 horas."
+
+#: templates/contact.html:16
+msgid "Back to home"
+msgstr "Volver al inicio"
+
+#: templates/create_list.html:2
 msgid "Create List"
 msgstr "Crear Lista"
 
-#: templates/create_list.html:9
+#: templates/create_list.html:9 templates/multiple_choice.html:58
+#: templates/quiz.html:65
 msgid "Back to Dashboard"
 msgstr "Volver al Panel"
 
@@ -51,10 +190,14 @@ msgid "Create a new list"
 msgstr "Crear una nueva lista"
 
 #: templates/create_list.html:11
-msgid "Give your study list a name to get started."
-msgstr "Dale un nombre a tu lista de estudio para comenzar."
+msgid ""
+"Give your list a name first. Right after that you will land on the edit "
+"page with 3 starter rows."
+msgstr ""
+"Primero ponle un nombre a tu lista. Después irás directamente a la página"
+" de edición con 3 filas iniciales."
 
-#: templates/create_list.html:20
+#: templates/create_list.html:20 templates/edit_list.html:36
 msgid "List Name"
 msgstr "Nombre de la Lista"
 
@@ -63,8 +206,25 @@ msgid "e.g. Spanish Vocabulary, Biology Chapter 3..."
 msgstr "ej. Vocabulario Español, Biología Capítulo 3..."
 
 #: templates/create_list.html:33
+msgid "Next step"
+msgstr "Siguiente paso"
+
+#: templates/create_list.html:34
+msgid ""
+"On the next page you can add rows manually, paste a copied list, or "
+"upload a document or image to extract words automatically."
+msgstr ""
+"En la siguiente página puedes añadir filas manualmente, pegar una lista "
+"copiada o subir un documento o una imagen para extraer palabras "
+"automáticamente."
+
+#: templates/create_list.html:38
 msgid "Cancel"
 msgstr "Cancelar"
+
+#: templates/create_list.html:39
+msgid "Continue to Edit Page"
+msgstr "Continuar a la página de edición"
 
 #: templates/dashboard.html:10
 msgid "Your Study Lists"
@@ -90,11 +250,11 @@ msgstr "¡No hay listas aún — crea la primera!"
 msgid "Create New List"
 msgstr "Crear Nueva Lista"
 
-#: templates/dashboard.html:39
+#: templates/dashboard.html:39 templates/flashcards.html:12
 msgid "Flashcards"
 msgstr "Tarjetas de Memoria"
 
-#: templates/dashboard.html:40
+#: templates/dashboard.html:40 templates/quiz.html:12
 msgid "Normal Quiz"
 msgstr "Cuestionario Normal"
 
@@ -102,7 +262,8 @@ msgstr "Cuestionario Normal"
 msgid "Multiple Choice"
 msgstr "Opción Múltiple"
 
-#: templates/dashboard.html:44
+#: templates/dashboard.html:44 templates/flashcards.html:14
+#: templates/multiple_choice.html:14 templates/quiz.html:14
 msgid "Edit List"
 msgstr "Editar Lista"
 
@@ -118,6 +279,266 @@ msgstr "Crea tu primera lista y comienza a agregar palabras para estudiar."
 msgid "Create your first list"
 msgstr "Crea tu primera lista"
 
+#: templates/edit_list.html:11
+msgid ""
+"Build your list with a word, an explanation, one extra field, and an "
+"optional disadvantage."
+msgstr ""
+"Crea tu lista con una palabra, una explicación, un campo extra y una "
+"desventaja opcional."
+
+#: templates/edit_list.html:14
+msgid "saved rows"
+msgstr "filas guardadas"
+
+#: templates/edit_list.html:15
+msgid "Open Quiz"
+msgstr "Abrir quiz"
+
+#: templates/edit_list.html:26
+msgid "Edit list"
+msgstr "Editar lista"
+
+#: templates/edit_list.html:27
+msgid ""
+"Rows without a word are skipped automatically. Quiz modes only use rows "
+"that have an explanation."
+msgstr ""
+"Las filas sin palabra se omiten automáticamente. Los modos de quiz solo "
+"usan filas que tienen una explicación."
+
+#: templates/edit_list.html:30
+msgid "Add Row"
+msgstr "Añadir fila"
+
+#: templates/edit_list.html:31
+msgid "Save List"
+msgstr "Guardar lista"
+
+#: templates/edit_list.html:53 templates/edit_list.html:170
+#: templates/index.html:25
+msgid "Word"
+msgstr "Palabra"
+
+#: templates/edit_list.html:58 templates/edit_list.html:175
+msgid "Word or term"
+msgstr "Palabra o término"
+
+#: templates/edit_list.html:63 templates/edit_list.html:179
+#: templates/flashcards.html:27 templates/flashcards.html:68
+msgid "Description"
+msgstr "Descripción"
+
+#: templates/edit_list.html:68 templates/edit_list.html:184
+msgid "Explanation or meaning"
+msgstr "Explicación o significado"
+
+#: templates/edit_list.html:73 templates/edit_list.html:188
+msgid "Advantage / Example / Extra"
+msgstr "Ventaja / Ejemplo / Extra"
+
+#: templates/edit_list.html:78 templates/edit_list.html:193
+msgid "Example sentence, benefit, note..."
+msgstr "Frase de ejemplo, ventaja, nota..."
+
+#: templates/edit_list.html:83 templates/edit_list.html:197
+#: templates/flashcards.html:39 templates/flashcards.html:74
+msgid "Disadvantage"
+msgstr "Desventaja"
+
+#: templates/edit_list.html:88 templates/edit_list.html:202
+msgid "Limitation, warning, downside..."
+msgstr "Limitación, advertencia, desventaja..."
+
+#: templates/edit_list.html:93 templates/edit_list.html:206
+msgid "Remove"
+msgstr "Eliminar"
+
+#: templates/edit_list.html:103
+msgid "Import words fast"
+msgstr "Importar palabras rápido"
+
+#: templates/edit_list.html:104
+msgid ""
+"Paste a copied list or upload a file. Imported rows are added to the "
+"editor below and become available in the quiz after saving."
+msgstr ""
+"Pega una lista copiada o sube un archivo. Las filas importadas se añaden "
+"al editor de abajo y estarán disponibles en el quiz después de guardar."
+
+#: templates/edit_list.html:113
+msgid "Paste copied words"
+msgstr "Pegar palabras copiadas"
+
+#: templates/edit_list.html:119
+msgid ""
+"Examples:\n"
+"word<TAB>meaning\n"
+"word=meaning\n"
+"word|meaning|extra|disadvantage"
+msgstr ""
+"Ejemplos:\n"
+"palabra<TAB>significado\n"
+"palabra=significado\n"
+"palabra|significado|extra|desventaja"
+
+#: templates/edit_list.html:125
+msgid "Upload a document or image"
+msgstr "Sube un documento o una imagen"
+
+#: templates/edit_list.html:133
+msgid "Supported: txt, csv, tsv, docx, xlsx, pdf, png, jpg, jpeg, webp, bmp"
+msgstr "Compatible: txt, csv, tsv, docx, xlsx, pdf, png, jpg, jpeg, webp, bmp"
+
+#: templates/edit_list.html:137
+msgid "My words are separated by"
+msgstr "Mis palabras están separadas por"
+
+#: templates/edit_list.html:140
+msgid "Tab"
+msgstr "Tabulador"
+
+#: templates/edit_list.html:144
+msgid "Equals sign (=)"
+msgstr "Signo igual (=)"
+
+#: templates/edit_list.html:148
+msgid "Pipe (|)"
+msgstr "Barra vertical (|)"
+
+#: templates/edit_list.html:152
+msgid "Auto detect"
+msgstr "Detectar automáticamente"
+
+#: templates/edit_list.html:157
+msgid "Import Into Editor"
+msgstr "Importar al editor"
+
+#: templates/edit_list.html:253
+msgid "Importing..."
+msgstr "Importando..."
+
+#: templates/edit_list.html:264
+msgid "Import failed."
+msgstr "La importación falló."
+
+#: templates/edit_list.html:268
+msgid "Do not forget to save the list."
+msgstr "No olvides guardar la lista."
+
+#: templates/flashcards.html:33 templates/flashcards.html:71
+msgid "Extra"
+msgstr "Extra"
+
+#: templates/flashcards.html:48 templates/multiple_choice.html:37
+#: templates/quiz.html:46
+msgid "Previous"
+msgstr "Anterior"
+
+#: templates/flashcards.html:49
+msgid "Flip Card"
+msgstr "Girar tarjeta"
+
+#: templates/flashcards.html:50
+msgid "Next"
+msgstr "Siguiente"
+
+#: templates/flashcards.html:119 templates/multiple_choice.html:202
+#: templates/quiz.html:144
+msgid "No words in this list"
+msgstr "No hay palabras en esta lista"
+
+#: templates/flashcards.html:120
+msgid "Add some words first to start studying with flashcards."
+msgstr "Añade primero algunas palabras para empezar a estudiar con flashcards."
+
+#: templates/flashcards.html:121 templates/multiple_choice.html:204
+#: templates/quiz.html:146
+msgid "Add Words"
+msgstr "Añadir palabras"
+
+#: templates/index.html:9
+msgid "The smarter way to study"
+msgstr "La forma mas inteligente de estudiar"
+
+#: templates/index.html:11
+msgid "Master any subject"
+msgstr "Domina cualquier materia"
+
+#: templates/index.html:12
+msgid "at your own pace"
+msgstr "a tu propio ritmo"
+
+#: templates/index.html:15
+msgid ""
+"Create custom word lists with flexible study fields. Study with "
+"flashcards,"
+msgstr "Crea listas personalizadas con campos flexibles. Estudia con tarjetas,"
+
+#: templates/index.html:16
+msgid "track your progress, and actually remember what you learn."
+msgstr "sigue tu progreso y recuerda de verdad lo que aprendes."
+
+#: templates/index.html:19
+msgid "Start for free"
+msgstr "Empieza gratis"
+
+#: templates/index.html:20 templates/login.html:44 templates/register.html:82
+msgid "Sign in"
+msgstr "Iniciar Sesión"
+
+#: templates/index.html:29
+msgid "Definition"
+msgstr "Definicion"
+
+#: templates/index.html:30
+msgid "Lasting for a very short time"
+msgstr "Que dura muy poco tiempo"
+
+#: templates/index.html:33
+msgid "Example"
+msgstr "Ejemplo"
+
+#: templates/index.html:34
+msgid "The ephemeral beauty of cherry blossoms"
+msgstr "La belleza efimera de los cerezos en flor"
+
+#: templates/index.html:42
+msgid "Everything you need to study effectively"
+msgstr "Todo lo que necesitas para estudiar con eficacia"
+
+#: templates/index.html:46
+msgid "Custom Study Lists"
+msgstr "Listas de estudio personalizadas"
+
+#: templates/index.html:47
+msgid ""
+"Create word lists tailored to any subject — vocabulary, formulas, dates, "
+"concepts."
+msgstr ""
+"Crea listas adaptadas a cualquier materia — vocabulario, formulas, fechas"
+" y conceptos."
+
+#: templates/index.html:51
+msgid "Flexible Fields"
+msgstr "Campos flexibles"
+
+#: templates/index.html:52
+msgid ""
+"Add as many fields as you need per word: description, examples, notes, "
+"and more."
+msgstr ""
+"Agrega tantos campos como necesites por palabra: descripcion, ejemplos, "
+"notas y mas."
+
+#: templates/index.html:56
+msgid "Fast & Simple"
+msgstr "Rapido y simple"
+
+#: templates/index.html:57
+msgid "A clean interface that gets out of your way so you can focus on learning."
+msgstr "Una interfaz limpia para que te concentres en aprender."
+
 #: templates/login.html:9
 msgid "Welcome back"
 msgstr "Bienvenido de vuelta"
@@ -126,12 +547,14 @@ msgstr "Bienvenido de vuelta"
 msgid "Sign in to continue studying"
 msgstr "Inicia sesión para continuar estudiando"
 
-#: templates/login.html:18 templates/register.html:32
-msgid "Username"
+#: templates/login.html:18
+#, fuzzy
+msgid "Username or Email"
 msgstr "Nombre de Usuario"
 
 #: templates/login.html:24
-msgid "Enter your username"
+#, fuzzy
+msgid "Enter your username or email"
 msgstr "Ingresa tu nombre de usuario"
 
 #: templates/login.html:32 templates/register.html:45
@@ -142,15 +565,11 @@ msgstr "Contraseña"
 msgid "Enter your password"
 msgstr "Ingresa tu contraseña"
 
-#: templates/login.html:44 templates/register.html:61
-msgid "Sign in"
-msgstr "Iniciar Sesión"
-
-#: templates/login.html:48
+#: templates/login.html:48 templates/register.html:68
 msgid "or"
 msgstr "o"
 
-#: templates/login.html:58
+#: templates/login.html:58 templates/register.html:78
 msgid "Continue with Google"
 msgstr "Continuar con Google"
 
@@ -162,11 +581,266 @@ msgstr "¿No tienes una cuenta?"
 msgid "Create one"
 msgstr "Crea una"
 
+#: templates/multiple_choice.html:12
+#, fuzzy
+msgid "Multiple Choice Quiz"
+msgstr "Opción Múltiple"
+
+#: templates/multiple_choice.html:21 templates/quiz.html:21
+msgid "What is the translation of:"
+msgstr ""
+
+#: templates/multiple_choice.html:30 templates/quiz.html:39
+#, fuzzy
+msgid "Submit Answer"
+msgstr "Mostrar Respuesta"
+
+#: templates/multiple_choice.html:39 templates/quiz.html:48
+msgid "Next Question"
+msgstr ""
+
+#: templates/multiple_choice.html:52 templates/quiz.html:59
+msgid "Quiz Complete!"
+msgstr "Quiz completado!"
+
+#: templates/multiple_choice.html:53 templates/quiz.html:60
+msgid "Your score"
+msgstr "Tu puntuacion"
+
+#: templates/multiple_choice.html:54 templates/quiz.html:61
+msgid "Excellent work!"
+msgstr "Excelente trabajo!"
+
+#: templates/multiple_choice.html:55 templates/quiz.html:62
+msgid "Good job!"
+msgstr "Buen trabajo!"
+
+#: templates/multiple_choice.html:56 templates/quiz.html:63
+msgid "Keep practicing!"
+msgstr "Sigue practicando!"
+
+#: templates/multiple_choice.html:57 templates/quiz.html:64
+msgid "Try Again"
+msgstr "Intentar de nuevo"
+
+#: templates/multiple_choice.html:203
+msgid "Add some words first to take the multiple choice quiz."
+msgstr ""
+
+#: templates/privacy_policy.html:2
+msgid "Privacy Policy"
+msgstr ""
+
+#: templates/privacy_policy.html:9
+msgid "Privacy Policy for StudyFlow"
+msgstr ""
+
+#: templates/privacy_policy.html:10
+msgid "Last updated: March 2026"
+msgstr ""
+
+#: templates/privacy_policy.html:11
+msgid ""
+"Welcome to StudyFlow. Your privacy is important to us. This Privacy "
+"Policy explains what information we collect, how we use it, and how we "
+"protect it."
+msgstr ""
+
+#: templates/privacy_policy.html:16 templates/privacy_policy.html:29
+msgid "Information We Collect"
+msgstr ""
+
+#: templates/privacy_policy.html:17 templates/privacy_policy.html:46
+msgid "How We Use Your Information"
+msgstr ""
+
+#: templates/privacy_policy.html:18 templates/privacy_policy.html:58
+msgid "Google Authentication"
+msgstr ""
+
+#: templates/privacy_policy.html:19 templates/privacy_policy.html:64
+msgid "Data Storage and Security"
+msgstr ""
+
+#: templates/privacy_policy.html:20 templates/privacy_policy.html:70
+msgid "Data Sharing"
+msgstr ""
+
+#: templates/privacy_policy.html:21 templates/privacy_policy.html:76
+msgid "Your Rights"
+msgstr ""
+
+#: templates/privacy_policy.html:22 templates/privacy_policy.html:87
+msgid "Cookies"
+msgstr ""
+
+#: templates/privacy_policy.html:23 templates/privacy_policy.html:92
+msgid "Changes to This Policy"
+msgstr ""
+
+#: templates/privacy_policy.html:30
+msgid "When you use StudyFlow, we may collect the following information:"
+msgstr ""
+
+#: templates/privacy_policy.html:32
+msgid "Account Information"
+msgstr ""
+
+#: templates/privacy_policy.html:33
+msgid ""
+"When you create an account, we may collect your username, email address, "
+"and encrypted password."
+msgstr ""
+
+#: templates/privacy_policy.html:35
+msgid "Google Login Information"
+msgstr ""
+
+#: templates/privacy_policy.html:36
+msgid ""
+"If you sign in using Google, we receive basic profile information such as"
+" your name and email address from Google."
+msgstr ""
+
+#: templates/privacy_policy.html:38
+#, fuzzy
+msgid "Study Data"
+msgstr "Modo de Estudio"
+
+#: templates/privacy_policy.html:39
+msgid ""
+"We store the lists, words, flashcards, and study content that you create "
+"in order to provide the StudyFlow learning features."
+msgstr ""
+
+#: templates/privacy_policy.html:41
+msgid "Technical Information"
+msgstr ""
+
+#: templates/privacy_policy.html:42
+msgid ""
+"We may collect basic technical information such as browser type, device "
+"information, and IP address to improve the performance and security of "
+"the website."
+msgstr ""
+
+#: templates/privacy_policy.html:47
+msgid "We use the collected information to:"
+msgstr ""
+
+#: templates/privacy_policy.html:49
+#, fuzzy
+msgid "create and manage your account"
+msgstr "Crear cuenta"
+
+#: templates/privacy_policy.html:50
+msgid "allow you to log in and access your dashboard"
+msgstr ""
+
+#: templates/privacy_policy.html:51
+msgid "save and manage your study lists and flashcards"
+msgstr ""
+
+#: templates/privacy_policy.html:52
+msgid "improve the performance and reliability of StudyFlow"
+msgstr ""
+
+#: templates/privacy_policy.html:53
+msgid "maintain security and prevent misuse of the service"
+msgstr ""
+
+#: templates/privacy_policy.html:59
+msgid ""
+"StudyFlow allows users to sign in using Google. When you use Google "
+"login, authentication is handled securely through Google's OAuth system. "
+"We only receive basic profile information such as your email address and "
+"name."
+msgstr ""
+
+#: templates/privacy_policy.html:60
+msgid ""
+"StudyFlow does not access your Google password or other private Google "
+"data."
+msgstr ""
+
+#: templates/privacy_policy.html:65
+msgid ""
+"We take reasonable measures to protect your information. Passwords are "
+"stored in encrypted form and cannot be read directly."
+msgstr ""
+
+#: templates/privacy_policy.html:66
+msgid "Your data is stored securely on our hosting infrastructure."
+msgstr ""
+
+#: templates/privacy_policy.html:71
+msgid ""
+"StudyFlow does not sell, trade, or rent your personal information to "
+"third parties."
+msgstr ""
+
+#: templates/privacy_policy.html:72
+msgid ""
+"We may only share information if required by law or to protect the "
+"security of the service."
+msgstr ""
+
+#: templates/privacy_policy.html:77
+msgid "You have the right to:"
+msgstr ""
+
+#: templates/privacy_policy.html:79
+msgid "access the information stored about you"
+msgstr ""
+
+#: templates/privacy_policy.html:80
+msgid "request correction of your information"
+msgstr ""
+
+#: templates/privacy_policy.html:81
+msgid "request deletion of your account and associated data"
+msgstr ""
+
+#: templates/privacy_policy.html:83
+msgid "If you would like your data removed, please contact us."
+msgstr ""
+
+#: templates/privacy_policy.html:88
+msgid ""
+"StudyFlow may use cookies or session storage to keep you logged in and "
+"improve the user experience."
+msgstr ""
+
+#: templates/privacy_policy.html:93
+msgid ""
+"We may update this Privacy Policy from time to time. Any updates will be "
+"posted on this page."
+msgstr ""
+
+#: templates/privacy_policy.html:98
+msgid ""
+"If you have any questions about this Privacy Policy, you can contact us "
+"at:"
+msgstr ""
+
+#: templates/quiz.html:28
+#, fuzzy
+msgid "Your answer:"
+msgstr "Mostrar Respuesta"
+
+#: templates/quiz.html:34
+msgid "Type your answer here"
+msgstr ""
+
+#: templates/quiz.html:145
+msgid "Add some words first to take the quiz."
+msgstr ""
+
 #: templates/register.html:2
 msgid "Register"
 msgstr "Registrarse"
 
-#: templates/register.html:9 templates/register.html:57
+#: templates/register.html:9 templates/register.html:64
 msgid "Create account"
 msgstr "Crear cuenta"
 
@@ -174,13 +848,13 @@ msgstr "Crear cuenta"
 msgid "Start learning smarter today"
 msgstr "Comienza a aprender de manera más inteligente hoy"
 
-#: templates/register.html:18
-msgid "Email"
-msgstr "Correo Electrónico"
-
 #: templates/register.html:24
 msgid "Enter your email address"
 msgstr "Ingresa tu dirección de correo electrónico"
+
+#: templates/register.html:32
+msgid "Username"
+msgstr "Nombre de Usuario"
 
 #: templates/register.html:38
 msgid "Choose a username"
@@ -190,152 +864,39 @@ msgstr "Elige un nombre de usuario"
 msgid "Create a password"
 msgstr "Crea una contraseña"
 
-#: templates/register.html:61
+#: templates/register.html:60
+msgid "I agree to the"
+msgstr ""
+
+#: templates/register.html:60
+msgid "privacy policy"
+msgstr ""
+
+#: templates/register.html:82
 msgid "Already have an account?"
 msgstr "¿Ya tienes una cuenta?"
 
-#: templates/study.html:16
-msgid "Add a new word"
-msgstr "Agregar una nueva palabra"
+#~ msgid "Give your study list a name to get started."
+#~ msgstr "Dale un nombre a tu lista de estudio para comenzar."
 
-#: templates/study.html:24
-msgid "Word / Term"
-msgstr "Palabra / Término"
+#~ msgid "Add a new word"
+#~ msgstr "Agregar una nueva palabra"
 
-#: templates/study.html:30
-msgid "Enter the word or term"
-msgstr "Ingresa la palabra o término"
+#~ msgid "Enter the word or term"
+#~ msgstr "Ingresa la palabra o término"
 
-#: templates/study.html:52
-msgid "Add Word"
-msgstr "Agregar Palabra"
+#~ msgid "Actions"
+#~ msgstr "Acciones"
 
-#: templates/study.html:64
-msgid "Word"
-msgstr "Palabra"
+#~ msgid "Delete"
+#~ msgstr "Eliminar"
 
-#: templates/study.html:65
-msgid "Description"
-msgstr "Descripción"
+#~ msgid "No words yet"
+#~ msgstr ""
 
-#: templates/study.html:66
-msgid "Example"
-msgstr "Ejemplo"
+#~ msgid "Use the form above to add your first word to this list."
+#~ msgstr ""
 
-#: templates/study.html:67
-msgid "Disadvantage"
-msgstr "Desventaja"
-
-#: templates/study.html:68
-msgid "Actions"
-msgstr "Acciones"
-
-#: templates/study.html:82
-msgid "Delete"
-msgstr "Eliminar"
-
-#: templates/study.html:93
-msgid "Study Mode"
-msgstr "Modo de Estudio"
-
-#: templates/study.html:100
-msgid "Previous"
-msgstr "Anterior"
-
-#: templates/study.html:101
-msgid "Show Answer"
-msgstr "Mostrar Respuesta"
-
-#: templates/study.html:102
-msgid "Next"
-msgstr "Siguiente"
-
-#: templates/study.html:110
-msgid "No words yet"
-msgstr ""
-
-#: templates/study.html:111
-msgid "Use the form above to add your first word to this list."
-msgstr ""
-
-msgid "Contact"
-msgstr "Contacto"
-
-msgid "The smarter way to study"
-msgstr "La forma mas inteligente de estudiar"
-
-msgid "Master any subject"
-msgstr "Domina cualquier materia"
-
-msgid "at your own pace"
-msgstr "a tu propio ritmo"
-
-msgid "Create custom word lists with flexible study fields. Study with flashcards,"
-msgstr "Crea listas personalizadas con campos flexibles. Estudia con tarjetas,"
-
-msgid "track your progress, and actually remember what you learn."
-msgstr "sigue tu progreso y recuerda de verdad lo que aprendes."
-
-msgid "Start for free"
-msgstr "Empieza gratis"
-
-msgid "Definition"
-msgstr "Definicion"
-
-msgid "Lasting for a very short time"
-msgstr "Que dura muy poco tiempo"
-
-msgid "The ephemeral beauty of cherry blossoms"
-msgstr "La belleza efimera de los cerezos en flor"
-
-msgid "Everything you need to study effectively"
-msgstr "Todo lo que necesitas para estudiar con eficacia"
-
-msgid "Custom Study Lists"
-msgstr "Listas de estudio personalizadas"
-
-msgid "Create word lists tailored to any subject — vocabulary, formulas, dates, concepts."
-msgstr "Crea listas adaptadas a cualquier materia — vocabulario, formulas, fechas y conceptos."
-
-msgid "Flexible Fields"
-msgstr "Campos flexibles"
-
-msgid "Add as many fields as you need per word: description, examples, notes, and more."
-msgstr "Agrega tantos campos como necesites por palabra: descripcion, ejemplos, notas y mas."
-
-msgid "Fast & Simple"
-msgstr "Rapido y simple"
-
-msgid "A clean interface that gets out of your way so you can focus on learning."
-msgstr "Una interfaz limpia para que te concentres en aprender."
-
-msgid "Have a question or feedback? We would love to hear from you."
-msgstr "Tienes preguntas o comentarios? Nos encantara escucharte."
-
-msgid "We usually reply within 24 hours."
-msgstr "Normalmente respondemos en menos de 24 horas."
-
-msgid "Back to home"
-msgstr "Volver al inicio"
-
-msgid "Please log in to continue."
-msgstr "Inicia sesion para continuar."
-
-msgid "Quiz Complete!"
-msgstr "Quiz completado!"
-
-msgid "Your score"
-msgstr "Tu puntuacion"
-
-msgid "Excellent work!"
-msgstr "Excelente trabajo!"
-
-msgid "Good job!"
-msgstr "Buen trabajo!"
-
-msgid "Keep practicing!"
-msgstr "Sigue practicando!"
-
-msgid "Try Again"
-msgstr "Intentar de nuevo"
+#~ msgid "Please log in to continue."
+#~ msgstr "Inicia sesion para continuar."
 

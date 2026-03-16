@@ -1,12 +1,16 @@
+import csv
+import io
 import os
+import re
 from functools import lru_cache
+from itertools import zip_longest
 
 import polib
 from dotenv import load_dotenv
 from sqlalchemy import or_
 from sqlalchemy.exc import SQLAlchemyError
 
-from flask import Flask, abort, flash, redirect, render_template, request, session, url_for
+from flask import Flask, abort, flash, jsonify, redirect, render_template, request, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from flask_babel import Babel, gettext
@@ -37,6 +41,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', os.urandom(24).hex())
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
 
 # Google OAuth Configuration
 app.config['GOOGLE_CLIENT_ID'] = os.getenv('GOOGLE_CLIENT_ID')
@@ -199,6 +204,275 @@ def parse_initial_words(raw_words):
         )
 
     return parsed_words
+
+
+def normalize_word_entry(word='', description='', example='', disadvantage=''):
+    """Return a normalized word payload for forms, imports, and study views."""
+    return {
+        'word': (word or '').strip(),
+        'description': (description or '').strip(),
+        'example': (example or '').strip(),
+        'disadvantage': (disadvantage or '').strip(),
+    }
+
+
+def normalize_word_source(source):
+    """Normalize either a dict payload or a Word model instance."""
+    if isinstance(source, dict):
+        return normalize_word_entry(
+            source.get('word', ''),
+            source.get('description', ''),
+            source.get('example', ''),
+            source.get('disadvantage', ''),
+        )
+
+    return normalize_word_entry(
+        getattr(source, 'word', ''),
+        getattr(source, 'description', ''),
+        getattr(source, 'example', ''),
+        getattr(source, 'disadvantage', ''),
+    )
+
+
+def build_editor_rows(entries, minimum_rows=3):
+    """Prepare rows for the bulk editor and guarantee some empty starter rows."""
+    rows = [normalize_word_source(entry) for entry in entries]
+    while len(rows) < minimum_rows:
+        rows.append(normalize_word_entry())
+    return rows
+
+
+def extract_word_rows_from_form(form):
+    """Read bulk editor form rows and ignore completely empty or wordless rows."""
+    columns = [
+        form.getlist('word[]'),
+        form.getlist('description[]'),
+        form.getlist('example[]'),
+        form.getlist('disadvantage[]'),
+    ]
+    rows = []
+
+    for word, description, example, disadvantage in zip_longest(*columns, fillvalue=''):
+        row = normalize_word_entry(word, description, example, disadvantage)
+        if not any(row.values()):
+            continue
+        if not row['word']:
+            continue
+        rows.append(row)
+
+    return rows
+
+
+def build_flashcard_rows(words):
+    """Return saved rows that contain at least one study field."""
+    rows = []
+    for word in words:
+        row = normalize_word_source(word)
+        if not row['word']:
+            continue
+        if not any([row['description'], row['example'], row['disadvantage']]):
+            continue
+        rows.append(row)
+    return rows
+
+
+def build_quiz_rows(words):
+    """Return rows that can be used in description-based quizzes."""
+    return [row for row in build_flashcard_rows(words) if row['description']]
+
+
+def decode_text_bytes(file_bytes):
+    """Decode uploaded text using a few common encodings."""
+    for encoding in ('utf-8-sig', 'utf-8', 'cp1252', 'latin-1'):
+        try:
+            return file_bytes.decode(encoding)
+        except UnicodeDecodeError:
+            continue
+    return file_bytes.decode('utf-8', errors='ignore')
+
+
+def detect_separator(lines, preferred='auto'):
+    """Choose the best separator for pasted or extracted text."""
+    explicit_map = {
+        'tab': '\t',
+        'equals': '=',
+        'pipe': '|',
+        'semicolon': ';',
+        'comma': ',',
+    }
+    if preferred in explicit_map:
+        return explicit_map[preferred]
+
+    candidates = ['\t', '|', '=', ';', ',']
+    separator_scores = {}
+    for separator in candidates:
+        separator_scores[separator] = sum(1 for line in lines if separator in line)
+
+    best_separator = max(separator_scores, key=separator_scores.get, default='')
+    if separator_scores.get(best_separator, 0) > 0:
+        return best_separator
+
+    if any(re.search(r'\S\s{2,}\S', line) for line in lines):
+        return 'double-space'
+
+    return ''
+
+
+def parse_import_text(raw_text, separator='auto'):
+    """Parse pasted text or extracted document text into editor rows."""
+    if not raw_text:
+        return []
+
+    lines = [line.strip() for line in raw_text.replace('\r\n', '\n').split('\n') if line.strip()]
+    if not lines:
+        return []
+
+    active_separator = detect_separator(lines, preferred=separator)
+    rows = []
+
+    if active_separator:
+        for line in lines:
+            if active_separator == 'double-space':
+                parts = [part.strip() for part in re.split(r'\s{2,}', line) if part.strip()]
+            else:
+                if active_separator not in line:
+                    continue
+                parts = [part.strip() for part in line.split(active_separator)]
+
+            if not parts:
+                continue
+            while len(parts) < 4:
+                parts.append('')
+            if len(parts) > 4:
+                parts = parts[:3] + [' '.join(part for part in parts[3:] if part).strip()]
+
+            row = normalize_word_entry(parts[0], parts[1], parts[2], parts[3])
+            if row['word']:
+                rows.append(row)
+
+    if rows:
+        return rows
+
+    fallback_rows = []
+    index = 0
+    while index < len(lines):
+        word = lines[index]
+        description = lines[index + 1] if index + 1 < len(lines) else ''
+        row = normalize_word_entry(word, description)
+        if row['word']:
+            fallback_rows.append(row)
+        index += 2
+
+    return fallback_rows
+
+
+def extract_text_from_txt(file_bytes):
+    """Extract text from plain-text uploads."""
+    return decode_text_bytes(file_bytes)
+
+
+def extract_text_from_csv(file_bytes, delimiter=','):
+    """Extract rows from CSV-like files as tab-separated lines."""
+    decoded = decode_text_bytes(file_bytes)
+    reader = csv.reader(io.StringIO(decoded), delimiter=delimiter)
+    output_lines = []
+    for row in reader:
+        cleaned = [str(cell).strip() for cell in row]
+        if any(cleaned):
+            output_lines.append('\t'.join(cleaned))
+    return '\n'.join(output_lines)
+
+
+def extract_text_from_docx(file_bytes):
+    """Extract paragraphs and table rows from a .docx document."""
+    from docx import Document
+
+    document = Document(io.BytesIO(file_bytes))
+    chunks = [paragraph.text.strip() for paragraph in document.paragraphs if paragraph.text.strip()]
+
+    for table in document.tables:
+        for row in table.rows:
+            cells = [cell.text.strip() for cell in row.cells]
+            if any(cells):
+                chunks.append('\t'.join(cells))
+
+    return '\n'.join(chunks)
+
+
+def extract_text_from_pdf(file_bytes):
+    """Extract text from PDF pages."""
+    from pypdf import PdfReader
+
+    reader = PdfReader(io.BytesIO(file_bytes))
+    chunks = []
+    for page in reader.pages:
+        page_text = (page.extract_text() or '').strip()
+        if page_text:
+            chunks.append(page_text)
+    return '\n'.join(chunks)
+
+
+def extract_text_from_xlsx(file_bytes):
+    """Extract rows from spreadsheets as tab-separated lines."""
+    from openpyxl import load_workbook
+
+    workbook = load_workbook(io.BytesIO(file_bytes), data_only=True)
+    output_lines = []
+    for worksheet in workbook.worksheets:
+        for row in worksheet.iter_rows(values_only=True):
+            cleaned = [str(cell).strip() if cell is not None else '' for cell in row]
+            if any(cleaned):
+                output_lines.append('\t'.join(cleaned))
+    return '\n'.join(output_lines)
+
+
+@lru_cache(maxsize=1)
+def get_ocr_engine():
+    """Create the OCR engine lazily so image import stays optional until needed."""
+    from rapidocr_onnxruntime import RapidOCR
+
+    return RapidOCR()
+
+
+def extract_text_from_image(file_bytes):
+    """Extract OCR text from image uploads."""
+    import numpy as np
+    from PIL import Image
+
+    image = Image.open(io.BytesIO(file_bytes)).convert('RGB')
+    result, _ = get_ocr_engine()(np.array(image))
+    if not result:
+        return ''
+    return '\n'.join(item[1].strip() for item in result if len(item) > 1 and item[1].strip())
+
+
+def extract_text_from_upload(uploaded_file):
+    """Extract plain text from supported uploads."""
+    filename = (uploaded_file.filename or '').strip()
+    if not filename:
+        return ''
+
+    extension = os.path.splitext(filename)[1].lower()
+    file_bytes = uploaded_file.read()
+    if not file_bytes:
+        return ''
+
+    if extension == '.txt':
+        return extract_text_from_txt(file_bytes)
+    if extension == '.csv':
+        return extract_text_from_csv(file_bytes, delimiter=',')
+    if extension == '.tsv':
+        return extract_text_from_csv(file_bytes, delimiter='\t')
+    if extension == '.docx':
+        return extract_text_from_docx(file_bytes)
+    if extension == '.pdf':
+        return extract_text_from_pdf(file_bytes)
+    if extension == '.xlsx':
+        return extract_text_from_xlsx(file_bytes)
+    if extension in {'.png', '.jpg', '.jpeg', '.webp', '.bmp'}:
+        return extract_text_from_image(file_bytes)
+
+    raise ValueError('Unsupported file type.')
 
 
 def asset_url(filename):
@@ -570,29 +844,14 @@ def create_list(lang):
     lang = validate_language(lang)
     if request.method == "POST":
         name = request.form.get('name', '').strip()
-        initial_words_raw = request.form.get('initial_words', '').strip()
         if not name:
             flash(translate_text('List name is required.'), 'error')
         else:
             new_list = WordList(name=name, user_id=current_user.id)
             db.session.add(new_list)
-            db.session.flush()
-
-            initial_words = parse_initial_words(initial_words_raw)
-            for item in initial_words:
-                db.session.add(
-                    Word(
-                        word=item['word'],
-                        description=item['description'],
-                        example=item['example'],
-                        disadvantage=item['disadvantage'],
-                        list_id=new_list.id,
-                    )
-                )
-
             db.session.commit()
             flash(translate_text('List created successfully.'), 'success')
-            return redirect(localized_url('dashboard', lang=lang))
+            return redirect(localized_url('edit_list', lang=lang, list_id=new_list.id))
 
     return render_template("create_list.html")
 
@@ -604,30 +863,81 @@ def edit_list(list_id, lang):
     lang = validate_language(lang)
     user = get_current_user()
     word_list = WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
+    saved_words = Word.query.filter_by(list_id=list_id).order_by(Word.id.asc()).all()
 
     if request.method == "POST":
-        word        = request.form.get('word', '').strip()
-        description = request.form.get('description', '').strip()
-        example     = request.form.get('example', '').strip()
-        disadvantage= request.form.get('disadvantage', '').strip()
+        name = request.form.get('name', '').strip()
+        editor_rows = extract_word_rows_from_form(request.form)
 
-        if not word:
-            flash(translate_text('Word is required.'), 'error')
-        else:
-            new_word = Word(
-                word=word,
-                description=description,
-                example=example,
-                disadvantage=disadvantage,
-                list_id=list_id
+        if not name:
+            flash(translate_text('List name is required.'), 'error')
+            return render_template(
+                "edit_list.html",
+                word_list=word_list,
+                editor_rows=build_editor_rows(editor_rows),
+                saved_count=len(saved_words),
             )
-            db.session.add(new_word)
-            db.session.commit()
-            flash(translate_text('Word added successfully.'), 'success')
-            return redirect(localized_url('edit_list', lang=lang, list_id=list_id))
 
-    words = Word.query.filter_by(list_id=list_id).all()
-    return render_template("edit_list.html", word_list=word_list, words=words)
+        word_list.name = name
+        Word.query.filter_by(list_id=list_id).delete(synchronize_session=False)
+        for row in editor_rows:
+            db.session.add(
+                Word(
+                    word=row['word'],
+                    description=row['description'],
+                    example=row['example'],
+                    disadvantage=row['disadvantage'],
+                    list_id=list_id,
+                )
+            )
+
+        db.session.commit()
+        flash(translate_text('List saved successfully.'), 'success')
+        return redirect(localized_url('edit_list', lang=lang, list_id=list_id))
+
+    return render_template(
+        "edit_list.html",
+        word_list=word_list,
+        editor_rows=build_editor_rows(saved_words),
+        saved_count=len(saved_words),
+    )
+
+
+@app.route("/list/<int:list_id>/import_words", defaults={'lang': DEFAULT_LANGUAGE}, methods=["POST"])
+@app.route("/<lang>/list/<int:list_id>/import_words", methods=["POST"])
+@login_required
+def import_words(list_id, lang):
+    lang = validate_language(lang)
+    user = get_current_user()
+    WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
+
+    separator = request.form.get('separator', 'auto').strip() or 'auto'
+    paste_text = request.form.get('paste_text', '').strip()
+    uploaded_file = request.files.get('source_file')
+    imported_rows = []
+
+    if paste_text:
+        imported_rows.extend(parse_import_text(paste_text, separator=separator))
+
+    if uploaded_file and uploaded_file.filename:
+        try:
+            extracted_text = extract_text_from_upload(uploaded_file)
+        except ValueError:
+            return jsonify({'error': translate_text('Unsupported file type. Use txt, csv, tsv, docx, xlsx, pdf, or an image.')}), 400
+        except Exception:
+            return jsonify({'error': translate_text('The file could not be read. Try a clearer image or a simpler document.')}), 400
+
+        imported_rows.extend(parse_import_text(extracted_text, separator=separator))
+
+    if not imported_rows:
+        return jsonify({'error': translate_text('No words were found in the pasted text or uploaded file.')}), 400
+
+    return jsonify(
+        {
+            'message': translate_text('%(count)s rows imported into the editor.', count=len(imported_rows)),
+            'rows': imported_rows,
+        }
+    )
 
 
 @app.route("/list/<int:list_id>/flashcards", defaults={'lang': DEFAULT_LANGUAGE})
@@ -637,17 +947,8 @@ def flashcards(list_id, lang):
     validate_language(lang)
     user = get_current_user()
     word_list = WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
-    words = Word.query.filter_by(list_id=list_id).all()
-    words_data = [
-        {
-            'word': w.word,
-            'description': w.description,
-            'example': w.example,
-            'disadvantage': w.disadvantage,
-        }
-        for w in words
-    ]
-    return render_template("flashcards.html", word_list=word_list, words=words, words_data=words_data)
+    words = build_flashcard_rows(Word.query.filter_by(list_id=list_id).all())
+    return render_template("flashcards.html", word_list=word_list, words=words, words_data=words)
 
 
 @app.route("/list/<int:list_id>/quiz", defaults={'lang': DEFAULT_LANGUAGE})
@@ -657,18 +958,8 @@ def quiz(list_id, lang):
     validate_language(lang)
     user = get_current_user()
     word_list = WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
-    words = Word.query.filter_by(list_id=list_id).all()
-    study_words = [w for w in words if (w.description or '').strip()]
-    words_data = [
-        {
-            'word': w.word,
-            'description': w.description,
-            'example': w.example,
-            'disadvantage': w.disadvantage,
-        }
-        for w in study_words
-    ]
-    return render_template("quiz.html", word_list=word_list, words=study_words, words_data=words_data)
+    study_words = build_quiz_rows(Word.query.filter_by(list_id=list_id).all())
+    return render_template("quiz.html", word_list=word_list, words=study_words, words_data=study_words)
 
 
 @app.route("/list/<int:list_id>/multiple-choice", defaults={'lang': DEFAULT_LANGUAGE})
@@ -678,18 +969,8 @@ def multiple_choice(list_id, lang):
     validate_language(lang)
     user = get_current_user()
     word_list = WordList.query.filter_by(id=list_id, user_id=user.id).first_or_404()
-    words = Word.query.filter_by(list_id=list_id).all()
-    study_words = [w for w in words if (w.description or '').strip()]
-    words_data = [
-        {
-            'word': w.word,
-            'description': w.description,
-            'example': w.example,
-            'disadvantage': w.disadvantage,
-        }
-        for w in study_words
-    ]
-    return render_template("multiple_choice.html", word_list=word_list, words=study_words, words_data=words_data)
+    study_words = build_quiz_rows(Word.query.filter_by(list_id=list_id).all())
+    return render_template("multiple_choice.html", word_list=word_list, words=study_words, words_data=study_words)
 
 
 @app.route("/list/<int:list_id>/delete_word/<int:word_id>", defaults={'lang': DEFAULT_LANGUAGE}, methods=["POST"])

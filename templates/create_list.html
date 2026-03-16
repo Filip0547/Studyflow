@@ -8,7 +8,7 @@
         <div class="form-page-header">
             <a href="{{ localized_url('dashboard') }}" class="back-link">← {{ _('Back to Dashboard') }}</a>
             <h1>{{ _('Create a new list') }}</h1>
-            <p>{{ _('Create your list here. Editing existing lists happens on a separate edit page.') }}</p>
+            <p>{{ _('Give your list a name first. Right after that you will land on the edit page with 3 starter rows.') }}</p>
         </div>
 
         <div class="form-card">
@@ -29,21 +29,14 @@
                     >
                 </div>
 
-                <div class="form-group">
-                    <label for="initial_words">{{ _('Initial words (optional)') }}</label>
-                    <textarea
-                        id="initial_words"
-                        name="initial_words"
-                        class="form-input form-textarea"
-                        placeholder="{{ _('One line per word. Format: word|description|example|disadvantage') }}"
-                        rows="6"
-                    ></textarea>
-                    <small class="field-help">{{ _('Example: ephemeral|lasting very short|The ephemeral beauty of spring|hard to preserve') }}</small>
+                <div class="setup-note">
+                    <strong>{{ _('Next step') }}</strong>
+                    <span>{{ _('On the next page you can add rows manually, paste a copied list, or upload a document or image to extract words automatically.') }}</span>
                 </div>
 
                 <div class="form-actions">
                     <a href="{{ localized_url('dashboard') }}" class="btn btn-ghost">{{ _('Cancel') }}</a>
-                    <button type="submit" class="btn btn-primary">{{ _('Create List') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ _('Continue to Edit Page') }}</button>
                 </div>
             </form>
         </div>

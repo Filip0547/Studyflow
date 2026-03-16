@@ -22,12 +22,23 @@
                     <div class="card-word">{{ words[0].word }}</div>
                 </div>
                 <div id="card-back" class="card-back">
-                    <div class="card-description">{{ words[0].description or 'No description' }}</div>
+                    {% if words[0].description %}
+                    <div class="card-detail-block">
+                        <span class="card-detail-label">{{ _('Description') }}</span>
+                        <div class="card-description">{{ words[0].description }}</div>
+                    </div>
+                    {% endif %}
                     {% if words[0].example %}
-                    <div class="card-example">{{ words[0].example }}</div>
+                    <div class="card-detail-block">
+                        <span class="card-detail-label">{{ _('Extra') }}</span>
+                        <div class="card-example">{{ words[0].example }}</div>
+                    </div>
                     {% endif %}
                     {% if words[0].disadvantage %}
-                    <div class="card-disadvantage">{{ words[0].disadvantage }}</div>
+                    <div class="card-detail-block">
+                        <span class="card-detail-label">{{ _('Disadvantage') }}</span>
+                        <div class="card-disadvantage">{{ words[0].disadvantage }}</div>
+                    </div>
                     {% endif %}
                 </div>
             </div>
@@ -50,12 +61,26 @@
         // eslint-disable-next-line no-undef
         const words = {{ words_data|tojson }};
 
+        function renderBackContent(word) {
+            const detailBlocks = [];
+
+            if (word.description) {
+                detailBlocks.push('<div class="card-detail-block"><span class="card-detail-label">{{ _('Description') }}</span><div class="card-description">' + word.description + '</div></div>');
+            }
+            if (word.example) {
+                detailBlocks.push('<div class="card-detail-block"><span class="card-detail-label">{{ _('Extra') }}</span><div class="card-example">' + word.example + '</div></div>');
+            }
+            if (word.disadvantage) {
+                detailBlocks.push('<div class="card-detail-block"><span class="card-detail-label">{{ _('Disadvantage') }}</span><div class="card-disadvantage">' + word.disadvantage + '</div></div>');
+            }
+
+            return detailBlocks.join('');
+        }
+
         function updateCard() {
             const word = words[currentIndex];
             document.getElementById('card-front').innerHTML = '<div class="card-word">' + word.word + '</div>';
-            document.getElementById('card-back').innerHTML = '<div class="card-description">' + (word.description || 'No description') + '</div>' +
-                (word.example ? '<div class="card-example">' + word.example + '</div>' : '') +
-                (word.disadvantage ? '<div class="card-disadvantage">' + word.disadvantage + '</div>' : '');
+            document.getElementById('card-back').innerHTML = renderBackContent(word);
             document.getElementById('current-card').textContent = currentIndex + 1;
             isFlipped = false;
             document.getElementById('flashcard').classList.remove('flipped');
@@ -147,6 +172,25 @@
     background: var(--primary);
     color: white;
     transform: rotateY(180deg);
+}
+
+.card-detail-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 0.85rem;
+}
+
+.card-detail-block:last-child {
+    margin-bottom: 0;
+}
+
+.card-detail-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    opacity: 0.75;
+    text-transform: uppercase;
 }
 
 .card-word {

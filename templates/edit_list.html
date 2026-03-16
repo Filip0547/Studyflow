@@ -4,99 +4,278 @@
 {% block content %}
 <div class="container page-top">
 
-    <!-- PAGE HEADER -->
     <div class="page-header">
         <div>
             <a href="{{ localized_url('dashboard') }}" class="back-link">← {{ _('Dashboard') }}</a>
             <h1 class="page-title">{{ word_list.name }}</h1>
-            <p class="page-subtitle">{{ _('Edit your word list') }}</p>
+            <p class="page-subtitle">{{ _('Build your list with a word, an explanation, one extra field, and an optional disadvantage.') }}</p>
+        </div>
+        <div class="editor-header-meta">
+            <span class="editor-status-pill">{{ saved_count }} {{ _('saved rows') }}</span>
+            <a href="{{ localized_url('quiz', list_id=word_list.id) }}" class="btn btn-ghost">{{ _('Open Quiz') }}</a>
         </div>
     </div>
 
-    <!-- ADD WORD FORM -->
-    <div class="study-form-card">
-        <h2 class="study-form-title">{{ _('Add a new word') }}</h2>
-        <form method="POST" action="{{ localized_url('edit_list', list_id=word_list.id) }}">
+    <form method="POST" action="{{ localized_url('edit_list', list_id=word_list.id) }}" class="editor-shell">
+        <div class="study-form-card editor-card">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             {{ form.hidden_tag() if form }}
 
-            <div class="word-fields-grid">
-                <!-- WORD FIELD (always present) -->
-                <div class="form-group">
-                    <label for="word">{{ _('Word / Term') }}</label>
-                    <input
-                        type="text"
-                        id="word"
-                        name="word"
-                        class="form-input"
-                        placeholder="{{ _('Enter the word or term') }}"
-                        required
-                    >
+            <div class="editor-topbar">
+                <div>
+                    <h2 class="study-form-title">{{ _('Edit list') }}</h2>
+                    <p class="editor-copy">{{ _('Rows without a word are skipped automatically. Quiz modes only use rows that have an explanation.') }}</p>
                 </div>
+                <div class="editor-actions">
+                    <button type="button" class="btn btn-ghost" id="add-row-button">{{ _('Add Row') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ _('Save List') }}</button>
+                </div>
+            </div>
 
-                <!-- FLEXIBLE FIELDS — add or remove as needed -->
-                {% set field_names = ['description', 'example', 'disadvantage'] %}
-                {% for field in field_names %}
-                <div class="form-group">
-                    <label for="{{ field }}">{{ field | capitalize }}</label>
-                    <input
-                        type="text"
-                        id="{{ field }}"
-                        name="{{ field }}"
-                        class="form-input"
-                        placeholder="Enter {{ field }}"
-                    >
+            <div class="form-group">
+                <label for="name">{{ _('List Name') }}</label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    class="form-input"
+                    value="{{ word_list.name }}"
+                    required
+                >
+            </div>
+
+            <div id="word-rows" class="word-editor-grid">
+                {% for row in editor_rows %}
+                <div class="word-editor-row">
+                    <div class="row-index-badge" data-row-number>{{ loop.index }}</div>
+                    <div class="word-editor-fields">
+                        <div class="form-group compact-field">
+                            <label>{{ _('Word') }}</label>
+                            <input
+                                type="text"
+                                name="word[]"
+                                class="form-input"
+                                placeholder="{{ _('Word or term') }}"
+                                value="{{ row.word }}"
+                            >
+                        </div>
+                        <div class="form-group compact-field">
+                            <label>{{ _('Description') }}</label>
+                            <input
+                                type="text"
+                                name="description[]"
+                                class="form-input"
+                                placeholder="{{ _('Explanation or meaning') }}"
+                                value="{{ row.description }}"
+                            >
+                        </div>
+                        <div class="form-group compact-field">
+                            <label>{{ _('Advantage / Example / Extra') }}</label>
+                            <input
+                                type="text"
+                                name="example[]"
+                                class="form-input"
+                                placeholder="{{ _('Example sentence, benefit, note...') }}"
+                                value="{{ row.example }}"
+                            >
+                        </div>
+                        <div class="form-group compact-field">
+                            <label>{{ _('Disadvantage') }}</label>
+                            <input
+                                type="text"
+                                name="disadvantage[]"
+                                class="form-input"
+                                placeholder="{{ _('Limitation, warning, downside...') }}"
+                                value="{{ row.disadvantage }}"
+                            >
+                        </div>
+                    </div>
+                    <button type="button" class="row-remove-button" onclick="removeWordRow(this)">{{ _('Remove') }}</button>
                 </div>
                 {% endfor %}
             </div>
+        </div>
+    </form>
 
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">{{ _('Add Word') }}</button>
+    <div class="study-form-card import-card">
+        <div class="import-card-header">
+            <div>
+                <h2 class="study-form-title">{{ _('Import words fast') }}</h2>
+                <p class="editor-copy">{{ _('Paste a copied list or upload a file. Imported rows are added to the editor below and become available in the quiz after saving.') }}</p>
+            </div>
+        </div>
+
+        <form id="import-form" action="{{ localized_url('import_words', list_id=word_list.id) }}" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="import-grid">
+                <div class="form-group">
+                    <label for="paste_text">{{ _('Paste copied words') }}</label>
+                    <textarea
+                        id="paste_text"
+                        name="paste_text"
+                        class="form-input form-textarea"
+                        rows="8"
+                        placeholder="{{ _('Examples:\nword<TAB>meaning\nword=meaning\nword|meaning|extra|disadvantage') }}"
+                    ></textarea>
+                </div>
+
+                <div class="import-side-panel">
+                    <div class="form-group">
+                        <label for="source_file">{{ _('Upload a document or image') }}</label>
+                        <input
+                            type="file"
+                            id="source_file"
+                            name="source_file"
+                            class="form-input"
+                            accept=".txt,.csv,.tsv,.docx,.xlsx,.pdf,.png,.jpg,.jpeg,.webp,.bmp"
+                        >
+                        <small class="field-help">{{ _('Supported: txt, csv, tsv, docx, xlsx, pdf, png, jpg, jpeg, webp, bmp') }}</small>
+                    </div>
+
+                    <fieldset class="separator-fieldset">
+                        <legend>{{ _('My words are separated by') }}</legend>
+                        <label class="separator-option">
+                            <input type="radio" name="separator" value="tab" checked>
+                            <span>{{ _('Tab') }}</span>
+                        </label>
+                        <label class="separator-option">
+                            <input type="radio" name="separator" value="equals">
+                            <span>{{ _('Equals sign (=)') }}</span>
+                        </label>
+                        <label class="separator-option">
+                            <input type="radio" name="separator" value="pipe">
+                            <span>{{ _('Pipe (|)') }}</span>
+                        </label>
+                        <label class="separator-option">
+                            <input type="radio" name="separator" value="auto">
+                            <span>{{ _('Auto detect') }}</span>
+                        </label>
+                    </fieldset>
+
+                    <div class="import-actions-row">
+                        <button type="submit" class="btn btn-primary">{{ _('Import Into Editor') }}</button>
+                        <p id="import-feedback" class="import-feedback" aria-live="polite"></p>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
 
-    <!-- WORDS TABLE -->
-    {% if words %}
-    <div class="table-wrapper">
-        <table class="study-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>{{ _('Word') }}</th>
-                    <th>{{ _('Description') }}</th>
-                    <th>{{ _('Example') }}</th>
-                    <th>{{ _("Disadvantage") }}</th>
-                    <th>{{ _('Actions') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for word in words %}
-                <tr>
-                    <td class="row-num">{{ loop.index }}</td>
-                    <td class="word-cell"><strong>{{ word.word }}</strong></td>
-                    <td>{{ word.description or '—' }}</td>
-                    <td>{{ word.example or '—' }}</td>
-                    <td>{{ word.disadvantage or '—' }}</td>
-                    <td>
-                        <form method="POST" action="{{ localized_url('delete_word', list_id=word_list.id, word_id=word.id) }}" style="display:inline;">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <button type="submit" class="btn btn-danger btn-sm">{{ _('Delete') }}</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    <template id="word-row-template">
+        <div class="word-editor-row">
+            <div class="row-index-badge" data-row-number></div>
+            <div class="word-editor-fields">
+                <div class="form-group compact-field">
+                    <label>{{ _('Word') }}</label>
+                    <input
+                        type="text"
+                        name="word[]"
+                        class="form-input"
+                        placeholder="{{ _('Word or term') }}"
+                    >
+                </div>
+                <div class="form-group compact-field">
+                    <label>{{ _('Description') }}</label>
+                    <input
+                        type="text"
+                        name="description[]"
+                        class="form-input"
+                        placeholder="{{ _('Explanation or meaning') }}"
+                    >
+                </div>
+                <div class="form-group compact-field">
+                    <label>{{ _('Advantage / Example / Extra') }}</label>
+                    <input
+                        type="text"
+                        name="example[]"
+                        class="form-input"
+                        placeholder="{{ _('Example sentence, benefit, note...') }}"
+                    >
+                </div>
+                <div class="form-group compact-field">
+                    <label>{{ _('Disadvantage') }}</label>
+                    <input
+                        type="text"
+                        name="disadvantage[]"
+                        class="form-input"
+                        placeholder="{{ _('Limitation, warning, downside...') }}"
+                    >
+                </div>
+            </div>
+            <button type="button" class="row-remove-button" onclick="removeWordRow(this)">{{ _('Remove') }}</button>
+        </div>
+    </template>
 
-    {% else %}
-    <div class="empty-state">
-        <div class="empty-icon">✏️</div>
-        <h2>{{ _('No words yet') }}</h2>
-        <p>{{ _('Use the form above to add your first word to this list.') }}</p>
-    </div>
-    {% endif %}
+    <script>
+        const rowContainer = document.getElementById('word-rows');
+        const rowTemplate = document.getElementById('word-row-template');
+        const addRowButton = document.getElementById('add-row-button');
+        const importForm = document.getElementById('import-form');
+        const importFeedback = document.getElementById('import-feedback');
+
+        function renumberRows() {
+            rowContainer.querySelectorAll('[data-row-number]').forEach((badge, index) => {
+                badge.textContent = index + 1;
+            });
+        }
+
+        function appendRow(row = {}) {
+            const fragment = rowTemplate.content.cloneNode(true);
+            const inputs = fragment.querySelectorAll('input');
+            inputs[0].value = row.word || '';
+            inputs[1].value = row.description || '';
+            inputs[2].value = row.example || '';
+            inputs[3].value = row.disadvantage || '';
+            rowContainer.appendChild(fragment);
+            renumberRows();
+        }
+
+        function removeWordRow(button) {
+            const rows = rowContainer.querySelectorAll('.word-editor-row');
+            if (rows.length <= 1) {
+                rows[0].querySelectorAll('input').forEach((input) => {
+                    input.value = '';
+                });
+                return;
+            }
+
+            button.closest('.word-editor-row').remove();
+            renumberRows();
+        }
+
+        addRowButton.addEventListener('click', function() {
+            appendRow();
+        });
+
+        importForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            importFeedback.textContent = '{{ _('Importing...') }}';
+            importFeedback.className = 'import-feedback';
+
+            try {
+                const response = await fetch(importForm.action, {
+                    method: 'POST',
+                    body: new FormData(importForm),
+                });
+                const payload = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(payload.error || '{{ _('Import failed.') }}');
+                }
+
+                payload.rows.forEach((row) => appendRow(row));
+                importFeedback.textContent = payload.message + ' ' + '{{ _('Do not forget to save the list.') }}';
+                importFeedback.className = 'import-feedback success';
+                importForm.reset();
+            } catch (error) {
+                importFeedback.textContent = error.message;
+                importFeedback.className = 'import-feedback error';
+            }
+        });
+
+        renumberRows();
+    </script>
 
 </div>
 {% endblock %}
